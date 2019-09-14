@@ -1,0 +1,39 @@
+.form_login .toolbar {
+  font-size: x-large;
+}
+.form_login .title_login {
+  margin-top: 3%;
+}
+.logo {
+  width: 100%;
+  text-align: center;
+  padding: 4%;
+}
+.logo .img-logo {
+  width: 40%;
+}
+.loading {
+  padding-left: 50%;
+  padding-right: 50%;
+}
+.footer {
+  text-align: center;
+  font-size: x-small;
+  color: #09436a;
+}
+@media (max-width: 568px) {
+  .p-4 {
+    padding: 0.2rem !important;
+  }
+}
+@media (max-width: 991.98px) {
+  .app-body {
+    margin-top: 1.2rem;
+  }
+}
+@media (min-width: 991.99px) and (max-width: 5000px) {
+  .app-body {
+    margin-top: 0.2rem;
+  }
+}
+

@@ -1,0 +1,74 @@
+<div class="form_login app-body">
+  <main class="main d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <div class="card-group">
+            <div class="card p-4">
+              <div class="card-body">
+                <form name="loginForm" [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
+                  <div class="logo">
+                    <img src="assets/img/brand/logo.png" class="img-logo" alt=""/>
+                  </div>
+                  <p class="title_login text-muted">
+                    {{ 'VIEWS.LOGIN.MESSAGE' | translate }}
+                  </p>
+
+                  <div class="input-row" fxLayout="column" fxLayoutAlign="start stretch">
+                    <mat-form-field appearance="outline" fxFlex>
+                      <mat-label>
+                        {{ 'VIEWS.LOGIN.EMAIL' | translate }}
+                      </mat-label>
+                      <input matInput
+                             formControlName="email"
+                             placeholder="{{ 'VIEWS.LOGIN.EMAIL_PLACEHOLDER' | translate }}"
+                             required>
+                      <mat-icon matSuffix>mail</mat-icon>
+                      <mat-error>
+                        {{ 'VIEWS.LOGIN.EMAIL_REQUIRED' | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" fxFlex>
+                      <mat-label>
+                        {{ 'VIEWS.LOGIN.PASSWORD' | translate }}
+                      </mat-label>
+                      <input matInput
+                             formControlName="password"
+                             placeholder="{{ 'VIEWS.LOGIN.PASSWORD_PLACEHOLDER' | translate }}"
+                             [type]="hide ? 'password' : 'text'"
+                             required>
+                      <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                              [attr.aria-label]="'Hide password'"
+                              [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                      </button>
+                      <mat-error>
+                        {{ 'VIEWS.LOGIN.PASSWORD_REQUIRED' | translate }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-6 text-right">
+                      <button type="submit" class="btn btn-primary px-4" [disabled]="loginForm.invalid">
+                        {{ 'VIEWS.LOGIN.BUTTON_LOGIN' | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="row loading" *ngIf="submitted">
+                <mat-spinner strokeWidth="3"
+                             [diameter]="30">
+                </mat-spinner>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 footer">
+          {{ 'VIEWS.LOGIN.FOOTER' | translate }}
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

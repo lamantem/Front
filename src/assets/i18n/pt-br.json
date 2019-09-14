@@ -1,0 +1,35 @@
+{
+  "VIEWS": {
+    "LOGIN": {
+      "TITLE" : "Acesso",
+      "MESSAGE" : "Login",
+      "EMAIL" : "E-mail",
+      "EMAIL_REQUIRED" : "E-mail é obrigatório",
+      "EMAIL_PLACEHOLDER" : "Preencha seu e-mail",
+      "PASSWORD" : "Senha",
+      "PASSWORD_REQUIRED" : "Senha é obrigatório",
+      "PASSWORD_PLACEHOLDER" : "Preencha sua Senha",
+      "BUTTON_LOGIN" : "Acessar",
+      "BUTTON_RECOVERY_PASSWD" : "Esqueceu a senha?",
+      "BUTTON_PORTAL_RETURN" : "Retornar para o Portal?",
+      "FOOTER" : "FEPESE – Fundação de Estudos e Pesquisas Socioeconômicos"
+    },
+    "LIST": {
+      "TITLE" : "Buscar",
+      "ID_COLUMN_TABLE": "Cód.",
+      "NAME_COLUMN_TABLE": "Nome",
+      "ACTIONS_COLUMN_TABLE": "Ação",
+      "TOOLTIP_ADD_BUTTON": "Click para Adicionar",
+      "TOOLTIP_EDIT_BUTTON": "Click para Editar",
+      "TOOLTIP_REMOVE_BUTTON": "Click para Remover"
+    }
+  },
+  "COMPONENT": {
+    "EMPTY_DATA" : "Não teve retorno",
+    "PAGINATOR" : {
+      "ITEMS_PER_PAGE" : "Itens por página",
+      "NEXT_PAGE" : "Próxima página",
+      "PREVIOUS_PAGE" : "Página anterior"
+    }
+  }
+}
