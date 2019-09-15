@@ -61,6 +61,7 @@
     "ngx-captcha": "^7.0.0",
     "ngx-perfect-scrollbar": "^8.0.0",
     "popper.js": "1.14.7",
+    "quagga": "^0.12.1",
     "rxjs": "^6.5.2",
     "rxjs-compat": "latest",
     "simple-line-icons": "^2.4.1",
