@@ -4,6 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { TranslateService } from "@ngx-translate/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
+import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 
 @Component({
   selector: 'app-dasboard-form',
@@ -14,11 +15,15 @@ import { MatTableDataSource } from "@angular/material/table";
 export class DasboardFormComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(BarecodeScannerLivestreamComponent, {static: true}) barecodeScanner: BarecodeScannerLivestreamComponent;
 
   displayedColumns: string[] = ['id', 'name','actions'];
+
   dataSource = new MatTableDataSource<any>();
 
   loading: boolean;
+
+  barcodeValue;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -42,6 +47,12 @@ export class DasboardFormComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.barecodeScanner.start();
+  }
+
+  onValueChanges(result){
+    this.barcodeValue = result.codeResult.code;
+    console.log(result,this.barcodeValue);
   }
 
   translateMatPaginator() {

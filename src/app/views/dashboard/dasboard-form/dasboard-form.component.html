@@ -61,6 +61,17 @@
       </table>
     </div>
 
+    <mat-card>
+      <div style="width: 30%;">
+        <barcode-scanner-livestream type="code_128"
+                                    (valueChanges)="onValueChanges($event)">
+        </barcode-scanner-livestream>
+        <div [hidden]="!barcodeValue">
+          {{barcodeValue}}
+        </div>
+      </div>
+    </mat-card>
+
     <div class="footer_search"></div>
 
   </div>
