@@ -15,6 +15,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 };
 
 import 'hammerjs';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   imports: [
@@ -25,7 +27,11 @@ import 'hammerjs';
     CoreModule,
     SharedModule,
     AppRoutingModule,
-    AppMaterialModule
+    AppMaterialModule,
+    ServiceWorkerModule.register('/ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerImmediately'
+    })
   ],
   declarations: [
     AppComponent
