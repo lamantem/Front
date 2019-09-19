@@ -6,6 +6,8 @@ import { AuthenticationService } from '../../core/authentication';
 import { TranslateService } from '@ngx-translate/core';
 
 import Swal from 'sweetalert2';
+import { DashboardListService } from "../dashboard/dashboard-list/dashboard-list.service";
+import { LocalStorageService } from "../../core/services";
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +25,9 @@ export class LoginComponent implements OnInit {
     private authService: AuthenticationService,
     private formBuilder: FormBuilder,
     private router: Router,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public dashboardListService: DashboardListService,
+    public localStorage: LocalStorageService
   ) {
     translate.setDefaultLang('pt-br');
     const browserLang = translate.getBrowserLang();
@@ -80,10 +84,24 @@ export class LoginComponent implements OnInit {
               (resp_auth) => {
                 this.submitted = false;
                 authservice.setCurrentUser(resp_auth.data);
-                this.router.navigate(['/'])
-                  .catch(reason => {
-                    console.warn(reason);
-                  });
+
+                this.dashboardListService.getGroupReaderUrl(resp_auth.data.id);
+                this.dashboardListService.getAll()
+                  .pipe(debounceTime(300))
+                  .subscribe(
+                    (response) => {
+                      if (response.status === 200) {
+                        this.localStorage.setItem('groups', JSON.stringify(response.data));
+                      }
+                      this.router.navigate(['/'])
+                        .catch(reason => {
+                          console.warn(reason);
+                        });
+                    },
+                    error => {
+                      console.warn(error.toString())
+                    }
+                  );
               },
               error_auth => {
                 console.warn(error_auth)

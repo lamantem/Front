@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { DateAdapter, MatPaginator, MatTableDataSource } from "@angular/material";
 import { TranslateService } from "@ngx-translate/core";
 import { DashboardListService } from "./dashboard-list.service";
+import { debounceTime } from "rxjs/operators";
 
 @Component({
   selector: 'dashboard-list',
@@ -17,6 +18,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['id', 'name','actions'];
   dataSource = new MatTableDataSource<any>();
+  groupsReaderDataSource: DashboardModel.GroupsReader[] = [];
 
   loading: boolean;
 
@@ -34,21 +36,16 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.loadContests();
+    this.getGroupReader();
     // this.translateMatPaginator();
   }
 
   ngAfterViewInit() {
-
   }
 
-  loadContests() : void {
-    this.loading = false;
-    this.dataSource.data = [
-      {id:1,name:'Concurso A'},
-      {id:2,name:'Concurso B'},
-      {id:3,name:'Concurso C'}
-    ];
+  private getGroupReader(): void {
+      let user = localStorage.getItem('groups');
+      this.groupsReaderDataSource = JSON.parse(user)
   }
 
   translateMatPaginator() {
