@@ -5,6 +5,7 @@ import { DateAdapter, MatPaginator, MatTableDataSource } from "@angular/material
 import { TranslateService } from "@ngx-translate/core";
 import { DashboardListService } from "./dashboard-list.service";
 import { debounceTime } from "rxjs/operators";
+import { LocalStorageService } from "../../../core/services";
 
 @Component({
   selector: 'dashboard-list',
@@ -16,8 +17,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  displayedColumns: string[] = ['id', 'name','actions'];
-  dataSource = new MatTableDataSource<any>();
+  displayedColumns: string[] = ['name','actions'];
   groupsReaderDataSource: DashboardModel.GroupsReader[] = [];
 
   loading: boolean;
@@ -27,7 +27,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     public translate: TranslateService,
     private dashboardListService: DashboardListService,
     private router: Router,
-    private adapter: DateAdapter<any>
+    private adapter: DateAdapter<any>,
   ) {
     this.adapter.setLocale('pt-PT');
     translate.setDefaultLang('pt-br');

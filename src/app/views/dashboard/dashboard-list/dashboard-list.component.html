@@ -15,12 +15,6 @@
         </mat-spinner>
       </div>
       <table mat-table [dataSource]="groupsReaderDataSource">
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ 'VIEWS.LIST.ID_COLUMN_TABLE' | translate }}
-          </th>
-          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>
             {{ 'VIEWS.LIST.NAME_COLUMN_TABLE' | translate }}

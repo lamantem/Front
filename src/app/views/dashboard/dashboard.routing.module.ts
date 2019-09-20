@@ -6,7 +6,7 @@ import { DasboardFormComponent } from "./dasboard-form/dasboard-form.component";
 
 const dashboardRoutes: Routes = [
   {
-    path: 'concurso/:id',
+    path: 'concurso/:group_id',
     component: DasboardFormComponent,
     canActivate: [AuthenticationGuard]
   },

@@ -16,7 +16,11 @@ export class DashboardFormService extends BaseAPIClass {
     protected location: Location
   ) {
     super(httpClient,localStorageService,location);
-    this.baseUrl = environment.api_url + '/' + environment.api_version + '/search';
+  }
+
+  public getProtocolReaderUrl(group) : void {
+    this.baseUrl = environment.api_url + '/' + environment.api_version +
+      '/scanner/groups/'+ group +'/protocols';
   }
 
 }

@@ -28,24 +28,18 @@
                      [diameter]="75">
         </mat-spinner>
       </div>
-      <table mat-table [dataSource]="dataSource">
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ 'VIEWS.LIST.ID_COLUMN_TABLE' | translate }}
-          </th>
-          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>
+      <mat-table [dataSource]="protocolReaderDataSource">
+        <ng-container matColumnDef="participant_name">
+          <mat-header-cell *matHeaderCellDef>
             {{ 'VIEWS.LIST.NAME_COLUMN_TABLE' | translate }}
-          </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.participant_name}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef style="text-align: right; padding-right: 5%;">
+          <mat-header-cell class="actions" *matHeaderCellDef>
             {{ 'VIEWS.LIST.ACTIONS_COLUMN_TABLE' | translate }}
-          </th>
-          <td mat-cell *matCellDef="let element" class="actions_tab">
+          </mat-header-cell>
+          <mat-cell class="actions" *matCellDef="let element" class="actions_tab">
             <button mat-icon-button
                     matTooltip="{{ 'VIEWS.LIST.TOOLTIP_REMOVE_BUTTON' | translate }}"
                     color="primary">
@@ -54,11 +48,11 @@
                 delete
               </mat-icon>
             </button>
-          </td>
+          </mat-cell>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>>
+      </mat-table>
     </div>
 
     <mat-card>
@@ -75,3 +69,4 @@
     <div class="footer_search"></div>
 
   </div>
+</div>
