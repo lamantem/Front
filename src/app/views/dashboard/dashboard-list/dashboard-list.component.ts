@@ -19,8 +19,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['name','actions'];
   groupsReaderDataSource: DashboardModel.GroupsReader[] = [];
+  searchTerm: string;
 
   loading: boolean;
+  filter: any;
 
   constructor(
     private http: HttpClient,
