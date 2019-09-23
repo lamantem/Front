@@ -1,11 +1,9 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { DateAdapter, MatPaginator, MatTableDataSource } from "@angular/material";
+import { DateAdapter, MatPaginator } from "@angular/material";
 import { TranslateService } from "@ngx-translate/core";
 import { DashboardListService } from "./dashboard-list.service";
-import { debounceTime } from "rxjs/operators";
-import { LocalStorageService } from "../../../core/services";
 
 @Component({
   selector: 'dashboard-list',

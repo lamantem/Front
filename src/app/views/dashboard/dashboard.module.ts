@@ -10,6 +10,7 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { HttpLoaderFactory } from "../views.module";
 import { BrMaskerModule } from 'br-mask';
 import { BarecodeScannerLivestreamModule } from "ngx-barcode-scanner";
+import { DashboardReaderComponent } from './dashboard-reader/dashboard-reader.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,9 @@ import { BarecodeScannerLivestreamModule } from "ngx-barcode-scanner";
   ],
   declarations: [
     DashboardListComponent,
-    DasboardFormComponent
-  ]
+    DasboardFormComponent,
+    DashboardReaderComponent
+  ],
+  entryComponents: [DashboardReaderComponent],
 })
 export class DashboardModule {}

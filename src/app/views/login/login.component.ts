@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { AuthenticationService } from '../../core/authentication';
 import { TranslateService } from '@ngx-translate/core';
@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public translate: TranslateService,
     public dashboardListService: DashboardListService,
-    public localStorage: LocalStorageService
+    public localStorage: LocalStorageService,
   ) {
     translate.setDefaultLang('pt-br');
     const browserLang = translate.getBrowserLang();
@@ -91,7 +91,16 @@ export class LoginComponent implements OnInit {
                   .subscribe(
                     (response) => {
                       if (response.status === 200) {
-                        this.localStorage.setItem('groups', JSON.stringify(response.data));
+                        let localStorage = this.localStorage;
+                        let groups = response.data;
+                        localStorage.setItem('groups', JSON.stringify(groups));
+                        let protocols = [];
+                        groups.forEach(function (group) {
+                          group.protocols.forEach(function (protocol) {
+                            protocols.push(protocol);
+                          });
+                        });
+                        localStorage.setItem('protocols', JSON.stringify(protocols));
                       }
                       this.router.navigate(['/'])
                         .catch(reason => {

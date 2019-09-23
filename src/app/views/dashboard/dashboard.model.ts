@@ -9,28 +9,28 @@ declare namespace DashboardModel {
     end_date: string;
     origin_code: number;
     database_registry: string;
-    categorias: any;
-    moderadores: any;
-    participantes: any;
-    turnos: any;
+    categories: any;
+    moderators: any;
+    participants: any;
+    periods: any;
+    protocols: any;
   }
 
   export interface ProtocolReader {
     id: string;
     reader_user_access_id: number;
-    group_reader_participant_id: number;
+    group_reader_id: number;
     type: string;
-    read_date: string;
+    date_read: string;
     registration_code: number;
     end_date: string;
     group_reader: number;
     database_registry: string;
     group_reader_category_id: number;
     group_reader_period_id: number;
-    name: string;
     participant_name: string;
     protocol: string;
-    reader_user_acess_id: number;
     start_date: string;
   }
+
 }

@@ -17,7 +17,7 @@
     <div class="button_fab_list">
       <a mat-fab color="primary"
          matTooltip="{{ 'VIEWS.LIST.TOOLTIP_ADD_BUTTON' | translate }}"
-         routerLink="/leitura">
+         (click)="openReader()">
         <mat-icon>add</mat-icon>
       </a>
     </div>
@@ -28,7 +28,7 @@
                      [diameter]="75">
         </mat-spinner>
       </div>
-      <mat-table [dataSource]="protocolReaderDataSource">
+      <mat-table [dataSource]="protocolReader">
         <ng-container matColumnDef="participant_name">
           <mat-header-cell *matHeaderCellDef>
             {{ 'VIEWS.LIST.NAME_COLUMN_TABLE' | translate }}
@@ -39,7 +39,7 @@
           <mat-header-cell class="actions" *matHeaderCellDef>
             {{ 'VIEWS.LIST.ACTIONS_COLUMN_TABLE' | translate }}
           </mat-header-cell>
-          <mat-cell class="actions" *matCellDef="let element" class="actions_tab">
+          <mat-cell *matCellDef="let element" class="actions_tab">
             <button mat-icon-button
                     matTooltip="{{ 'VIEWS.LIST.TOOLTIP_REMOVE_BUTTON' | translate }}"
                     color="primary">
@@ -54,19 +54,6 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>>
       </mat-table>
     </div>
-
-    <mat-card>
-      <div style="width: 30%;">
-        <barcode-scanner-livestream type="code_128"
-                                    (valueChanges)="onValueChanges($event)">
-        </barcode-scanner-livestream>
-        <div [hidden]="!barcodeValue">
-          {{barcodeValue}}
-        </div>
-      </div>
-    </mat-card>
-
-    <div class="footer_search"></div>
 
   </div>
 </div>

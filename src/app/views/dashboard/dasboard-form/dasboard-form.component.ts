@@ -1,13 +1,14 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { DateAdapter } from '@angular/material';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { TranslateService } from "@ngx-translate/core";
 import { MatPaginator } from "@angular/material/paginator";
-import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 import { ActivatedRoute } from "@angular/router";
-import { debounceTime } from "rxjs/operators";
 import { LocalStorageService } from "../../../core/services";
 import { DashboardFormService } from "./dashboard-form.service";
+import { MatDialog } from "@angular/material/dialog";
+import { DashboardReaderComponent } from "../dashboard-reader/dashboard-reader.component";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-dasboard-form',
@@ -18,22 +19,21 @@ import { DashboardFormService } from "./dashboard-form.service";
 export class DasboardFormComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(BarecodeScannerLivestreamComponent, {static: true}) barecodeScanner: BarecodeScannerLivestreamComponent;
 
-  protocolReaderDataSource: DashboardModel.ProtocolReader[] = [];
+  protocolReader: DashboardModel.ProtocolReader[] = [];
+  groupsReader: DashboardModel.GroupsReader[] = [];
   displayedColumns: string[] = ['participant_name', 'actions'];
 
   loading: boolean;
-
-  barcodeValue;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private adapter: DateAdapter<any>,
     public translate: TranslateService,
-    private route: ActivatedRoute,
     private localStorage: LocalStorageService,
     private dashboardFormService: DashboardFormService,
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {
     this.adapter.setLocale('pt-PT');
     translate.setDefaultLang('pt-br');
@@ -47,32 +47,25 @@ export class DasboardFormComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.barecodeScanner.start();
   }
 
-  onValueChanges(result){
-    this.barcodeValue = result.codeResult.code;
-    console.log(result,this.barcodeValue);
+  openReader() {
+    const dialogRef = this.dialog.open(DashboardReaderComponent, {
+      width: '80%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+    });
   }
 
   private getProtocolReader(): void {
-    this.loading = true;
+    let protocol = localStorage.getItem('protocols');
+    this.protocolReader = JSON.parse(protocol);
 
     let group_id = this.route.snapshot.paramMap.get('group_id');
-    this.dashboardFormService.getProtocolReaderUrl(group_id);
-    this.dashboardFormService.getAll()
-      .pipe(debounceTime(300))
-      .subscribe(
-        (response) => {
-          this.protocolReaderDataSource = response.data;
-          this.localStorage.setItem('protocols', JSON.stringify(response.data));
-          this.loading = false;
-        },
-        error => {
-          this.loading = false;
-          console.warn(error.toString())
-        }
-      );
+
+    this.protocolReader = _.filter(this.protocolReader, {'group_reader_id': parseInt(group_id)});
   }
 
   translateMatPaginator() {
