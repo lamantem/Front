@@ -11,6 +11,7 @@ import { HttpLoaderFactory } from "../views.module";
 import { BrMaskerModule } from 'br-mask';
 import { BarecodeScannerLivestreamModule } from "ngx-barcode-scanner";
 import { DashboardReaderComponent } from './dashboard-reader/dashboard-reader.component';
+import { FilterPipe } from "../../shared/filter/filter.pipe";
 
 @NgModule({
   imports: [
@@ -32,8 +33,9 @@ import { DashboardReaderComponent } from './dashboard-reader/dashboard-reader.co
   declarations: [
     DashboardListComponent,
     DasboardFormComponent,
-    DashboardReaderComponent
+    DashboardReaderComponent,
+    FilterPipe
   ],
-  entryComponents: [DashboardReaderComponent],
+  entryComponents: [DashboardReaderComponent]
 })
 export class DashboardModule {}

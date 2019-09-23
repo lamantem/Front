@@ -13,6 +13,13 @@ table {
   margin: 10%;
 }
 
+mat-form-field.mat-form-field {
+  padding-left: 2px;
+  padding-right: 2px;
+  width:100%;
+  background-color: white;
+}
+
 .table_empty {
   text-align: center;
   padding: 3%;
