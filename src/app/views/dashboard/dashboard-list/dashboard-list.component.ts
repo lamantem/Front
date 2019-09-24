@@ -44,8 +44,8 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
   }
 
   private getGroupReader(): void {
-      let user = localStorage.getItem('groups');
-      this.groupsReaderDataSource = JSON.parse(user)
+      let groups = localStorage.getItem('groups');
+      this.groupsReaderDataSource = JSON.parse(groups)
   }
 
   translateMatPaginator() {

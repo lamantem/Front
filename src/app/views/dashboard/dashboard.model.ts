@@ -17,20 +17,13 @@ declare namespace DashboardModel {
   }
 
   export interface ProtocolReader {
-    id: string;
-    reader_user_access_id: number;
+    id: number;
+    moderator_id: number;
     group_reader_id: number;
     type: string;
-    date_read: string;
+    date_reader: string;
     registration_code: number;
-    end_date: string;
-    group_reader: number;
-    database_registry: string;
-    group_reader_category_id: number;
-    group_reader_period_id: number;
     participant_name: string;
-    protocol: string;
-    start_date: string;
   }
 
 }
