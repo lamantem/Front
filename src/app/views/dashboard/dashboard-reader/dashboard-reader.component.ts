@@ -22,10 +22,9 @@ export class DashboardReaderComponent implements OnInit {
 
   spinner: boolean;
   message: string;
-  sincronize: boolean;
   barcodeValue;
 
-  code$ = new Subject<any>();
+  code = new Subject<any>();
 
   constructor(
     private route: ActivatedRoute,
@@ -34,14 +33,14 @@ export class DashboardReaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.doSearchbyCode(this.code$)
+    this.doSearchbyCode(this.code)
       .subscribe(
         res => {
           this.spinner = false;
           this.message = res;
         },
         err => {
-          this.rawSearchByCode(this.code$);
+          this.rawSearchByCode(this.code);
         },
       );
   }
@@ -78,7 +77,7 @@ export class DashboardReaderComponent implements OnInit {
         'group_reader_id': parseInt(this.data.group_id),
         'participant_name': participants[0].name,
         'registration_code': participants[0].registration_code,
-        'type': groups[0].type,
+        'protocol_type': groups[0].protocol_type,
         'date_reader': '2019-09-24 00:00:00'
       };
 
@@ -107,8 +106,16 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   onValueChanges(result){
-    this.barcodeValue = result.codeResult.code;
-    console.log(result,this.barcodeValue);
+    this.doSearchbyCode(result.codeResult.code)
+      .subscribe(
+        res => {
+          this.spinner = false;
+          this.message = res;
+        },
+        err => {
+          this.rawSearchByCode(this.code);
+        },
+      );
   }
 
 }

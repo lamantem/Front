@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { AuthenticationService } from '../../core/authentication';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted: boolean;
   hide: boolean;
-  sincronize: boolean;
+  synchronized: boolean;
 
   constructor(
     private authService: AuthenticationService,
@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
                 this.submitted = false;
                 authservice.setCurrentUser(resp_auth.data);
 
-                this.dashboardListService.getGroupReaderUrl(resp_auth.data.id);
+                this.dashboardListService.getGroupReaderUrl();
                 this.dashboardListService.getAll()
                   .pipe(debounceTime(300))
                   .subscribe(
@@ -102,8 +102,8 @@ export class LoginComponent implements OnInit {
                           });
                         });
                         localStorage.setItem('protocols', JSON.stringify(protocols));
-                        this.sincronize = false;
-                        this.localStorage.setItem('sincronize', JSON.stringify(this.sincronize));
+                        this.synchronized = true;
+                        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
                       }
                       this.router.navigate(['/'])
                         .catch(reason => {

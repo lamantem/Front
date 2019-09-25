@@ -20,7 +20,7 @@ declare namespace DashboardModel {
     id: number;
     moderator_id: number;
     group_reader_id: number;
-    type: string;
+    protocol_type: string;
     date_reader: string;
     registration_code: number;
     participant_name: string;

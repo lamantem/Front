@@ -18,9 +18,9 @@ export class DashboardListService extends BaseAPIClass {
     super(httpClient,localStorageService,location);
   }
 
-  public getGroupReaderUrl(user) : void {
+  public getGroupReaderUrl() : void {
     this.baseUrl = environment.api_url + '/' + environment.api_version +
-      '/scanner/groups?user_id=' + user;
+      '/scanner/groups';
   }
 
 }

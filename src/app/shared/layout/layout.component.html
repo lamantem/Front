@@ -24,8 +24,12 @@
           <strong>Conta</strong>
         </div>
         <a class="dropdown-item"
-           href="#"
-           routerLink="/sair">
+           (click)="synchronizeProtocols()">
+          <i class="fa fa-cloud-upload"></i>
+          Sincronizar
+        </a>
+        <a class="dropdown-item"
+           (click)="isSynchronized()">
           <i class="fa fa-lock"></i>
           Sair
         </a>
