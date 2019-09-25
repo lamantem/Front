@@ -79,11 +79,26 @@ export abstract class BaseAPIClass {
   }
 
   create(payload: any): Observable<any> {
+    console.log(this.baseUrl)
     return this.httpClient.post(this.baseUrl, payload).pipe(
       map((body: any) => {
         return body;
       })
     );
+  }
+
+  createWithToken(payload: any): Observable<any> {
+    console.log(this.baseUrl)
+    return this.httpClient.post(
+      this.baseUrl,
+      payload,
+      this.getHttpOptions()
+    )
+      .pipe(
+        map((body: any) => {
+          return body;
+        })
+      );
   }
 
   update(id: string, payload: any): Observable<any> {

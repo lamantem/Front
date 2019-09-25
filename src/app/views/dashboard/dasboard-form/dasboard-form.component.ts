@@ -21,10 +21,10 @@ export class DasboardFormComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   protocolReader: DashboardModel.ProtocolReader[] = [];
-  groupsReader: DashboardModel.GroupsReader[] = [];
-  displayedColumns: string[] = ['participant_name', 'actions'];
+  displayedColumns: string[] = ['registration_code', 'participant_name', 'actions'];
 
   loading: boolean;
+  synchronized: boolean;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -51,17 +51,32 @@ export class DasboardFormComponent implements OnInit, AfterViewInit {
 
   openReader() {
     const dialogRef = this.dialog.open(DashboardReaderComponent, {
-      width: '80%'
-    });
+      width: '80%',
+      data: {
+        group_id: this.route.snapshot.paramMap.get('group_id')
+      }});
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+      if (result) {
+        this.synchronized = false;
+        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+        this.getProtocolReader();
+      }
     });
   }
 
+  removeProtocol(cod) {
+    let protocols = JSON.parse(localStorage['protocols']);
+
+    _.remove(protocols, {'id': parseInt(cod)});
+
+    localStorage.setItem('protocols', JSON.stringify(protocols));
+
+    this.getProtocolReader();
+  }
+
   private getProtocolReader(): void {
-    let protocol = localStorage.getItem('protocols');
-    this.protocolReader = JSON.parse(protocol);
+    this.protocolReader = JSON.parse(localStorage['protocols']);
 
     let group_id = this.route.snapshot.paramMap.get('group_id');
 

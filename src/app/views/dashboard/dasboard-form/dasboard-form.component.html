@@ -15,7 +15,7 @@
   <div class="animated fadeIn">
 
     <div class="button_fab_list">
-      <a mat-fab color="primary"
+      <a mat-mini-fab color="primary"
          matTooltip="{{ 'VIEWS.LIST.TOOLTIP_ADD_BUTTON' | translate }}"
          (click)="openReader()">
         <mat-icon>add</mat-icon>
@@ -29,6 +29,12 @@
         </mat-spinner>
       </div>
       <mat-table [dataSource]="protocolReader">
+        <ng-container matColumnDef="registration_code">
+          <mat-header-cell *matHeaderCellDef>
+            {{ 'VIEWS.LIST.ID_COLUMN_TABLE' | translate }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.registration_code}} </mat-cell>
+        </ng-container>
         <ng-container matColumnDef="participant_name">
           <mat-header-cell *matHeaderCellDef>
             {{ 'VIEWS.LIST.NAME_COLUMN_TABLE' | translate }}
@@ -42,7 +48,8 @@
           <mat-cell *matCellDef="let element" class="actions_tab">
             <button mat-icon-button
                     matTooltip="{{ 'VIEWS.LIST.TOOLTIP_REMOVE_BUTTON' | translate }}"
-                    color="primary">
+                    color="primary"
+                    (click)="removeProtocol(element.id)">
               <mat-icon aria-label="Delete"
                         class="iconButton">
                 delete

@@ -3,7 +3,7 @@
   <div class="container" style="width: 100%">
 
     <mat-card style="width: 100%">
-      <input style="width: 100%" class="instantInput" (input)="code$.next($event.target.value)" (keydown)="onChange()"
+      <input style="width: 100%" class="instantInput" (input)="code.next($event.target.value)" (keydown)="onChange()"
              placeholder="Numero do barcode">
       <div class="flex-container text-center" fxLayout="row" fxLayoutAlign="center center">
         <div class="flex-item">
@@ -29,6 +29,5 @@
 
 </mat-dialog-content>
 <mat-dialog-actions style="display: flex; justify-content: flex-end;">
-  <button mat-button mat-dialog-close>Cancel</button>
   <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Salvar</button>
 </mat-dialog-actions>
