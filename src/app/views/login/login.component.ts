@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted: boolean;
   hide: boolean;
+  sincronize: boolean;
 
   constructor(
     private authService: AuthenticationService,
@@ -101,6 +102,8 @@ export class LoginComponent implements OnInit {
                           });
                         });
                         localStorage.setItem('protocols', JSON.stringify(protocols));
+                        this.sincronize = false;
+                        this.localStorage.setItem('sincronize', JSON.stringify(this.sincronize));
                       }
                       this.router.navigate(['/'])
                         .catch(reason => {

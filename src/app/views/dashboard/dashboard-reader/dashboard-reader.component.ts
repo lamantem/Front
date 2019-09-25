@@ -22,6 +22,7 @@ export class DashboardReaderComponent implements OnInit {
 
   spinner: boolean;
   message: string;
+  sincronize: boolean;
   barcodeValue;
 
   code$ = new Subject<any>();
@@ -33,7 +34,7 @@ export class DashboardReaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-      this.doSearchbyCode(this.code$)
+    this.doSearchbyCode(this.code$)
       .subscribe(
         res => {
           this.spinner = false;
@@ -93,6 +94,8 @@ export class DashboardReaderComponent implements OnInit {
       );
 
       this.protocolReader.push(new_protocol);
+      this.sincronize = true;
+      this.localStorage.setItem('sincronize', JSON.stringify(this.sincronize));
       this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
       return of('Participante encontrado: ' + participants[0].name);
     }
