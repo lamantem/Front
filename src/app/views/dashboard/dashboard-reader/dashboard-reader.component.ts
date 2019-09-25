@@ -41,8 +41,7 @@ export class DashboardReaderComponent implements OnInit {
           this.message = res;
         },
         err => {
-          this.spinner = false;
-          this.message = `An Error! ${err.json().error}`;
+          this.rawSearchByCode(this.code$);
         },
       );
   }
@@ -71,19 +70,20 @@ export class DashboardReaderComponent implements OnInit {
     let groups = _.filter(this.groupsReader, {'id': parseInt(this.data.group_id)});
     let participants = _.filter(groups[0].participants, {'registration_code': parseInt(code)});
 
-    let new_protocol = {
-      'id': participants[0].id,
-      'moderator_id': user['id'],
-      'group_reader_id': parseInt(this.data.group_id),
-      'participant_name': participants[0].name,
-      'registration_code': participants[0].registration_code,
-      'type': groups[0].type,
-      'date_reader': '2019-09-24 00:00:00'
-    };
-
-    let participantsExist = _.filter(this.protocolReader, {'registration_code': parseInt(code)});
-
     if (participants.length > 0) {
+
+      let new_protocol = {
+        'id': participants[0].id,
+        'moderator_id': user['id'],
+        'group_reader_id': parseInt(this.data.group_id),
+        'participant_name': participants[0].name,
+        'registration_code': participants[0].registration_code,
+        'type': groups[0].type,
+        'date_reader': '2019-09-24 00:00:00'
+      };
+
+      let participantsExist = _.filter(this.protocolReader, {'registration_code': parseInt(code)});
+
       if (!_.isEmpty(participantsExist)) {
         Swal.fire('Ops!', 'Candidato já foi escaneado!', 'error');
         return of('O candidato já foi escaneado!');
@@ -94,8 +94,6 @@ export class DashboardReaderComponent implements OnInit {
       );
 
       this.protocolReader.push(new_protocol);
-      this.sincronize = true;
-      this.localStorage.setItem('sincronize', JSON.stringify(this.sincronize));
       this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
       return of('Participante encontrado: ' + participants[0].name);
     }

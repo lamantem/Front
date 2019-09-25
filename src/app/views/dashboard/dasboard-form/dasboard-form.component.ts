@@ -24,7 +24,7 @@ export class DasboardFormComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['registration_code', 'participant_name', 'actions'];
 
   loading: boolean;
-  private i: number;
+  sincronize: boolean;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -58,6 +58,8 @@ export class DasboardFormComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.sincronize = true;
+        this.localStorage.setItem('sincronize', JSON.stringify(this.sincronize));
         this.getProtocolReader();
       }
     });
