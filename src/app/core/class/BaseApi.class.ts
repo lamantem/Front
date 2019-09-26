@@ -88,7 +88,6 @@ export abstract class BaseAPIClass {
   }
 
   createWithToken(payload: any): Observable<any> {
-    console.log(this.baseUrl)
     return this.httpClient.post(
       this.baseUrl,
       payload,

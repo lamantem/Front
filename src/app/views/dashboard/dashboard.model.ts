@@ -17,7 +17,7 @@ declare namespace DashboardModel {
   }
 
   export interface ProtocolReader {
-    id: number;
+    participant_id: number;
     moderator_id: number;
     group_reader_id: number;
     protocol_type: string;

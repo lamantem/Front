@@ -20,6 +20,6 @@ export class LayoutService extends BaseAPIClass{
 
   public prepareSyncProtocolUrl(): void {
     this.baseUrl = environment.api_url + '/' + environment.api_version +
-      '/scanner/sync/protocols';
+      '/scanner/protocols/sync';
   }
 }

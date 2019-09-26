@@ -33,6 +33,10 @@ export class DashboardReaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.spinner = true;
+    this.barecodeScanner.start().then(r =>
+      this.spinner = false
+    );
     this.doSearchbyCode(this.code)
       .subscribe(
         res => {
@@ -68,16 +72,17 @@ export class DashboardReaderComponent implements OnInit {
 
     let groups = _.filter(this.groupsReader, {'id': parseInt(this.data.group_id)});
     let participants = _.filter(groups[0].participants, {'registration_code': parseInt(code)});
+    let mod = _.filter(groups[0].moderators, {'user_id': user['id']});
 
     if (participants.length > 0) {
 
       let new_protocol = {
-        'id': participants[0].id,
-        'moderator_id': user['id'],
+        'participant_id': participants[0].id,
+        'moderator_id': mod[0].id,
         'group_reader_id': parseInt(this.data.group_id),
         'participant_name': participants[0].name,
         'registration_code': participants[0].registration_code,
-        'protocol_type': groups[0].protocol_type,
+        'protocol_type': 'falta',
         'date_reader': '2019-09-24 00:00:00'
       };
 
@@ -101,8 +106,6 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.barecodeScanner.start();
-
   }
 
   onValueChanges(result){

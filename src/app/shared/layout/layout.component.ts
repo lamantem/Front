@@ -55,11 +55,12 @@ export class LayoutComponent implements OnDestroy {
     }
 
     let protocols = JSON.parse(localStorage['protocols']);
-    console.log(protocols);
 
     this.layoutService.prepareSyncProtocolUrl();
     this.layoutService.createWithToken(protocols).subscribe((resp)=> {
-      console.log(resp)
+      if (resp == 500) {
+        Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
+      }
     } );
 
     this.synchronized = true;
