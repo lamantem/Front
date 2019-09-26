@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardListComponent } from "./dashboard-list/dashboard-list.component";
-import { DasboardFormComponent } from "./dasboard-form/dasboard-form.component";
+import { DashboardFormComponent } from "./dashboard-form/dashboard-form.component";
 import { DashboardRoutingModule } from "./dashboard.routing.module";
 import { AppMaterialModule } from "../../app.material.module";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
@@ -32,7 +32,7 @@ import { FilterPipe } from "../../shared/filter/filter.pipe";
   ],
   declarations: [
     DashboardListComponent,
-    DasboardFormComponent,
+    DashboardFormComponent,
     DashboardReaderComponent,
     FilterPipe
   ],

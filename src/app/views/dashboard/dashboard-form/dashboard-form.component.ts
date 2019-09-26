@@ -12,11 +12,11 @@ import * as _ from 'lodash';
 
 @Component({
   selector: 'app-dasboard-form',
-  templateUrl: './dasboard-form.component.html',
-  styleUrls: ['./dasboard-form.component.scss'],
+  templateUrl: './dashboard-form.component.html',
+  styleUrls: ['./dashboard-form.component.scss'],
   preserveWhitespaces: false
 })
-export class DasboardFormComponent implements OnInit, AfterViewInit {
+export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
