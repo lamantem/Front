@@ -26,4 +26,9 @@ declare namespace DashboardModel {
     participant_name: string;
   }
 
+  export interface NewParticipant {
+    registration_code: number;
+    participant_name: string;
+  }
+
 }

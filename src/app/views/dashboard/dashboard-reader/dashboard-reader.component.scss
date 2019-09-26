@@ -1,0 +1,13 @@
+.instantInput {
+  width: 100%;
+}
+
+.text-modal {
+  text-align: center;
+  margin-top: 20px;
+
+  @media screen and (min-width: 600px) {
+    font-size: larger;
+  }
+  font-weight: bold;
+}
