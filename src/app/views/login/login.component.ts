@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
-import { AuthenticationService } from '../../core/authentication';
 import { TranslateService } from '@ngx-translate/core';
-
-import Swal from 'sweetalert2';
+import { AuthenticationService } from '../../core/authentication';
 import { DashboardListService } from "../dashboard/dashboard-list/dashboard-list.service";
 import { LocalStorageService } from "../../core/services";
+import { environment } from "../../../environments/environment";
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
   submitted: boolean;
   hide: boolean;
   synchronized: boolean;
+  app_version: string;
 
   constructor(
     private authService: AuthenticationService,
@@ -38,6 +40,9 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.submitted = false;
     this.hide      = true;
+
+    this.prepareAppVersion();
+
     this.loginForm = this.formBuilder.group(
       {
         email: ['', [Validators.required, Validators.email]],
@@ -47,6 +52,10 @@ export class LoginComponent implements OnInit {
 
   get fields() {
     return this.loginForm.controls;
+  }
+
+  prepareAppVersion() : void {
+    this.app_version = environment.app_version;
   }
 
   onSubmit() {

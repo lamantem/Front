@@ -1,8 +1,8 @@
 {
-  "name": "Leitor FEPESE",
-  "short_name": "FEPESE",
+  "name": "App de Leitura - @FEPESE",
+  "short_name": "Leitor",
   "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "background_color": "#f0f3f5",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
