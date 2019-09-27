@@ -24,6 +24,7 @@ export class DashboardReaderComponent implements OnInit {
   newProtocol: object;
   spinner: boolean;
   show: boolean;
+  reader: boolean;
   message: string;
   barcodeValue;
 
@@ -37,6 +38,7 @@ export class DashboardReaderComponent implements OnInit {
 
   ngOnInit() {
     this.show = false;
+    this.reader = true;
     this.doSearchbyCode(this.code)
       .subscribe(
         res => {
@@ -52,6 +54,17 @@ export class DashboardReaderComponent implements OnInit {
   onChange() {
     this.spinner = true;
     debounceTime(800);
+  }
+
+  onValueChanges(result){
+    this.barcodeValue = result.codeResult.code;
+    let code = this.barcodeValue.split('-');
+
+    this.rawSearchByCode(parseInt(code[1]));
+  }
+
+  ngAfterViewInit() {
+    this.barecodeScanner.start();
   }
 
   doSearchbyCode(codes: Observable<any>) {
@@ -109,19 +122,16 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   saveProtocol() {
-    this.protocolReader.push(<DashboardModel.ProtocolReader>this.newProtocol);
-    this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
+    if (this.newProtocol != null) {
+      this.protocolReader.push(<DashboardModel.ProtocolReader>this.newProtocol);
+      this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
+    }
   }
 
-  ngAfterViewInit() {
-    this.barecodeScanner.start();
+  resetNewParticipant() {
+    this.show = false;
+    this.newParticipant = [];
+    this.message = '';
+    this.barecodeScanner.retart();
   }
-
-  onValueChanges(result){
-    this.barcodeValue = result.codeResult.code;
-    let code = this.barcodeValue.split('-');
-
-    this.rawSearchByCode(parseInt(code[1]));
-  }
-
 }
