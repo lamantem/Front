@@ -7,5 +7,6 @@ export const environment = {
   client_secret: 'naTzgBPMrOFpcJGqYpIUNjmF9s5L3KS69ZFnKFTn',
   grantType: 'password',
   scope: '*',
-  siteKey_recaptcha: '6LcbtbMUAAAAAE-QlEOZyy74gqLRmAekikmMG_RN'
+  siteKey_recaptcha: '6LcbtbMUAAAAAE-QlEOZyy74gqLRmAekikmMG_RN',
+  app_version: 'App versão Beta 0.1.0'
 };

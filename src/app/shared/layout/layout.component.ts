@@ -65,7 +65,7 @@ export class LayoutComponent implements OnDestroy {
 
     this.synchronized = true;
     this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-    Swal.fire('Good job!', 'Sincronizado com sucesso!', 'success');
+    Swal.fire('Bom trabalho!', 'Sincronizado com sucesso!', 'success');
   }
 
   isSynchronized(): void {

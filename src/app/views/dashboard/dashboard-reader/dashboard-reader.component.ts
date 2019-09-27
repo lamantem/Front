@@ -19,8 +19,12 @@ export class DashboardReaderComponent implements OnInit {
 
   groupsReader: DashboardModel.GroupsReader[] = [];
   protocolReader: DashboardModel.ProtocolReader[] = [];
+  newParticipant: DashboardModel.NewParticipant[] = [];
 
+  newProtocol: object;
   spinner: boolean;
+  show: boolean;
+  reader: boolean;
   message: string;
   barcodeValue;
 
@@ -33,10 +37,8 @@ export class DashboardReaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.spinner = true;
-    this.barecodeScanner.start().then(r =>
-      this.spinner = false
-    );
+    this.show = false;
+    this.reader = true;
     this.doSearchbyCode(this.code)
       .subscribe(
         res => {
@@ -51,6 +53,18 @@ export class DashboardReaderComponent implements OnInit {
 
   onChange() {
     this.spinner = true;
+    debounceTime(800);
+  }
+
+  onValueChanges(result){
+    this.barcodeValue = result.codeResult.code;
+    let code = this.barcodeValue.split('-');
+
+    this.rawSearchByCode(parseInt(code[1]));
+  }
+
+  ngAfterViewInit() {
+    this.barecodeScanner.start();
   }
 
   doSearchbyCode(codes: Observable<any>) {
@@ -76,7 +90,16 @@ export class DashboardReaderComponent implements OnInit {
 
     if (participants.length > 0) {
 
-      let new_protocol = {
+      let participantsExist = _.filter(this.protocolReader, {'registration_code': parseInt(code)});
+
+      if (!_.isEmpty(participantsExist)) {
+        Swal.fire('Ops!', 'Candidato já foi escaneado!', 'error');
+        this.barecodeScanner.retart();
+        debounceTime(400);
+        return of('O candidato já foi escaneado!');
+      }
+
+      this.newProtocol = {
         'participant_id': participants[0].id,
         'moderator_id': mod[0].id,
         'group_reader_id': parseInt(this.data.group_id),
@@ -87,39 +110,29 @@ export class DashboardReaderComponent implements OnInit {
         'date_reader': '2019-09-24 00:00:00'
       };
 
-      let participantsExist = _.filter(this.protocolReader, {'registration_code': parseInt(code)});
+      this.barecodeScanner.stop();
 
-      if (!_.isEmpty(participantsExist)) {
-        Swal.fire('Ops!', 'Candidato já foi escaneado!', 'error');
-        return of('O candidato já foi escaneado!');
-      }
+      this.newParticipant['participant_name'] = participants[0].name;
+      this.newParticipant['registration_code'] = participants[0].registration_code;
+      this.show = true;
 
-      Swal.fire('Candidato: ' + participants[0].name,
-        'codigo inscricao: ' + participants[0].registration_code,
-      );
-
-      this.protocolReader.push(new_protocol);
-      this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
-      return of('Participante encontrado: ' + participants[0].name);
+      return of('Candidato encontrado!');
     }
 
     return of('O codigo de inscrição está invalido!');
   }
 
-  ngAfterViewInit() {
+  saveProtocol() {
+    if (this.newProtocol != null) {
+      this.protocolReader.push(<DashboardModel.ProtocolReader>this.newProtocol);
+      this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
+    }
   }
 
-  onValueChanges(result){
-    this.doSearchbyCode(result.codeResult.code)
-      .subscribe(
-        res => {
-          this.spinner = false;
-          this.message = res;
-        },
-        err => {
-          this.rawSearchByCode(this.code);
-        },
-      );
+  resetNewParticipant() {
+    this.show = false;
+    this.newParticipant = [];
+    this.message = '';
+    this.barecodeScanner.retart();
   }
-
 }
