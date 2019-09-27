@@ -8,6 +8,7 @@ import { LocalStorageService } from "../../../core/services";
 import { DashboardFormService } from "./dashboard-form.service";
 import { MatDialog } from "@angular/material/dialog";
 import { DashboardReaderComponent } from "../dashboard-reader/dashboard-reader.component";
+import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'lodash';
 
 @Component({
@@ -19,11 +20,10 @@ import * as _ from 'lodash';
 export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-
-  protocolReader: DashboardModel.ProtocolReader[] = [];
+  dataSource: any;
   displayedColumns: string[] = ['registration_code', 'participant_name', 'actions'];
-
   loading: boolean;
+
   synchronized: boolean;
 
   constructor(
@@ -76,11 +76,12 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   }
 
   private getProtocolReader(): void {
-    this.protocolReader = JSON.parse(localStorage['protocols']);
+    let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
 
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
-    this.protocolReader = _.filter(this.protocolReader, {'group_reader_id': parseInt(group_id)});
+    protocolReaderDataSource = _.filter(protocolReaderDataSource, {'group_reader_id': parseInt(group_id)});
+    this.dataSource = new MatTableDataSource(protocolReaderDataSource);
   }
 
   translateMatPaginator() {
@@ -94,5 +95,9 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
         this.paginator._intl.nextPageLabel     = translation['COMPONENT.PAGINATOR.NEXT_PAGE'];
         this.paginator._intl.previousPageLabel = translation['COMPONENT.PAGINATOR.PREVIOUS_PAGE'];
       });
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

@@ -98,7 +98,18 @@ export class LoginComponent implements OnInit {
                         let protocols = [];
                         groups.forEach(function (group) {
                           group.protocols.forEach(function (protocol) {
-                            protocols.push(protocol);
+                              let protocol_local = {
+                                  date_reader: protocol.date_reader,
+                                  group_reader_id: protocol.group_reader_id,
+                                  moderator_id: protocol.moderator_id,
+                                  participant_id: protocol.participant_id,
+                                  participant_name: protocol.participant_name,
+                                  protocol_type: protocol.protocol_type,
+                                  registration_code: protocol.registration_code,
+                                  period: protocol.period,
+                                  active: 1
+                              };
+                            protocols.push(protocol_local);
                           });
                         });
                         localStorage.setItem('protocols', JSON.stringify(protocols));

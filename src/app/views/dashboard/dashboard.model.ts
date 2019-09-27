@@ -24,6 +24,7 @@ declare namespace DashboardModel {
     date_reader: string;
     registration_code: number;
     participant_name: string;
+    period: string;
   }
 
 }

@@ -83,6 +83,7 @@ export class DashboardReaderComponent implements OnInit {
         'participant_name': participants[0].name,
         'registration_code': participants[0].registration_code,
         'protocol_type': 'falta',
+        'period': participants[0].period,
         'date_reader': '2019-09-24 00:00:00'
       };
 

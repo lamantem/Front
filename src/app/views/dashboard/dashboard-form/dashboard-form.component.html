@@ -28,7 +28,15 @@
                      [diameter]="75">
         </mat-spinner>
       </div>
-      <mat-table [dataSource]="protocolReader">
+      <mat-form-field id="search-term"
+                      appearance="outline"
+                      style="background-color: #f3f4f5;
+                      width: 100%;">
+        <mat-label>Buscar</mat-label>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="registration_code">
           <mat-header-cell *matHeaderCellDef>
             {{ 'VIEWS.LIST.ID_COLUMN_TABLE' | translate }}
@@ -58,8 +66,9 @@
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
+
     </div>
 
   </div>
