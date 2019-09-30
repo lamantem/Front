@@ -1,14 +1,14 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { DateAdapter } from '@angular/material';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { TranslateService } from "@ngx-translate/core";
-import { MatPaginator } from "@angular/material/paginator";
 import { ActivatedRoute } from "@angular/router";
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { DateAdapter } from '@angular/material';
+import { DashboardReaderComponent } from "../dashboard-reader/dashboard-reader.component";
 import { LocalStorageService } from "../../../core/services";
 import { DashboardFormService } from "./dashboard-form.service";
-import { MatDialog } from "@angular/material/dialog";
-import { DashboardReaderComponent } from "../dashboard-reader/dashboard-reader.component";
-import { MatTableDataSource } from '@angular/material/table';
+import { TranslateService } from "@ngx-translate/core";
 import * as _ from 'lodash';
 
 @Component({
@@ -44,6 +44,11 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.loading = false;
     this.getProtocolReader();
+    this.dataSource.filterPredicate = function(data, filter: string): boolean {
+      return data.participant_name.toLowerCase().includes(filter)
+          || data.period.toLowerCase().includes(filter)
+          || data.registration_code.toString() === filter;
+    }
   }
 
   ngAfterViewInit() {
@@ -100,4 +105,5 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
 }
