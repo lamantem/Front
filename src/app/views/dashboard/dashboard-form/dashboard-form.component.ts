@@ -45,6 +45,11 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.loading = false;
     this.getProtocolReader();
+    this.dataSource.filterPredicate = function(data, filter: string): boolean {
+      return data.participant_name.toLowerCase().includes(filter)
+          || data.period.toLowerCase().includes(filter)
+          || data.registration_code.toString() === filter;
+    }
   }
 
   ngAfterViewInit() {
@@ -142,4 +147,5 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
 }

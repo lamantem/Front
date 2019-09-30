@@ -77,8 +77,7 @@ export class LoginComponent implements OnInit {
 
   private login(email, password): void {
     let authservice = this.authService;
-    this.submitted = true;
-
+    this.submitted  = true;
     authservice.login(
       email,
       password
@@ -92,9 +91,7 @@ export class LoginComponent implements OnInit {
           )
             .subscribe(
               (resp_auth) => {
-                this.submitted = false;
                 authservice.setCurrentUser(resp_auth.data);
-
                 this.dashboardListService.getGroupReaderUrl();
                 this.dashboardListService.getAll()
                   .pipe(debounceTime(300))
@@ -108,15 +105,15 @@ export class LoginComponent implements OnInit {
                         groups.forEach(function (group) {
                           group.protocols.forEach(function (protocol) {
                               let protocol_local = {
-                                  id: protocol.id,
-                                  date_reader: protocol.date_reader,
-                                  group_reader_id: protocol.group_reader_id,
-                                  moderator_id: protocol.moderator_id,
-                                  participant_id: protocol.participant_id,
-                                  participant_name: protocol.participant_name,
-                                  protocol_type: protocol.protocol_type,
+                                  id:                protocol.id,
+                                  date_reader:       protocol.date_reader,
+                                  group_reader_id:   protocol.group_reader_id,
+                                  moderator_id:      protocol.moderator_id,
+                                  participant_id:    protocol.participant_id,
+                                  participant_name:  protocol.participant_name,
+                                  protocol_type:     protocol.protocol_type,
                                   registration_code: protocol.registration_code,
-                                  period: protocol.period,
+                                  period:            protocol.period,
                                   active: 1
                               };
                             protocols.push(protocol_local);
@@ -125,6 +122,7 @@ export class LoginComponent implements OnInit {
                         localStorage.setItem('protocols', JSON.stringify(protocols));
                         this.synchronized = true;
                         this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+                        this.submitted = false;
                       }
                       this.router.navigate(['/'])
                         .catch(reason => {
@@ -132,11 +130,13 @@ export class LoginComponent implements OnInit {
                         });
                     },
                     error => {
+                      this.submitted = false;
                       console.warn(error.toString())
                     }
                   );
               },
               error_auth => {
+                this.submitted = false;
                 console.warn(error_auth)
               }
             );
