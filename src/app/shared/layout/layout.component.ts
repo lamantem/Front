@@ -6,6 +6,9 @@ import { Router } from "@angular/router";
 import Swal from "sweetalert2";
 import { LocalStorageService } from "../../core/services";
 import { LayoutService } from "./layout.service";
+import * as _ from 'lodash';
+import { RadioControlValueAccessor } from "@angular/forms";
+
 
 @Component({
   selector: 'app-dashboard',
@@ -55,13 +58,27 @@ export class LayoutComponent implements OnDestroy {
     }
 
     let protocols = JSON.parse(localStorage['protocols']);
+    let remove = _.remove(protocols, {'active': 0});
 
-    this.layoutService.prepareSyncProtocolUrl();
-    this.layoutService.createWithToken(protocols).subscribe((resp)=> {
-      if (resp == 500) {
-        Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
-      }
-    } );
+    if (!_.isEmpty(remove)) {
+        this.layoutService.deleteSyncProtocolUrl();
+        this.layoutService.deleteAllWithToken(remove).subscribe((resp) => {
+          if (resp == 500) {
+            Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
+          }
+          return;
+        });
+    }
+
+    if (!_.isEmpty(protocols)) {
+      this.layoutService.prepareSyncProtocolUrl();
+      this.layoutService.createWithToken(protocols).subscribe((resp)=> {
+        if (resp == 500) {
+          Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
+          return;
+        }
+      } );
+    }
 
     this.synchronized = true;
     this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));

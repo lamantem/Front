@@ -22,4 +22,9 @@ export class LayoutService extends BaseAPIClass{
     this.baseUrl = environment.api_url + '/' + environment.api_version +
       '/scanner/protocols/sync';
   }
+
+  public deleteSyncProtocolUrl(): void {
+    this.baseUrl = environment.api_url + '/' + environment.api_version +
+      '/scanner/protocols/all';
+  }
 }

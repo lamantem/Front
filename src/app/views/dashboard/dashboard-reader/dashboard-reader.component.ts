@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { ActivatedRoute } from "@angular/router";
 import { Observable, of, Subject } from "rxjs";
+import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
+import { LocalStorageService } from "../../../core/services";
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
-import { ActivatedRoute } from "@angular/router";
-import { LocalStorageService } from "../../../core/services";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -100,6 +101,7 @@ export class DashboardReaderComponent implements OnInit {
       }
 
       this.newProtocol = {
+        'id': null,
         'participant_id': participants[0].id,
         'moderator_id': mod[0].id,
         'group_reader_id': parseInt(this.data.group_id),
@@ -107,7 +109,8 @@ export class DashboardReaderComponent implements OnInit {
         'registration_code': participants[0].registration_code,
         'protocol_type': 'falta',
         'period': participants[0].period,
-        'date_reader': '2019-09-24 00:00:00'
+        'active': 1,
+        'date_reader': moment().format('YYYY-MM-DD h:mm:ss')
       };
 
       this.barecodeScanner.stop();

@@ -79,7 +79,6 @@ export abstract class BaseAPIClass {
   }
 
   create(payload: any): Observable<any> {
-    console.log(this.baseUrl)
     return this.httpClient.post(this.baseUrl, payload).pipe(
       map((body: any) => {
         return body;
@@ -110,6 +109,25 @@ export abstract class BaseAPIClass {
 
   delete(id: string): Observable<any> {
     return this.httpClient.delete(`${ this.baseUrl }/${ id }`).pipe(
+      map((body: any) => {
+        return body;
+      })
+    );
+  }
+
+  deleteAllWithToken(payload: any): Observable<any> {
+    let options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': this.getToken()
+      }),
+      body: payload,
+    };
+
+    return this.httpClient.delete(
+      this.baseUrl,
+      options
+    ).pipe(
       map((body: any) => {
         return body;
       })
