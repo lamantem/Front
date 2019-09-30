@@ -12,8 +12,7 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     RouterModule
   ],
-  declarations: [
-  ],
+  declarations: [],
   exports: [
     CommonModule,
     FormsModule,

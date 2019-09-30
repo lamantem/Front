@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Location } from '@angular/common';
-import { BaseAPIClass } from "../../../core/class";
 import { LocalStorageService } from "../../../core/services";
+import { Location } from "@angular/common";
 import { environment } from "../../../../environments/environment";
+import { BaseAPIClass } from "../../../core/class";
 
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardFormService extends BaseAPIClass {
+export class DashboardReaderService extends BaseAPIClass {
 
   constructor(
     protected httpClient: HttpClient,
@@ -16,7 +16,12 @@ export class DashboardFormService extends BaseAPIClass {
     protected location: Location
   ) {
     super(httpClient,localStorageService,location);
-    this.baseUrl = environment.api_url + '/' + environment.api_version + '/search';
+  }
+
+  public getGroupReaderUrl(group) : void {
+    this.baseUrl = environment.api_url + '/' + environment.api_version +
+      'scanner/groups/'+ group +'/protocols';
+
   }
 
 }

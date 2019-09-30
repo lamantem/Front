@@ -7,31 +7,45 @@
 .sidebar .nav-title {
   background-color: red;
 }
-.nav_avatar {
-  padding-right: 1%
-}
-
 .sidebar-minimized .sidebar .nav-link .nav-icon {
   color: #ffffff;
 }
-
+.nav-link{
+  height: 35px;
+  width: 35px;
+}
 .sidebar .nav-link.active .nav-icon {
   color: #ffffff;
 }
-
+.row{
+  margin-right: auto;
+}
+.app-footer{
+  text-align: center;
+  display: inline-block;
+}
 .footer-dash {
+  padding-top: 0.3rem;
   font-size: x-small;
 }
-
 .user-name {
-  top: 6px;
-  padding: 0px;
+  top: 3px;
+  padding-left: 2px;
   text-align: left;
 }
 
-@media (max-width: 400px) {
-  .user-name {
-    display: none;
+@media (max-width: 471px) {
+  .user-name { display: none; }
+}
+@media (min-width:472px) and (max-width: 767.98px){
+  .footer-dash {
+    display: inline-block;
+    font-size: small;
   }
 }
-
+@media (min-width:768px) and (max-width: 5000px){
+  .footer-dash {
+    display: inline-block;
+    font-size: medium;
+  }
+}

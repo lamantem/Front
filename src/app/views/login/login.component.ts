@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
-import { AuthenticationService } from '../../core/authentication';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthenticationService } from '../../core/authentication';
+import { DashboardListService } from "../dashboard/dashboard-list/dashboard-list.service";
+import { LocalStorageService } from "../../core/services";
+import { environment } from "../../../environments/environment";
 
 import Swal from 'sweetalert2';
 
@@ -18,12 +21,16 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   submitted: boolean;
   hide: boolean;
+  synchronized: boolean;
+  app_version: string;
 
   constructor(
     private authService: AuthenticationService,
     private formBuilder: FormBuilder,
     private router: Router,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public dashboardListService: DashboardListService,
+    public localStorage: LocalStorageService,
   ) {
     translate.setDefaultLang('pt-br');
     const browserLang = translate.getBrowserLang();
@@ -33,6 +40,9 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.submitted = false;
     this.hide      = true;
+
+    this.prepareAppVersion();
+
     this.loginForm = this.formBuilder.group(
       {
         email: ['', [Validators.required, Validators.email]],
@@ -42,6 +52,10 @@ export class LoginComponent implements OnInit {
 
   get fields() {
     return this.loginForm.controls;
+  }
+
+  prepareAppVersion() : void {
+    this.app_version = environment.app_version;
   }
 
   onSubmit() {
@@ -63,8 +77,7 @@ export class LoginComponent implements OnInit {
 
   private login(email, password): void {
     let authservice = this.authService;
-    this.submitted = true;
-
+    this.submitted  = true;
     authservice.login(
       email,
       password
@@ -78,14 +91,52 @@ export class LoginComponent implements OnInit {
           )
             .subscribe(
               (resp_auth) => {
-                this.submitted = false;
                 authservice.setCurrentUser(resp_auth.data);
-                this.router.navigate(['/'])
-                  .catch(reason => {
-                    console.warn(reason);
-                  });
+                this.dashboardListService.getGroupReaderUrl();
+                this.dashboardListService.getAll()
+                  .pipe(debounceTime(300))
+                  .subscribe(
+                    (response) => {
+                      if (response.status === 200) {
+                        let localStorage = this.localStorage;
+                        let groups = response.data;
+                        localStorage.setItem('groups', JSON.stringify(groups));
+                        let protocols = [];
+                        groups.forEach(function (group) {
+                          group.protocols.forEach(function (protocol) {
+                              let protocol_local = {
+                                  id:                protocol.id,
+                                  date_reader:       protocol.date_reader,
+                                  group_reader_id:   protocol.group_reader_id,
+                                  moderator_id:      protocol.moderator_id,
+                                  participant_id:    protocol.participant_id,
+                                  participant_name:  protocol.participant_name,
+                                  protocol_type:     protocol.protocol_type,
+                                  registration_code: protocol.registration_code,
+                                  period:            protocol.period,
+                                  active: 1
+                              };
+                            protocols.push(protocol_local);
+                          });
+                        });
+                        localStorage.setItem('protocols', JSON.stringify(protocols));
+                        this.synchronized = true;
+                        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+                        this.submitted = false;
+                      }
+                      this.router.navigate(['/'])
+                        .catch(reason => {
+                          console.warn(reason);
+                        });
+                    },
+                    error => {
+                      this.submitted = false;
+                      console.warn(error.toString())
+                    }
+                  );
               },
               error_auth => {
+                this.submitted = false;
                 console.warn(error_auth)
               }
             );

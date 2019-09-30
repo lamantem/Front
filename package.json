@@ -19,8 +19,9 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0",
     "build": "ng build --prod --aot --buildOptimizer --commonChunk --vendorChunk --optimization --progress",
+    "start-pwa": "npm run build && http-server -p 8088 -c-1 dist/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -38,7 +39,9 @@
     "@angular/material": "^8.0.1",
     "@angular/platform-browser": "^8.0.2",
     "@angular/platform-browser-dynamic": "^8.0.2",
+    "@angular/pwa": "^0.12.4",
     "@angular/router": "^8.0.2",
+    "@angular/service-worker": "^8.1.2",
     "@coreui/angular": "^2.5.2",
     "@coreui/coreui": "^2.1.12",
     "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.3.1",
@@ -82,6 +85,7 @@
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^12.0.8",
     "codelyzer": "^5.1.0",
+    "http-server": "^0.11.1",
     "jasmine-core": "^3.4.0",
     "jasmine-spec-reporter": "^4.2.1",
     "karma": "^4.1.0",

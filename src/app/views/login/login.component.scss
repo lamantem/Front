@@ -1,3 +1,6 @@
+.card-body{
+  min-width: 200px;
+}
 .form_login .toolbar {
   font-size: x-large;
 }
@@ -17,21 +20,60 @@
   padding-right: 50%;
 }
 .footer {
+  padding-top: 0.3rem;
   text-align: center;
   font-size: x-small;
   color: #09436a;
 }
-@media (max-width: 568px) {
+@media (min-width: 300px) and (max-width: 450px) {
+  *{
+    font-size: medium;
+  }
   .p-4 {
     padding: 0.2rem !important;
   }
-}
-@media (max-width: 991.98px) {
-  .app-body {
-    margin-top: 1.2rem;
+  .footer{
+    font-size: small;
+    padding-top: 0.3rem;
   }
 }
-@media (min-width: 991.99px) and (max-width: 5000px) {
+@media (min-width: 451px) and (max-width: 568px) {
+  *{
+    font-size: medium;
+  }
+  .p-4 {
+    padding: 0.2rem !important;
+  }
+  .footer{
+    font-size: medium;
+    padding-top: 0.3rem;
+  }
+}
+@media (min-width: 568.1px) and (max-width: 767px) {
+  *{
+    font-size: medium;
+  }
+  .card-group{
+    align-content: center;
+    min-width:370px;
+  }
+  .app-body {
+    font-size: medium;
+    margin-top: 1.2rem;
+  }
+  .footer{
+    font-size: medium;
+    padding-top: 0.3rem;
+  }
+}
+@media (min-width: 768px) and (max-width: 5000px) {
+  *{
+  font-size: large;
+}
+  .footer{
+    font-size: medium;
+    padding-top: 0.3rem;
+  }
   .app-body {
     margin-top: 0.2rem;
   }

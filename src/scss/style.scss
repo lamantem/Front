@@ -22,9 +22,19 @@
   margin-top: 5em;
 }
 
-.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+.mat-step-header
+.mat-step-icon-selected,
+.mat-step-header
+.mat-step-icon-state-done,
+.mat-step-header
+.mat-step-icon-state-edit {
   background-color: #1196db;
   color: #fff;
+}
+
+#search-term
+.mat-form-field-wrapper {
+  padding: 1%;
 }
 
 @media screen and (max-width: 700px) {

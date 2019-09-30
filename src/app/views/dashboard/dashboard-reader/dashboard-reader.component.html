@@ -1,0 +1,67 @@
+<mat-dialog-content class="mat-typography">
+
+  <mat-tab-group (selectedTabChange)="resetNewParticipant()">
+    
+    <mat-tab>
+      <div class="container">
+
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">photo_camera</mat-icon>
+          Leitor
+        </ng-template>
+
+        <div>
+          <barcode-scanner-livestream type="code_39"
+                                      (valueChanges)="onValueChanges($event)">
+          </barcode-scanner-livestream>
+        </div>
+
+        <div *ngIf="show">
+          <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
+          <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
+        </div>
+
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <div class="container">
+
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">create</mat-icon>
+          Leitura Manual
+        </ng-template>
+
+        <div>
+          <mat-form-field class="instantInput" appearance="outline" fxFlex>
+            <mat-label>
+              Codigo de Inscrição
+            </mat-label>
+            <input matInput
+                   (input)="code.next($event.target.value)" (keydown)="onChange()">
+          </mat-form-field>
+        </div>
+
+        <div class="flex-container text-center" fxLayout="row" fxLayoutAlign="center center">
+          <div class="flex-item">
+            <mat-spinner color="accent" class="app-spinner" *ngIf="spinner"></mat-spinner>
+          </div>
+          <div class="flex-item" *ngIf="!spinner">
+            <mat-card class="mat-elevation-z0 text-modal" *ngIf="message"> {{message}}</mat-card>
+          </div>
+        </div>
+
+        <div *ngIf="show">
+          <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
+          <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
+        </div>
+      </div>
+
+    </mat-tab>
+  </mat-tab-group>
+
+</mat-dialog-content>
+<mat-dialog-actions style="display: flex; justify-content: flex-end;">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-button (click)="saveProtocol()" [mat-dialog-close]="true" cdkFocusInitial>Salvar</button>
+</mat-dialog-actions>

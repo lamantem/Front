@@ -8,7 +8,7 @@ import { environment } from "../../../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardListService extends BaseAPIClass {
+export class DashboardFormService extends BaseAPIClass {
 
   constructor(
     protected httpClient: HttpClient,
@@ -18,9 +18,9 @@ export class DashboardListService extends BaseAPIClass {
     super(httpClient,localStorageService,location);
   }
 
-  public getGroupReaderUrl() : void {
+  public getProtocolReaderUrl(group) : void {
     this.baseUrl = environment.api_url + '/' + environment.api_version +
-      '/scanner/groups';
+      '/scanner/groups/'+ group +'/protocols';
   }
 
 }

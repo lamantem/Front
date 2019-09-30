@@ -9,7 +9,7 @@
   <meta name="author" content="Desenvolvimento@fepese.org.br">
   <meta name="keyword" content="Leitura">
   <link rel="shortcut icon" href="assets/favicon.ico">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=block" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons&amp;display=block" rel="stylesheet">
   <style>
     .sidebar .nav-link.active .nav-icon {
       color: #ffffff;
@@ -28,7 +28,19 @@
     }
   </style>
   <title>App Leitura - FEPESE</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1976d2">
 </head>
 <body class="app header-fixed">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-148987720-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-148987720-1');
+  </script>
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>
 </html>

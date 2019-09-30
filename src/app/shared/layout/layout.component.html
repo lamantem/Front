@@ -2,7 +2,7 @@
         [navbarBrandRouterLink]="['/']"
         [fixed]="true"
         [navbarBrandFull]="{src: 'assets/img/brand/icon_fepese.png', width: '40%', height: '50%', alt: 'FEPESE'}"
-        [navbarBrandMinimized]="{src: 'assets/img/brand/icon_fepese.png', width: 30, height: 30, alt: 'FEPESE'}"
+        [navbarBrandMinimized]="{src: 'assets/img/brand/navbrand-mini.png',width: 55, height: 40, alt: 'FEPESE'}"
         [sidebarToggler]="'lg'"
         [mobileAsideMenuToggler]="false"
         [asideMenuToggler]="''">
@@ -24,9 +24,13 @@
           <strong>Conta</strong>
         </div>
         <a class="dropdown-item"
-           href="#"
-           routerLink="/sair">
-          <i class="fa fa-lock"></i>
+           (click)="synchronizeProtocols()">
+          <i class="fa fa-refresh"></i>
+          Sincronizar
+        </a>
+        <a class="dropdown-item"
+           (click)="isSynchronized()">
+          <i class="fa fa-power-off"></i>
           Sair
         </a>
       </div>
