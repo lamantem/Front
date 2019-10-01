@@ -58,11 +58,13 @@
           <mat-header-cell class="actions" *matHeaderCellDef>
             {{ 'VIEWS.LIST.ACTIONS_COLUMN_TABLE' | translate }}
           </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="actions_tab">
+          <mat-cell *matCellDef="let element"
+                    class="actions_tab"
+                    style="margin-right: 2%">
             <button mat-icon-button
                     matTooltip="{{ 'VIEWS.LIST.TOOLTIP_REMOVE_BUTTON' | translate }}"
                     color="primary"
-                    (click)="removeProtocol(element.id)">
+                    (click)="removeProtocol(element.registration_code)">
               <mat-icon aria-label="Delete"
                         class="iconButton">
                 delete
@@ -134,3 +136,4 @@
     </div>
   </mat-tab>
 </mat-tab-group>
+

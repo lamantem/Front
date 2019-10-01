@@ -38,23 +38,34 @@
               Codigo de Inscrição
             </mat-label>
             <input matInput
-                   (input)="code.next($event.target.value)" (keydown)="onChange()">
+                   (input)="code.next($event.target.value)"
+                   (keydown)="onChange()">
           </mat-form-field>
         </div>
 
         <div class="flex-container text-center" fxLayout="row" fxLayoutAlign="center center">
           <div class="flex-item">
-            <mat-spinner color="accent" class="app-spinner" *ngIf="spinner"></mat-spinner>
+            <mat-spinner color="Primary"
+                         class="app-spinner"
+                         strokeWidth="3"
+                         [diameter]="30"
+                         *ngIf="spinner">
+            </mat-spinner>
           </div>
           <div class="flex-item" *ngIf="!spinner">
             <mat-card class="mat-elevation-z0 text-modal" *ngIf="message"> {{message}}</mat-card>
           </div>
         </div>
 
-        <div *ngIf="show">
-          <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
-          <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
+        <div *ngIf="show && !spinner">
+          <p class="text-modal">
+            Nome do candidato: {{ newParticipant['participant_name'] }}
+          </p>
+          <p class="text-modal">
+            Codigo de inscrição: {{ newParticipant['registration_code'] }}
+          </p>
         </div>
+
       </div>
 
     </mat-tab>

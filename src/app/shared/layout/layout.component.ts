@@ -1,11 +1,15 @@
 import { Component, OnDestroy, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { navItems } from '../../_nav';
-import { AuthenticationService } from "../../core/authentication";
 import { Router } from "@angular/router";
-import Swal from "sweetalert2";
+import { debounceTime } from "rxjs/operators";
+import { AuthenticationService } from "../../core/authentication";
 import { LocalStorageService } from "../../core/services";
 import { LayoutService } from "./layout.service";
+import { DashboardListService } from "../../views/dashboard/dashboard-list/dashboard-list.service";
+import { navItems } from '../../_nav';
+
+import * as _ from 'lodash';
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +30,7 @@ export class LayoutComponent implements OnDestroy {
     private router: Router,
     private localStorage: LocalStorageService,
     private layoutService: LayoutService,
+    private dashboardListService: DashboardListService,
     @Inject(DOCUMENT) _document?: any,
     @Inject(AuthenticationService) _auth? : any,
   ) {
@@ -54,24 +59,86 @@ export class LayoutComponent implements OnDestroy {
       return;
     }
 
-    let protocols = JSON.parse(localStorage['protocols']);
+    if (this.isSynchronized()) {
+      Swal.fire('Ops!', 'No momento não existe registro para sincronizar!', 'warning');
+      return;
+    }
 
-    this.layoutService.prepareSyncProtocolUrl();
-    this.layoutService.createWithToken(protocols).subscribe((resp)=> {
-      if (resp == 500) {
-        Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
+    let protocols = this.loadProtocols();
+
+    if (!_.isEmpty(protocols)) {
+      let remove = _.remove(protocols, {'active': 0});
+      if (!_.isEmpty(remove)) {
+        this.layoutService.deleteSyncProtocolUrl();
+        this.layoutService.deleteAllWithToken(remove)
+          .subscribe((resp) => {
+            if (resp.status === 202) {
+              let protocols_local = [];
+              protocols = this.loadProtocols();
+              protocols.forEach(function (protocol) {
+                if (protocol.id !== remove[0].id) {
+                  protocols_local.push(protocol);
+                }
+              });
+              this.localStorage.clearItem('protocols');
+              this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
+            }
+          },
+          error => {
+            Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
+            return;
+          });
       }
-    } );
+
+      this.layoutService.prepareSyncProtocolUrl();
+      this.layoutService.createWithToken(protocols)
+        .subscribe((resp)=> {
+          if (resp.status === 201) {
+            this.dashboardListService.getGroupReaderUrl();
+            this.dashboardListService.getAll()
+              .pipe(debounceTime(300))
+              .subscribe((response) => {
+                if (response.status === 200) {
+                  let protocols_local = [];
+                  response.data.forEach(function (group) {
+                    group.protocols.forEach(function (protocol) {
+                      protocols_local.push({
+                        id:                protocol.id,
+                        date_reader:       protocol.date_reader,
+                        group_reader_id:   protocol.group_reader_id,
+                        moderator_id:      protocol.moderator_id,
+                        participant_id:    protocol.participant_id,
+                        participant_name:  protocol.participant_name,
+                        protocol_type:     protocol.protocol_type,
+                        registration_code: protocol.registration_code,
+                        period:            protocol.period,
+                        active: 1
+                      });
+                    });
+                  });
+
+                  if (protocols_local.length > 0) {
+                    this.localStorage.clearItem('protocols');
+                    this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
+                  }
+                }
+              },
+              error => {
+                Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
+                return;
+              });
+          }
+        });
+    }
 
     this.synchronized = true;
     this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-    Swal.fire('Bom trabalho!', 'Sincronizado com sucesso!', 'success');
+
+    Swal.fire('Bom trabalho!', 'Registros sincronizados com sucesso!', 'success');
   }
 
-  isSynchronized(): void {
-    let synchronized = JSON.parse(localStorage['synchronized']);
-
-    if (!synchronized) {
+  verifySynchronized(): void {
+    if (!this.isSynchronized()) {
       Swal.fire('Ops!', 'Você precisa sincronizar antes de sair!', 'error');
       return;
     }
@@ -81,7 +148,17 @@ export class LayoutComponent implements OnDestroy {
         console.warn(reason);
       });
   }
+
+  isSynchronized() : boolean {
+    return JSON.parse(localStorage['synchronized']);
+  }
+
+  loadProtocols() : any {
+    return JSON.parse(localStorage['protocols']);
+  }
+
   ngOnDestroy(): void {
     this.changes.disconnect();
   }
+
 }

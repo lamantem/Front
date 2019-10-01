@@ -1,12 +1,14 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { ActivatedRoute } from "@angular/router";
 import { Observable, of, Subject } from "rxjs";
+import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
+import { LocalStorageService } from "../../../core/services";
+
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
-import { ActivatedRoute } from "@angular/router";
-import { LocalStorageService } from "../../../core/services";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -58,9 +60,14 @@ export class DashboardReaderComponent implements OnInit {
 
   onValueChanges(result){
     this.barcodeValue = result.codeResult.code;
-    let code = this.barcodeValue.split('-');
 
-    this.rawSearchByCode(parseInt(code[1]));
+    if (this.barcodeValue.indexOf('-') >= 0) {
+      let code = this.barcodeValue.split('-');
+      this.rawSearchByCode(parseInt(code[1]));
+      return;
+    }
+
+    this.rawSearchByCode(parseInt(this.barcodeValue));
   }
 
   ngAfterViewInit() {
@@ -88,9 +95,12 @@ export class DashboardReaderComponent implements OnInit {
     let participants = _.filter(groups[0].participants, {'registration_code': parseInt(code)});
     let mod = _.filter(groups[0].moderators, {'user_id': user['id']});
 
+    this.resetNewParticipant();
+
     if (participants.length > 0) {
 
-      let participantsExist = _.filter(this.protocolReader, {'registration_code': parseInt(code)});
+      let participantsExist = _.filter(this.protocolReader,
+        {'registration_code': parseInt(code), 'active': 1});
 
       if (!_.isEmpty(participantsExist)) {
         Swal.fire('Ops!', 'Candidato já foi escaneado!', 'error');
@@ -100,6 +110,7 @@ export class DashboardReaderComponent implements OnInit {
       }
 
       this.newProtocol = {
+        'id': null,
         'participant_id': participants[0].id,
         'moderator_id': mod[0].id,
         'group_reader_id': parseInt(this.data.group_id),
@@ -107,12 +118,13 @@ export class DashboardReaderComponent implements OnInit {
         'registration_code': participants[0].registration_code,
         'protocol_type': 'falta',
         'period': participants[0].period,
-        'date_reader': '2019-09-24 00:00:00'
+        'active': 1,
+        'date_reader': moment().format('YYYY-MM-DD h:mm:ss')
       };
 
       this.barecodeScanner.stop();
 
-      this.newParticipant['participant_name'] = participants[0].name;
+      this.newParticipant['participant_name']  = participants[0].name;
       this.newParticipant['registration_code'] = participants[0].registration_code;
       this.show = true;
 

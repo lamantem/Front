@@ -105,6 +105,7 @@ export class LoginComponent implements OnInit {
                         groups.forEach(function (group) {
                           group.protocols.forEach(function (protocol) {
                               let protocol_local = {
+                                  id:                protocol.id,
                                   date_reader:       protocol.date_reader,
                                   group_reader_id:   protocol.group_reader_id,
                                   moderator_id:      protocol.moderator_id,
