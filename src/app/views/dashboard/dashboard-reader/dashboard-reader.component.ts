@@ -5,6 +5,7 @@ import { Observable, of, Subject } from "rxjs";
 import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { LocalStorageService } from "../../../core/services";
+
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
@@ -89,6 +90,8 @@ export class DashboardReaderComponent implements OnInit {
     let participants = _.filter(groups[0].participants, {'registration_code': parseInt(code)});
     let mod = _.filter(groups[0].moderators, {'user_id': user['id']});
 
+    this.resetNewParticipant();
+
     if (participants.length > 0) {
 
       let participantsExist = _.filter(this.protocolReader,
@@ -116,7 +119,7 @@ export class DashboardReaderComponent implements OnInit {
 
       this.barecodeScanner.stop();
 
-      this.newParticipant['participant_name'] = participants[0].name;
+      this.newParticipant['participant_name']  = participants[0].name;
       this.newParticipant['registration_code'] = participants[0].registration_code;
       this.show = true;
 
