@@ -91,7 +91,8 @@ export class DashboardReaderComponent implements OnInit {
 
     if (participants.length > 0) {
 
-      let participantsExist = _.filter(this.protocolReader, {'registration_code': parseInt(code)});
+      let participantsExist = _.filter(this.protocolReader,
+        {'registration_code': parseInt(code), 'active': 1});
 
       if (!_.isEmpty(participantsExist)) {
         Swal.fire('Ops!', 'Candidato já foi escaneado!', 'error');
