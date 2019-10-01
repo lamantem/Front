@@ -10,9 +10,9 @@ import { TranslateService } from "@ngx-translate/core";
 import { LocalStorageService } from "../../../core/services";
 import { DashboardFormService } from "./dashboard-form.service";
 import { DashboardReaderComponent } from "../dashboard-reader/dashboard-reader.component";
+
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
-
 
 @Component({
   selector: 'app-dashboard-form',
@@ -61,14 +61,14 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     this.getProtocolReader();
     this.dataSourceMissing.filterPredicate = function(data, filter: string): boolean {
       return data.participant_name.toLowerCase().includes(filter)
-          || data.period.toLowerCase().includes(filter)
-          || data.registration_code.toString() === filter;
+        || data.period.toLowerCase().includes(filter)
+        || data.registration_code.toString() === filter;
     };
-    this.getGroupReader();
+    this.loadGroupReader();
     this.dataSourceSearch.filterPredicate = function(data, filter: string): boolean {
       return data.name.toLowerCase().includes(filter)
-          || data.period.toLowerCase().includes(filter)
-          || data.registration_code.toString() === filter;
+        || data.period.toLowerCase().includes(filter)
+        || data.registration_code.toString() === filter;
     };
   }
 
@@ -154,40 +154,40 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     this.dataSourceMissing = new MatTableDataSource(protocolReaderDataSource);
   }
 
-  private getGroupReader(): void {
-    let groups = localStorage.getItem('groups');
+  private loadGroupReader(): void {
+    let groups   = localStorage.getItem('groups');
     let group_id = this.route.snapshot.paramMap.get('group_id');
-
     this.groupsReaderDataSource = JSON.parse(groups);
     this.groupsReaderDataSource = _.filter(this.groupsReaderDataSource, {'id': parseInt(group_id)});
+    this.dataSourceSearch = new MatTableDataSource([]);
+  }
 
+  private loadParticipants(): void {
     let participants = [];
-    this.groupsReaderDataSource.forEach(function (group) {
-      group.participants.forEach(function (participant) {
-        let participant_local = {
-          name:               participant.name,
-          registration_code:  participant.registration_code,
-          allocation_code:    participant.allocation_code,
-          period:             participant.period
-        };
-        participants.push(participant_local);
-      })
+    this.groupsReaderDataSource[0].participants.forEach(function (participant,key) {
+      participants.push({
+        name:               participant.name,
+        registration_code:  participant.registration_code,
+        allocation_code:    participant.allocation_code,
+        period:             participant.period
+      });
     });
-
     this.dataSourceSearch = new MatTableDataSource(participants);
   }
 
-  applyFilterMissing(filterValue: string) {
+  applyFilterMissing(filterValue: string) : void {
     this.dataSourceMissing.filter = filterValue.trim().toLowerCase();
   }
 
-  applyFilterSearch(filterValue: string) {
+  applyFilterSearch(filterValue: string) : void {
     this.dataSourceSearch.filter = filterValue.trim().toLowerCase();
   }
 
-  collapseAllocation() {
+  collapseAllocation(tabEvent:any) : void {
     this.expandedElement = [];
+    if (tabEvent.index === 1) {
+      this.loadParticipants();
+    }
   }
-
 
 }
