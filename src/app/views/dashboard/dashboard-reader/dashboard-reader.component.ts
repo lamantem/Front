@@ -60,9 +60,14 @@ export class DashboardReaderComponent implements OnInit {
 
   onValueChanges(result){
     this.barcodeValue = result.codeResult.code;
-    let code = this.barcodeValue.split('-');
 
-    this.rawSearchByCode(parseInt(code[1]));
+    if (this.barcodeValue.indexOf('-') >= 0) {
+      let code = this.barcodeValue.split('-');
+      this.rawSearchByCode(parseInt(code[1]));
+      return;
+    }
+
+    this.rawSearchByCode(parseInt(this.barcodeValue));
   }
 
   ngAfterViewInit() {
