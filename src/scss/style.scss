@@ -15,11 +15,18 @@
   position: fixed;
   z-index: 300;
   width: 100%;
-  margin-bottom: 2%;
+}
+
+.breadcrumb {
+  margin: 0 !important;
 }
 
 .breadcrumb-push {
   margin-top: 5em;
+}
+
+.mat-tab-label{
+  width: 50% !important;
 }
 
 .mat-step-header
@@ -34,11 +41,27 @@
 
 #search-term
 .mat-form-field-wrapper {
+  margin-top: 8px;
   padding: 1%;
 }
 
+#search-termMissing
+.mat-form-field-wrapper {
+  margin-top: 8px;
+  padding: 1%;
+}
+
+#search-termSearch
+.mat-form-field-wrapper {
+  margin-top: 8px;
+  padding: 1%;
+}
+
+.main .container-fluid {
+  margin-top: 10px;
+  margin-bottom: 26px;
+  padding: 0 15px;
+}
+
 @media screen and (max-width: 700px) {
-  .main .container-fluid {
-    padding: 0 15px;
-  }
 }

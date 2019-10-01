@@ -8,11 +8,13 @@
     </a>
   </li>
   <li class="breadcrumb-item">
-    Faltantes
+    {{ groupsReaderDataSource[0].name }}
   </li>
 </ol>
-<div class="container-fluid scroller_content">
-  <div class="animated fadeIn">
+<mat-tab-group  (selectedTabChange)="collapseAllocation()">
+  <mat-tab label="Faltantes">
+    <div class="container-fluid scroller_content">
+      <div class="animated fadeIn">
 
     <div class="button_fab_list">
       <a mat-mini-fab color="primary"
@@ -28,15 +30,18 @@
                      [diameter]="75">
         </mat-spinner>
       </div>
-      <mat-form-field id="search-term"
+      <mat-form-field id="search-termMissing"
                       appearance="outline"
                       style="background-color: #f3f4f5;
                       width: 100%;">
         <mat-label>Buscar</mat-label>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="">
+        <input matInput (keyup)="applyFilterMissing($event.target.value)" placeholder="">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
-      <mat-table [dataSource]="dataSource">
+
+      <mat-divider></mat-divider>
+
+      <mat-table [dataSource]="dataSourceMissing">
         <ng-container matColumnDef="registration_code">
           <mat-header-cell *matHeaderCellDef>
             {{ 'VIEWS.LIST.ID_COLUMN_TABLE' | translate }}
@@ -65,11 +70,67 @@
             </button>
           </mat-cell>
         </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-header-row *matHeaderRowDef="displayedColumnsMissing"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsMissing;"></mat-row>
       </mat-table>
 
     </div>
-
   </div>
 </div>
+
+  </mat-tab>
+  <mat-tab label="Busca">
+    <div class="container-fluid scroller_content">
+      <div class="animated fadeIn">
+
+      <div class="mat-elevation-z8">
+          <div class="loading-indicator" *ngIf="loading">
+            <mat-spinner strokeWidth="3"
+                         [diameter]="75">
+            </mat-spinner>
+          </div>
+          <mat-form-field id="search-termSearch"
+                          appearance="outline"
+                          style="background-color: #f3f4f5;
+                          width: 100%;">
+            <mat-label>Buscar</mat-label>
+            <input matInput (keyup)="applyFilterSearch($event.target.value)" placeholder="">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <mat-divider></mat-divider>
+
+          <table mat-table [dataSource]="dataSourceSearch" multiTemplateDataRows>
+            <ng-container matColumnDef="{{ column }}" *ngFor="let column of displayedColumnsSearch; let i= index">
+              <th mat-header-cell *matHeaderCellDef> {{ ColumnNames[i] }} </th>
+              <td mat-cell *matCellDef="let element"> {{ element[column] }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="expandedDetail">
+              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumnsSearch.length">
+                <div class="element-detail"
+                     [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                  <div *ngIf="!element.allocation_code" class="element-description">
+                    Local de prova não encontrado
+                  </div>
+                  <div class="element-description">
+                    {{element.allocation_code}}
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsSearch"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumnsSearch;"
+                class="element-row"
+                [class.expanded-row]="expandedElement === element"
+                (click)="expandedElement = expandedElement === element ? null : element">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

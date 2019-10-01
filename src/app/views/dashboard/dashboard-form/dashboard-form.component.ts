@@ -10,20 +10,34 @@ import { LocalStorageService } from "../../../core/services";
 import { DashboardFormService } from "./dashboard-form.service";
 import { TranslateService } from "@ngx-translate/core";
 import * as _ from 'lodash';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+
 
 @Component({
-  selector: 'app-dasboard-form',
+  selector: 'app-dashboard-form',
   templateUrl: './dashboard-form.component.html',
   styleUrls: ['./dashboard-form.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
   preserveWhitespaces: false
 })
 export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  dataSource: any;
-  displayedColumns: string[] = ['registration_code', 'participant_name', 'actions'];
-  loading: boolean;
+  dataSourceMissing: any;
+  dataSourceSearch: any;
+  displayedColumnsMissing: string[] = ['registration_code', 'participant_name', 'actions'];
+  displayedColumnsSearch: string[] = ['registration_code', 'name'];
+  ColumnNames: string[] = ['Cód.', 'Nome'];
+  groupsReaderDataSource: DashboardModel.GroupsReader[] = [];
+  expandedElement: DashboardModel.GroupsReader[] | null;
 
+  loading: boolean;
   synchronized: boolean;
 
   constructor(
@@ -44,11 +58,17 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.loading = false;
     this.getProtocolReader();
-    this.dataSource.filterPredicate = function(data, filter: string): boolean {
+    this.dataSourceMissing.filterPredicate = function(data, filter: string): boolean {
       return data.participant_name.toLowerCase().includes(filter)
           || data.period.toLowerCase().includes(filter)
           || data.registration_code.toString() === filter;
-    }
+    };
+    this.getGroupReader();
+    this.dataSourceSearch.filterPredicate = function(data, filter: string): boolean {
+      return data.name.toLowerCase().includes(filter)
+          || data.period.toLowerCase().includes(filter)
+          || data.registration_code.toString() === filter;
+    };
   }
 
   ngAfterViewInit() {
@@ -86,24 +106,43 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
     protocolReaderDataSource = _.filter(protocolReaderDataSource, {'group_reader_id': parseInt(group_id)});
-    this.dataSource = new MatTableDataSource(protocolReaderDataSource);
+    this.dataSourceMissing = new MatTableDataSource(protocolReaderDataSource);
   }
 
-  translateMatPaginator() {
-    this.translate.get([
-      'COMPONENT.PAGINATOR.ITEMS_PER_PAGE',
-      'COMPONENT.PAGINATOR.NEXT_PAGE',
-      'COMPONENT.PAGINATOR.PREVIOUS_PAGE',
-    ])
-      .subscribe(translation => {
-        this.paginator._intl.itemsPerPageLabel = translation['COMPONENT.PAGINATOR.ITEMS_PER_PAGE'];
-        this.paginator._intl.nextPageLabel     = translation['COMPONENT.PAGINATOR.NEXT_PAGE'];
-        this.paginator._intl.previousPageLabel = translation['COMPONENT.PAGINATOR.PREVIOUS_PAGE'];
-      });
+  private getGroupReader(): void {
+    let groups = localStorage.getItem('groups');
+    let group_id = this.route.snapshot.paramMap.get('group_id');
+
+    this.groupsReaderDataSource = JSON.parse(groups);
+    this.groupsReaderDataSource = _.filter(this.groupsReaderDataSource, {'id': parseInt(group_id)});
+
+    let participants = [];
+    this.groupsReaderDataSource.forEach(function (group) {
+      group.participants.forEach(function (participant) {
+        let participant_local = {
+          name:               participant.name,
+          registration_code:  participant.registration_code,
+          allocation_code:    participant.allocation_code,
+          period:             participant.period
+        };
+        participants.push(participant_local);
+      })
+    });
+
+    this.dataSourceSearch = new MatTableDataSource(participants);
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilterMissing(filterValue: string) {
+    this.dataSourceMissing.filter = filterValue.trim().toLowerCase();
   }
+
+  applyFilterSearch(filterValue: string) {
+    this.dataSourceSearch.filter = filterValue.trim().toLowerCase();
+  }
+
+  collapseAllocation() {
+    this.expandedElement = [];
+  }
+
 
 }
