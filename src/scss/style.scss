@@ -32,6 +32,18 @@
   color: #fff;
 }
 
+@media screen and (min-width: 700px) {
+  .dialog {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .dialog {
+    width: 95%;
+  }
+}
+
 #search-term
 .mat-form-field-wrapper {
   padding: 1%;

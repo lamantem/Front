@@ -57,7 +57,9 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   openReader() {
     const dialogRef = this.dialog.open(DashboardReaderComponent, {
-      width: '80%',
+      panelClass: 'dialog',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
       data: {
         group_id: this.route.snapshot.paramMap.get('group_id')
       }});
