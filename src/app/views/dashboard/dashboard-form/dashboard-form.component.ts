@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { DateAdapter } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatPaginator } from "@angular/material/paginator";
@@ -30,16 +30,20 @@ import * as _ from 'lodash';
 export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  dataSourceMissing: any;
-  dataSourceSearch: any;
+
   displayedColumnsMissing: string[] = ['registration_code', 'participant_name', 'actions'];
   displayedColumnsSearch: string[] = ['registration_code', 'name'];
   ColumnNames: string[] = ['Cód.', 'Nome'];
-  groupsReaderDataSource: DashboardModel.GroupsReader[] = [];
+
+  protocolReaderDataSource: DashboardModel.ProtocolReader[] = [];
+  groupsReader: DashboardModel.GroupsReader[] = [];
   expandedElement: DashboardModel.GroupsReader[] | null;
 
+  dataSourceMissing: any;
   loading: boolean;
   synchronized: boolean;
+  name : string = '';
+  registration_code : string = '';
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -61,12 +65,6 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     this.getProtocolReader();
     this.dataSourceMissing.filterPredicate = function(data, filter: string): boolean {
       return data.participant_name.toLowerCase().includes(filter)
-        || data.period.toLowerCase().includes(filter)
-        || data.registration_code.toString() === filter;
-    };
-    this.loadGroupReader();
-    this.dataSourceSearch.filterPredicate = function(data, filter: string): boolean {
-      return data.name.toLowerCase().includes(filter)
         || data.period.toLowerCase().includes(filter)
         || data.registration_code.toString() === filter;
     };
@@ -95,7 +93,6 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   removeProtocol(cod) {
     let protocols = JSON.parse(localStorage['protocols']);
-
     let protocol = _.filter(protocols, {'registration_code': parseInt(cod)});
 
     Swal.fire({
@@ -141,53 +138,66 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
         this.getProtocolReader();
       }
+      if (_.isEmpty(protocols)){
+        this.synchronized = true;
+        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+      }
     });
   }
 
   private getProtocolReader(): void {
     let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
+    let group = JSON.parse(localStorage['groups']);
+
+    let user = localStorage.getItem('appUser');
+    user = JSON.parse(user);
 
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
-    protocolReaderDataSource = _.filter(protocolReaderDataSource,
-        {'group_reader_id': parseInt(group_id),'active': 1});
+    this.groupsReader = _.filter(group,
+      {'id': parseInt(group_id)});
+
+    let mod = _.filter(this.groupsReader[0].moderators, {'user_id': user['id']});
+
+    protocolReaderDataSource = _.filter(protocolReaderDataSource, {
+      'group_reader_id': parseInt(group_id),
+      'active': 1,
+      'moderator_id': mod[0].id
+    });
+
     this.dataSourceMissing = new MatTableDataSource(protocolReaderDataSource);
   }
 
-  private loadGroupReader(): void {
-    let groups   = localStorage.getItem('groups');
-    let group_id = this.route.snapshot.paramMap.get('group_id');
-    this.groupsReaderDataSource = JSON.parse(groups);
-    this.groupsReaderDataSource = _.filter(this.groupsReaderDataSource, {'id': parseInt(group_id)});
-    this.dataSourceSearch = new MatTableDataSource([]);
-  }
+  public loadGroupReader(): void {
+    let groups = localStorage.getItem('groups');
+    let group = JSON.parse(groups);
 
-  private loadParticipants(): void {
-    let participants = [];
-    this.groupsReaderDataSource[0].participants.forEach(function (participant,key) {
-      participants.push({
-        name:               participant.name,
-        registration_code:  participant.registration_code,
-        allocation_code:    participant.allocation_code,
-        period:             participant.period
+    let group_id = this.route.snapshot.paramMap.get('group_id');
+
+    this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
+
+    if (this.registration_code != '' && this.name === '') {
+      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
+        'registration_code': parseInt(this.registration_code),
       });
+      return;
+    }
+
+    if (this.name != '' && this.registration_code === '') {
+      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
+        'name': this.name.toLocaleUpperCase(),
+      });
+      return;
+    }
+
+    this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
+      'registration_code': parseInt(this.registration_code),
+      'name': this.name.toLocaleUpperCase()
     });
-    this.dataSourceSearch = new MatTableDataSource(participants);
   }
 
   applyFilterMissing(filterValue: string) : void {
     this.dataSourceMissing.filter = filterValue.trim().toLowerCase();
-  }
-
-  applyFilterSearch(filterValue: string) : void {
-    this.dataSourceSearch.filter = filterValue.trim().toLowerCase();
-  }
-
-  collapseAllocation(tabEvent:any) : void {
-    this.expandedElement = [];
-    if (tabEvent.index === 1) {
-      this.loadParticipants();
-    }
   }
 
 }

@@ -66,8 +66,14 @@ export class LayoutComponent implements OnDestroy {
 
     let protocols = this.loadProtocols();
 
+    if (_.isEmpty(protocols)) {
+      this.synchronized = true;
+      this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+    }
+
     if (!_.isEmpty(protocols)) {
       let remove = _.remove(protocols, {'active': 0});
+
       if (!_.isEmpty(remove)) {
         this.layoutService.deleteSyncProtocolUrl();
         this.layoutService.deleteAllWithToken(remove)
@@ -80,59 +86,66 @@ export class LayoutComponent implements OnDestroy {
                   protocols_local.push(protocol);
                 }
               });
+
+              this.synchronized = true;
+              this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+
               this.localStorage.clearItem('protocols');
               this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
+              return;
             }
           },
           error => {
             Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
-            return;
           });
       }
 
-      this.layoutService.prepareSyncProtocolUrl();
-      this.layoutService.createWithToken(protocols)
-        .subscribe((resp)=> {
-          if (resp.status === 201) {
-            this.dashboardListService.getGroupReaderUrl();
-            this.dashboardListService.getAll()
-              .pipe(debounceTime(300))
-              .subscribe((response) => {
-                if (response.status === 200) {
-                  let protocols_local = [];
-                  response.data.forEach(function (group) {
-                    group.protocols.forEach(function (protocol) {
-                      protocols_local.push({
-                        id:                protocol.id,
-                        date_reader:       protocol.date_reader,
-                        group_reader_id:   protocol.group_reader_id,
-                        moderator_id:      protocol.moderator_id,
-                        participant_id:    protocol.participant_id,
-                        participant_name:  protocol.participant_name,
-                        protocol_type:     protocol.protocol_type,
-                        registration_code: protocol.registration_code,
-                        period:            protocol.period,
-                        active: 1
+      if (!_.isEmpty(protocols)) {
+        this.layoutService.prepareSyncProtocolUrl();
+        this.layoutService.createWithToken(protocols)
+          .subscribe((resp) => {
+            if (resp.status === 201) {
+              this.dashboardListService.getGroupReaderUrl();
+              this.dashboardListService.getAll()
+                .pipe(debounceTime(300))
+                .subscribe((response) => {
+                    if (response.status === 200) {
+                      let protocols_local = [];
+                      response.data.forEach(function (group) {
+                        group.protocols.forEach(function (protocol) {
+                          protocols_local.push({
+                            id: protocol.id,
+                            date_reader: protocol.date_reader,
+                            group_reader_id: protocol.group_reader_id,
+                            moderator_id: protocol.moderator_id,
+                            participant_id: protocol.participant_id,
+                            participant_name: protocol.participant_name,
+                            protocol_type: protocol.protocol_type,
+                            registration_code: protocol.registration_code,
+                            period: protocol.period,
+                            active: 1
+                          });
+                        });
                       });
-                    });
+
+                      if (protocols_local.length > 0) {
+                        this.localStorage.clearItem('protocols');
+                        this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
+                      }
+
+                      this.synchronized = true;
+                      this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+
+                    }
+                  },
+                  error => {
+                    Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
+                    return;
                   });
-
-                  if (protocols_local.length > 0) {
-                    this.localStorage.clearItem('protocols');
-                    this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
-                  }
-                }
-              },
-              error => {
-                Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
-                return;
-              });
-          }
-        });
+            }
+          });
+      }
     }
-
-    this.synchronized = true;
-    this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
 
     Swal.fire('Bom trabalho!', 'Registros sincronizados com sucesso!', 'success');
   }
