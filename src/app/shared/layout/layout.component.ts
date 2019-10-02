@@ -80,6 +80,10 @@ export class LayoutComponent implements OnDestroy {
                   protocols_local.push(protocol);
                 }
               });
+
+              this.synchronized = true;
+              this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+
               this.localStorage.clearItem('protocols');
               this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
             }
@@ -121,6 +125,10 @@ export class LayoutComponent implements OnDestroy {
                     this.localStorage.clearItem('protocols');
                     this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
                   }
+
+                  this.synchronized = true;
+                  this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+
                 }
               },
               error => {
@@ -130,9 +138,6 @@ export class LayoutComponent implements OnDestroy {
           }
         });
     }
-
-    this.synchronized = true;
-    this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
 
     Swal.fire('Bom trabalho!', 'Registros sincronizados com sucesso!', 'success');
   }

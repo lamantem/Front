@@ -8,10 +8,10 @@
     </a>
   </li>
   <li class="breadcrumb-item">
-    {{ groupsReaderDataSource[0].name }}
+    {{ this.groupsReader[0].name }}
   </li>
 </ol>
-<mat-tab-group  (selectedTabChange)="collapseAllocation($event)">
+<mat-tab-group>
   <mat-tab label="Faltantes">
     <div class="container-fluid scroller_content">
       <div class="animated fadeIn">
@@ -78,36 +78,44 @@
     </div>
   </mat-tab>
   <mat-tab label="Local de prova">
-    <div class="container-fluid scroller_content">
-      <div class="animated fadeIn">
 
-      <div class="mat-elevation-z8">
-          <div class="loading-indicator" *ngIf="loading">
-            <mat-spinner strokeWidth="3"
-                         [diameter]="75">
-            </mat-spinner>
-          </div>
-          <mat-form-field id="search-termSearch"
-                          appearance="outline"
-                          style="background-color: #f3f4f5;
-                          width: 100%;">
-            <mat-label>Buscar</mat-label>
-            <input matInput (keyup)="applyFilterSearch($event.target.value)" placeholder="">
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
+    <div>
+      <mat-card class="mat-elevation-z8 mat-card-search">
+        <div class="loading-indicator" *ngIf="loading">
+          <mat-spinner strokeWidth="3"
+                       [diameter]="75">
+          </mat-spinner>
+        </div>
+        <mat-form-field class="search-termSearch"
+                        appearance="outline">
+          <mat-label>Cód.</mat-label>
+          <input matInput [(ngModel)]="registration_code">
+        </mat-form-field>
 
-          <mat-divider></mat-divider>
+        <mat-form-field class="search-termSearch"
+                        appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput [(ngModel)]="name">
+        </mat-form-field>
 
-          <table mat-table [dataSource]="dataSourceSearch" multiTemplateDataRows>
+        <div class="button-search">
+          <button type="submit" (click)="loadGroupReader()" class="btn btn-primary px-4">
+            Buscar
+          </button>
+        </div>
+
+        <div *ngIf="protocolReaderDataSource">
+          <mat-divider [inset]="true"></mat-divider>
+          <table mat-table [dataSource]="protocolReaderDataSource" multiTemplateDataRows>
             <ng-container matColumnDef="{{ column }}" *ngFor="let column of displayedColumnsSearch; let i= index">
-              <th mat-header-cell *matHeaderCellDef> {{ ColumnNames[i] }} </th>
-              <td mat-cell *matCellDef="let element"> {{ element[column] }} </td>
+              <th class="padding-rows" mat-header-cell *matHeaderCellDef> {{ ColumnNames[i] }} </th>
+              <td class="padding-rows" mat-cell *matCellDef="let element"> {{ element[column] }} </td>
             </ng-container>
 
             <ng-container matColumnDef="expandedDetail">
               <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumnsSearch.length">
                 <div class="element-detail"
-                     [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                     [@detailExpand]="element == 'expanded'">
                   <div *ngIf="!element.allocation_code" class="element-description">
                     Local de prova não encontrado
                   </div>
@@ -126,9 +134,8 @@
             </tr>
             <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
           </table>
-
         </div>
-      </div>
+      </mat-card>
     </div>
   </mat-tab>
 </mat-tab-group>

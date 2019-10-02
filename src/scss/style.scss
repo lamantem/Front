@@ -1,12 +1,9 @@
 // If you want to override variables do it here
 @import "variables";
-
 // Import styles
 @import "~@coreui/coreui/scss/coreui";
-
 // If you want to add something do it here
 @import "custom";
-
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 //body {margin: 0; height: 100%; overflow: hidden}
@@ -25,7 +22,7 @@
   margin-top: 5em;
 }
 
-.mat-tab-label{
+.mat-tab-label {
   width: 50% !important;
 }
 
@@ -63,10 +60,12 @@
   padding: 1%;
 }
 
-#search-termSearch
-.mat-form-field-wrapper {
-  margin-top: 8px;
-  padding: 1%;
+.search-termSearch {
+  width: 100%;
+  .mat-form-field-wrapper {
+    margin-top: 8px;
+    padding: 1%;
+  }
 }
 
 .main .container-fluid {
