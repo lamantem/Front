@@ -63,8 +63,7 @@ export class DashboardReaderComponent implements OnInit {
 
     if (this.barcodeValue.indexOf('-') >= 0) {
       let code = this.barcodeValue.split('-');
-      this.rawSearchByCode(parseInt(code[1]));
-      return;
+      this.barcodeValue = parseInt(code[1]);
     }
 
     this.rawSearchByCode(parseInt(this.barcodeValue));
@@ -86,8 +85,10 @@ export class DashboardReaderComponent implements OnInit {
   rawSearchByCode(code): Observable<any> {
     let group = localStorage.getItem('groups');
     this.groupsReader = JSON.parse(group);
+
     let protocol = localStorage.getItem('protocols');
     this.protocolReader = JSON.parse(protocol);
+
     let user = localStorage.getItem('appUser');
     user = JSON.parse(user);
 
@@ -95,7 +96,7 @@ export class DashboardReaderComponent implements OnInit {
     let participants = _.filter(groups[0].participants, {'registration_code': parseInt(code)});
     let mod = _.filter(groups[0].moderators, {'user_id': user['id']});
 
-    this.resetNewParticipant();
+    this.resetNewParticipant(false);
 
     if (participants.length > 0) {
 
@@ -103,10 +104,10 @@ export class DashboardReaderComponent implements OnInit {
         {'registration_code': parseInt(code), 'active': 1});
 
       if (!_.isEmpty(participantsExist)) {
-        Swal.fire('Ops!', 'Candidato já foi escaneado!', 'error');
+        Swal.fire('Ops!', 'Candidato já foi registrado!', 'error');
         this.barecodeScanner.retart();
         debounceTime(400);
-        return of('O candidato já foi escaneado!');
+        return of('O candidato já foi registrado!');
       }
 
       this.newProtocol = {
@@ -131,7 +132,8 @@ export class DashboardReaderComponent implements OnInit {
       return of('Candidato encontrado!');
     }
 
-    return of('O codigo de inscrição está invalido!');
+    this.show = false;
+    return of('Código de inscrição inválido!');
   }
 
   saveProtocol() {
@@ -141,10 +143,15 @@ export class DashboardReaderComponent implements OnInit {
     }
   }
 
-  resetNewParticipant() {
+  resetNewParticipant(withReload:boolean) : void {
     this.show = false;
     this.newParticipant = [];
     this.message = '';
-    this.barecodeScanner.retart();
+    if (withReload) {
+      if (!this.barecodeScanner.isStarted()) {
+        this.barecodeScanner.start();
+      }
+      this.barecodeScanner.retart();
+    }
   }
 }
