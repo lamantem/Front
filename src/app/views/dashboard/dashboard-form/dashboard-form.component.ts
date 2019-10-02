@@ -149,13 +149,22 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
     let group = JSON.parse(localStorage['groups']);
 
+    let user = localStorage.getItem('appUser');
+    user = JSON.parse(user);
+
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
     this.groupsReader = _.filter(group,
       {'id': parseInt(group_id)});
 
-    protocolReaderDataSource = _.filter(protocolReaderDataSource,
-        {'group_reader_id': parseInt(group_id),'active': 1});
+    let mod = _.filter(this.groupsReader[0].moderators, {'user_id': user['id']});
+
+    protocolReaderDataSource = _.filter(protocolReaderDataSource, {
+      'group_reader_id': parseInt(group_id),
+      'active': 1,
+      'moderator_id': mod[0].id
+    });
+
     this.dataSourceMissing = new MatTableDataSource(protocolReaderDataSource);
   }
 
