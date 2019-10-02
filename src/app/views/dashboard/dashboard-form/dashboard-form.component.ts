@@ -93,7 +93,6 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   removeProtocol(cod) {
     let protocols = JSON.parse(localStorage['protocols']);
-
     let protocol = _.filter(protocols, {'registration_code': parseInt(cod)});
 
     Swal.fire({
@@ -138,6 +137,10 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
         );
 
         this.getProtocolReader();
+      }
+      if (_.isEmpty(protocols)){
+        this.synchronized = true;
+        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
       }
     });
   }
