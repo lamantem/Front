@@ -163,21 +163,25 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     let groups = localStorage.getItem('groups');
     let group = JSON.parse(groups);
 
-    if (this.registration_code != '' && this.name == '') {
-      this.protocolReaderDataSource = _.filter(group[0].participants, {
+    let group_id = this.route.snapshot.paramMap.get('group_id');
+
+    this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
+
+    if (this.registration_code != '' && this.name === '') {
+      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
         'registration_code': parseInt(this.registration_code),
       });
       return;
     }
 
-    if (this.name != '' && this.registration_code == '') {
-      this.protocolReaderDataSource = _.filter(group[0].participants, {
+    if (this.name != '' && this.registration_code === '') {
+      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
         'name': this.name.toLocaleUpperCase(),
       });
       return;
     }
 
-    this.protocolReaderDataSource = _.filter(group[0].participants, {
+    this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
       'registration_code': parseInt(this.registration_code),
       'name': this.name.toLocaleUpperCase()
     });
