@@ -149,13 +149,22 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
     let group = JSON.parse(localStorage['groups']);
 
+    let user = localStorage.getItem('appUser');
+    user = JSON.parse(user);
+
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
     this.groupsReader = _.filter(group,
       {'id': parseInt(group_id)});
 
-    protocolReaderDataSource = _.filter(protocolReaderDataSource,
-        {'group_reader_id': parseInt(group_id),'active': 1});
+    let mod = _.filter(this.groupsReader[0].moderators, {'user_id': user['id']});
+
+    protocolReaderDataSource = _.filter(protocolReaderDataSource, {
+      'group_reader_id': parseInt(group_id),
+      'active': 1,
+      'moderator_id': mod[0].id
+    });
+
     this.dataSourceMissing = new MatTableDataSource(protocolReaderDataSource);
   }
 
@@ -163,21 +172,25 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     let groups = localStorage.getItem('groups');
     let group = JSON.parse(groups);
 
-    if (this.registration_code != '' && this.name == '') {
-      this.protocolReaderDataSource = _.filter(group[0].participants, {
+    let group_id = this.route.snapshot.paramMap.get('group_id');
+
+    this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
+
+    if (this.registration_code != '' && this.name === '') {
+      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
         'registration_code': parseInt(this.registration_code),
       });
       return;
     }
 
-    if (this.name != '' && this.registration_code == '') {
-      this.protocolReaderDataSource = _.filter(group[0].participants, {
+    if (this.name != '' && this.registration_code === '') {
+      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
         'name': this.name.toLocaleUpperCase(),
       });
       return;
     }
 
-    this.protocolReaderDataSource = _.filter(group[0].participants, {
+    this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
       'registration_code': parseInt(this.registration_code),
       'name': this.name.toLocaleUpperCase()
     });
