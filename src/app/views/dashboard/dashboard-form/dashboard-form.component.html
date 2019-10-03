@@ -39,7 +39,7 @@
 
           <mat-divider></mat-divider>
 
-          <mat-table [dataSource]="dataSourceMissing">
+          <table mat-table [dataSource]="dataSourceMissing">
             <ng-container matColumnDef="registration_code">
               <mat-header-cell *matHeaderCellDef>
                 {{ 'VIEWS.LIST.ID_COLUMN_TABLE' | translate }}
@@ -73,7 +73,10 @@
             <mat-header-row *matHeaderRowDef="displayedColumnsMissing"></mat-header-row>
             <mat-row [ngStyle]="{'background-color': row.sync === 1 ? '#f3f4f5' : 'white'}"
                      *matRowDef="let row; columns: displayedColumnsMissing;"></mat-row>
-          </mat-table>
+          </table>
+          <div *ngIf="dataSourceMissing.data.length === 0" class="no-return">
+            {{ 'COMPONENT.EMPTY_DATA' | translate }}
+          </div>
         </div>
       </div>
     </div>
@@ -105,7 +108,6 @@
           </button>
         </div>
 
-        <div *ngIf="protocolReaderDataSource">
           <mat-divider [inset]="true"></mat-divider>
           <table mat-table [dataSource]="protocolReaderDataSource" multiTemplateDataRows>
             <ng-container matColumnDef="{{ column }}" *ngFor="let column of displayedColumnsSearch; let i= index">
@@ -118,7 +120,7 @@
                 <div class="element-detail"
                      [@detailExpand]="element == 'expanded'">
                   <div *ngIf="!element.allocation_code" class="element-description">
-                    Local de prova não encontrado
+                    {{ 'COMPONENT.EMPTY_DATA' | translate }}
                   </div>
                   <div class="element-description">
                     {{element.allocation_code}}
@@ -135,6 +137,8 @@
             </tr>
             <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
           </table>
+        <div *ngIf="protocolReaderDataSource.length === 0" class="no-return">
+          {{ 'COMPONENT.EMPTY_DATA' | translate }}
         </div>
       </mat-card>
     </div>
