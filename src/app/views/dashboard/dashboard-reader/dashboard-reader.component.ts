@@ -119,8 +119,9 @@ export class DashboardReaderComponent implements OnInit {
         'registration_code': participants[0].registration_code,
         'protocol_type': 'falta',
         'period': participants[0].period,
+        'date_reader': moment().format('YYYY-MM-DD h:mm:ss'),
         'active': 1,
-        'date_reader': moment().format('YYYY-MM-DD h:mm:ss')
+        'sync': 0
       };
 
       this.barecodeScanner.stop();

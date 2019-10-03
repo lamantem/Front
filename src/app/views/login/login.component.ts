@@ -114,7 +114,8 @@ export class LoginComponent implements OnInit {
                                   protocol_type:     protocol.protocol_type,
                                   registration_code: protocol.registration_code,
                                   period:            protocol.period,
-                                  active: 1
+                                  active: 1,
+                                  sync: 1
                               };
                             protocols.push(protocol_local);
                           });

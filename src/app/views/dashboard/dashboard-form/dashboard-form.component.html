@@ -71,7 +71,8 @@
               </mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumnsMissing"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumnsMissing;"></mat-row>
+            <mat-row [ngStyle]="{'background-color': row.sync === 1 ? '#f3f4f5' : 'white'}"
+                     *matRowDef="let row; columns: displayedColumnsMissing;"></mat-row>
           </mat-table>
         </div>
       </div>
