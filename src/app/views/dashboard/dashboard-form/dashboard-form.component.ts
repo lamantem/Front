@@ -96,13 +96,14 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     let protocol = _.filter(protocols, {'registration_code': parseInt(cod)});
 
     Swal.fire({
-      title: 'Você tem certeza que quer deletar o '+ protocol[0].participant_name +'?',
-      text: "Você não consegue reverter essa ação depois!",
+      title: 'Deseja remover: '+ protocol[0].participant_name +'?',
+      text: "Esta é uma ação irreversivel!",
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sim, pode deletar!'
+      confirmButtonText: 'Sim, pretendo deletar!',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.value) {
 
