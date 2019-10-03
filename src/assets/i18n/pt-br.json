@@ -17,6 +17,7 @@
     "LIST": {
       "TITLE" : "Buscar",
       "ID_COLUMN_TABLE": "Cód.",
+      "SYNC_COLUMN_TABLE": "Sinc.",
       "NAME_COLUMN_TABLE": "Nome",
       "ACTIONS_COLUMN_TABLE": "Ação",
       "TOOLTIP_ADD_BUTTON": "Click para Adicionar",

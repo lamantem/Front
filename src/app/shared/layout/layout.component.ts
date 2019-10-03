@@ -136,7 +136,6 @@ export class LayoutComponent implements OnDestroy {
 
                       this.synchronized = true;
                       this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-
                     }
                   },
                   error => {
@@ -148,7 +147,12 @@ export class LayoutComponent implements OnDestroy {
       }
     }
 
-    Swal.fire('Bom trabalho!', 'Registros sincronizados com sucesso!', 'success');
+    Swal.fire('Bom trabalho!', 'Registros sincronizados com sucesso!', 'success')
+      .then((result) => {
+        if (result.value) {
+          window.location.reload();
+        }
+      });
   }
 
   verifySynchronized(): void {

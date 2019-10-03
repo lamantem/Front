@@ -40,6 +40,15 @@
           <mat-divider></mat-divider>
 
           <mat-table [dataSource]="dataSourceMissing">
+            <ng-container matColumnDef="sync">
+              <mat-header-cell *matHeaderCellDef>
+                {{ 'VIEWS.LIST.SYNC_COLUMN_TABLE' | translate }}
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <i *ngIf="element.sync === 1" class="material-icons check">done</i>
+                <i *ngIf="element.sync != 1" class="material-icons">done</i>
+              </mat-cell>
+            </ng-container>
             <ng-container matColumnDef="registration_code">
               <mat-header-cell *matHeaderCellDef>
                 {{ 'VIEWS.LIST.ID_COLUMN_TABLE' | translate }}
@@ -71,8 +80,7 @@
               </mat-cell>
             </ng-container>
             <mat-header-row *matHeaderRowDef="displayedColumnsMissing"></mat-header-row>
-            <mat-row [ngStyle]="{'background-color': row.sync === 1 ? '#f3f4f5' : 'white'}"
-                     *matRowDef="let row; columns: displayedColumnsMissing;"></mat-row>
+            <mat-row *matRowDef="let row; columns: displayedColumnsMissing;"></mat-row>
           </mat-table>
         </div>
       </div>
