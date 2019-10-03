@@ -31,7 +31,7 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  displayedColumnsMissing: string[] = ['registration_code', 'participant_name', 'actions'];
+  displayedColumnsMissing: string[] = ['sync', 'registration_code', 'participant_name', 'actions'];
   displayedColumnsSearch: string[] = ['registration_code', 'name'];
   ColumnNames: string[] = ['Cód.', 'Nome'];
 
