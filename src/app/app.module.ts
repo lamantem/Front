@@ -1,5 +1,6 @@
 import { CommonModule, LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -8,14 +9,13 @@ import { CoreModule } from './core';
 import { SharedModule } from './shared';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
-import { AppMaterialModule } from './app.material.module';
+import { AppMaterialModule } from "./app.material.module";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 
 import 'hammerjs';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 @NgModule({
