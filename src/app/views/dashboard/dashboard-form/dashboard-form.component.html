@@ -8,68 +8,150 @@
     </a>
   </li>
   <li class="breadcrumb-item">
-    Faltantes
+    {{ this.groupsReader[0].name }}
   </li>
 </ol>
-<div class="container-fluid scroller_content">
-  <div class="animated fadeIn">
+<mat-tab-group>
+  <mat-tab label="Faltantes">
+    <div class="container-fluid scroller_content">
+      <div class="animated fadeIn">
+        <div class="button_fab_list">
+          <a mat-mini-fab color="primary"
+             matTooltip="{{ 'VIEWS.LIST.TOOLTIP_ADD_BUTTON' | translate }}"
+             (click)="openReader()">
+            <mat-icon>add</mat-icon>
+          </a>
+        </div>
+        <div class="mat-elevation-z8">
+          <div class="loading-indicator" *ngIf="loading">
+            <mat-spinner strokeWidth="3"
+                         [diameter]="75">
+            </mat-spinner>
+          </div>
+          <mat-form-field id="search-termMissing"
+                          appearance="outline"
+                          style="background-color: #f3f4f5;
+                          width: 100%;">
+            <mat-label>Buscar</mat-label>
+            <input matInput (keyup)="applyFilterMissing($event.target.value)" placeholder="">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
 
-    <div class="button_fab_list">
-      <a mat-mini-fab color="primary"
-         matTooltip="{{ 'VIEWS.LIST.TOOLTIP_ADD_BUTTON' | translate }}"
-         (click)="openReader()">
-        <mat-icon>add</mat-icon>
-      </a>
-    </div>
+          <mat-divider></mat-divider>
 
-    <div class="mat-elevation-z8">
-      <div class="loading-indicator" *ngIf="loading">
-        <mat-spinner strokeWidth="3"
-                     [diameter]="75">
-        </mat-spinner>
+
+          <table mat-table [dataSource]="dataSourceMissing">
+
+            <ng-container matColumnDef="sync">
+              <mat-header-cell *matHeaderCellDef>
+                {{ 'VIEWS.LIST.SYNC_COLUMN_TABLE' | translate }}
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <i *ngIf="element.sync === 1" class="material-icons check">done</i>
+                <i *ngIf="element.sync != 1" class="material-icons">done</i>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="registration_code">
+              <mat-header-cell *matHeaderCellDef>
+                {{ 'VIEWS.LIST.ID_COLUMN_TABLE' | translate }}
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.registration_code}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="participant_name">
+              <mat-header-cell *matHeaderCellDef>
+                {{ 'VIEWS.LIST.NAME_COLUMN_TABLE' | translate }}
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.participant_name}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <mat-header-cell class="actions" *matHeaderCellDef>
+                {{ 'VIEWS.LIST.ACTIONS_COLUMN_TABLE' | translate }}
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"
+                        class="actions_tab"
+                        style="margin-right: 2%">
+                <button mat-icon-button
+                        matTooltip="{{ 'VIEWS.LIST.TOOLTIP_REMOVE_BUTTON' | translate }}"
+                        color="primary"
+                        (click)="removeProtocol(element.registration_code)">
+                  <mat-icon aria-label="Delete"
+                            class="iconButton">
+                    delete
+                  </mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumnsMissing"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumnsMissing;"></mat-row>
+          </table>
+          <div *ngIf="dataSourceMissing.data.length === 0" class="no-return">
+            {{ 'COMPONENT.EMPTY_DATA' | translate }}
+          </div>
+        </div>
       </div>
-      <mat-form-field id="search-term"
-                      appearance="outline"
-                      style="background-color: #f3f4f5;
-                      width: 100%;">
-        <mat-label>Buscar</mat-label>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="">
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-      <mat-table [dataSource]="dataSource">
-        <ng-container matColumnDef="registration_code">
-          <mat-header-cell *matHeaderCellDef>
-            {{ 'VIEWS.LIST.ID_COLUMN_TABLE' | translate }}
-          </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.registration_code}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="participant_name">
-          <mat-header-cell *matHeaderCellDef>
-            {{ 'VIEWS.LIST.NAME_COLUMN_TABLE' | translate }}
-          </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.participant_name}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="actions">
-          <mat-header-cell class="actions" *matHeaderCellDef>
-            {{ 'VIEWS.LIST.ACTIONS_COLUMN_TABLE' | translate }}
-          </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="actions_tab">
-            <button mat-icon-button
-                    matTooltip="{{ 'VIEWS.LIST.TOOLTIP_REMOVE_BUTTON' | translate }}"
-                    color="primary"
-                    (click)="removeProtocol(element.registration_code)">
-              <mat-icon aria-label="Delete"
-                        class="iconButton">
-                delete
-              </mat-icon>
-            </button>
-          </mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
-
     </div>
+  </mat-tab>
+  <mat-tab label="Local de prova">
 
-  </div>
-</div>
+    <div>
+      <mat-card class="mat-elevation-z8 mat-card-search">
+        <div class="loading-indicator" *ngIf="loading">
+          <mat-spinner strokeWidth="3"
+                       [diameter]="75">
+          </mat-spinner>
+        </div>
+        <mat-form-field class="search-termSearch"
+                        appearance="outline">
+          <mat-label>Cód.</mat-label>
+          <input matInput [(ngModel)]="registration_code">
+        </mat-form-field>
+
+        <mat-form-field class="search-termSearch"
+                        appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput [(ngModel)]="name">
+        </mat-form-field>
+
+        <div class="button-search">
+          <button type="submit" (click)="loadGroupReader()" class="btn btn-primary px-4">
+            Buscar
+          </button>
+        </div>
+
+          <mat-divider [inset]="true"></mat-divider>
+          <table mat-table [dataSource]="protocolReaderDataSource" multiTemplateDataRows>
+            <ng-container matColumnDef="{{ column }}" *ngFor="let column of displayedColumnsSearch; let i= index">
+              <th class="padding-rows" mat-header-cell *matHeaderCellDef> {{ ColumnNames[i] }} </th>
+              <td class="padding-rows" mat-cell *matCellDef="let element"> {{ element[column] }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="expandedDetail">
+              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumnsSearch.length">
+                <div class="element-detail"
+                     [@detailExpand]="element == 'expanded'">
+                  <div *ngIf="!element.allocation_code" class="element-description">
+                    {{ 'COMPONENT.EMPTY_DATA' | translate }}
+                  </div>
+                  <div class="element-description">
+                    {{element.allocation_code}}
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsSearch"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumnsSearch;"
+                class="element-row"
+                [class.expanded-row]="expandedElement === element"
+                (click)="expandedElement = expandedElement === element ? null : element">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+          </table>
+        <div *ngIf="protocolReaderDataSource.length === 0" class="no-return">
+          {{ 'COMPONENT.EMPTY_DATA' | translate }}
+        </div>
+      </mat-card>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+

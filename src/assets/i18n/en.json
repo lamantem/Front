@@ -17,6 +17,7 @@
     "LIST": {
       "TITLE" : "Search",
       "ID_COLUMN_TABLE": "Id",
+      "SYNC_COLUMN_TABLE": "Sync.",
       "NAME_COLUMN_TABLE": "Name",
       "ACTIONS_COLUMN_TABLE": "Actions",
       "TOOLTIP_ADD_BUTTON": "Click to add",

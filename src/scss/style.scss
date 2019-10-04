@@ -1,12 +1,9 @@
 // If you want to override variables do it here
 @import "variables";
-
 // Import styles
 @import "~@coreui/coreui/scss/coreui";
-
 // If you want to add something do it here
 @import "custom";
-
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 //body {margin: 0; height: 100%; overflow: hidden}
@@ -15,11 +12,18 @@
   position: fixed;
   z-index: 300;
   width: 100%;
-  margin-bottom: 2%;
+}
+
+.breadcrumb {
+  margin: 0 !important;
 }
 
 .breadcrumb-push {
   margin-top: 5em;
+}
+
+.mat-tab-label {
+  width: 50% !important;
 }
 
 .mat-step-header
@@ -32,13 +36,51 @@
   color: #fff;
 }
 
-#search-term
-.mat-form-field-wrapper {
-  padding: 1%;
+@media screen and (min-width: 700px) {
+  .dialog {
+    width: 60%;
+  }
 }
 
 @media screen and (max-width: 700px) {
-  .main .container-fluid {
-    padding: 0 15px;
+  .dialog {
+    width: 95%;
   }
+}
+
+#search-term
+.mat-form-field-wrapper {
+  margin-top: 8px;
+  padding: 1%;
+}
+
+#search-termMissing
+.mat-form-field-wrapper {
+  margin-top: 8px;
+  padding: 1%;
+}
+
+.search-termSearch {
+  width: 100%;
+  .mat-form-field-wrapper {
+    margin-top: 8px;
+    padding: 1%;
+  }
+}
+
+.no-return{
+  padding: 16px;
+  opacity: 0.5;
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;
+}
+
+.main .container-fluid {
+  margin-top: 10px;
+  margin-bottom: 26px;
+  padding: 0 15px;
+}
+
+@media screen and (max-width: 700px) {
 }
