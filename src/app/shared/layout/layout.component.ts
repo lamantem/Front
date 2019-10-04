@@ -150,7 +150,10 @@ export class LayoutComponent implements OnDestroy {
     Swal.fire('Bom trabalho!', 'Registros sincronizados com sucesso!', 'success')
       .then((result) => {
         if (result.value) {
-          window.location.reload();
+          this.router.navigate(['/'])
+            .catch(reason => {
+              console.warn(reason);
+            });
         }
       });
   }
