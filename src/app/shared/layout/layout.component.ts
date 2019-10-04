@@ -25,6 +25,7 @@ export class LayoutComponent implements OnDestroy {
   user: any;
   auth: any;
   synchronized: boolean;
+  loading: boolean;
 
   constructor(
     private router: Router,
@@ -37,6 +38,7 @@ export class LayoutComponent implements OnDestroy {
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
     });
+    this.loading = false;
     this.auth = _auth;
     this.user = this.auth.getCurrentUser();
     this.element = _document.body;
@@ -54,12 +56,15 @@ export class LayoutComponent implements OnDestroy {
   }
 
   synchronizeProtocols() {
+    this.loading = true;
     if (!navigator.onLine) {
+      this.loading = false;
       Swal.fire('Ops!', 'Você precisa conectar a internet!', 'error');
       return;
     }
 
     if (this.isSynchronized()) {
+      this.loading = false;
       Swal.fire('Ops!', 'No momento não existe registro para sincronizar!', 'warning');
       return;
     }
@@ -96,6 +101,7 @@ export class LayoutComponent implements OnDestroy {
             }
           },
           error => {
+            this.loading = false;
             Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
           });
       }
@@ -134,6 +140,8 @@ export class LayoutComponent implements OnDestroy {
                         this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
                       }
 
+                      this.loading = false;
+
                       this.synchronized = true;
                       this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
 
@@ -149,6 +157,7 @@ export class LayoutComponent implements OnDestroy {
                     }
                   },
                   error => {
+                    this.loading = false;
                     Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
                     return;
                   });
