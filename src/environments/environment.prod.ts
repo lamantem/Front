@@ -8,5 +8,5 @@ export const environment = {
   grantType: 'password',
   scope: '*',
   siteKey_recaptcha: '6LcbtbMUAAAAAE-QlEOZyy74gqLRmAekikmMG_RN',
-  app_version: 'App versão Beta 0.1.6'
+  app_version: 'App versão 1.0.0'
 };
