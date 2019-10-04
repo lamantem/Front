@@ -171,29 +171,32 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   public loadGroupReader(): void {
     let groups = localStorage.getItem('groups');
-    let group = JSON.parse(groups);
+    let group  = JSON.parse(groups);
 
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
     this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
 
-    if (this.registration_code != '' && this.name === '') {
+    if (this.registration_code !== '' && this.name === '') {
       this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
         'registration_code': parseInt(this.registration_code),
       });
       return;
     }
 
-    if (this.name != '' && this.registration_code === '') {
-      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
-        'name': this.name.toLocaleUpperCase(),
+    let filter_name = this.name.toLocaleUpperCase();
+
+    if (this.name !== '' && this.registration_code === '') {
+      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, function (participant) {
+        return participant.name.toLocaleUpperCase().indexOf(filter_name)>-1;
       });
       return;
     }
 
-    this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
-      'registration_code': parseInt(this.registration_code),
-      'name': this.name.toLocaleUpperCase()
+    let filter_registration_code = parseInt(this.registration_code);
+    this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, function (participant) {
+      return (participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
+              participant.registration_code === filter_registration_code);
     });
   }
 
