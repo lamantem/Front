@@ -11,7 +11,7 @@
     {{ this.groupsReader[0].name }}
   </li>
 </ol>
-<mat-tab-group>
+<mat-tab-group (selectedTabChange)="clearLocationValues()">
   <mat-tab label="Faltantes">
     <div class="container-fluid scroller_content">
       <div class="animated fadeIn">
