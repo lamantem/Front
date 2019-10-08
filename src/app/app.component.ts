@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { SwUpdate } from '@angular/service-worker';
+import { SwUpdate } from "@angular/service-worker";
+import { CheckForUpdateService } from "./core/service-worker/check-for-update.service";
 
 @Component({
   selector: 'body',
@@ -8,20 +9,15 @@ import { SwUpdate } from '@angular/service-worker';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(
-    private router: Router,
-    public sw: SwUpdate
-  ) {
-    sw.available.subscribe(event => {
-      console.log('current version is', event.current);
-      console.log('available version is', event.available);
-    });
-    sw.activated.subscribe(event => {
-      console.log('old version was', event.previous);
-      console.log('new version is', event.current);
-    });
-    sw.available.subscribe(event => {
-      sw.activateUpdate().then(() => this.reloadApp());
+
+  updateAvailable = false;
+
+  constructor(private updates: SwUpdate,
+              public checkForUpdateService: CheckForUpdateService,
+              private router: Router) {
+    this.updates.available.subscribe((event) => {
+      console.log('avaiable!');
+      this.updateAvailable = true;
     });
   }
 
@@ -36,10 +32,5 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() : void {}
-
-  reloadApp(){
-    document.location.reload();
-    console.log("The app is updating right now");
-  }
 
 }
