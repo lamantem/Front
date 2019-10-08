@@ -8,11 +8,11 @@ import { Component, Input} from '@angular/core';
         <img src="/assets/icons/icon-72x72.png" />
       </div>
       <div class="desc">
-        A new update is available!
+        Nova versão disponivel!!
         <br/>
-        You can reload with the button below.
+        Clique para atualizar.
         <br/>
-        <button (click)="reload()">Reload</button>
+        <button (click)="reload()">Atualizar</button>
       </div>
     </div>
   `,

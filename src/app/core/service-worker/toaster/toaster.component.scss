@@ -1,9 +1,8 @@
 .toast {
+  width: 95%;
   visibility: hidden;
-  max-width: 50px;
   height: 100px;
-  /*margin-left: -125px;*/
-  margin: auto;
+  margin: 0 auto;
   background-color: #333;
   color: #fff;
   text-align: center;
