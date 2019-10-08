@@ -42,6 +42,12 @@
 
           <table mat-table [dataSource]="dataSourceMissing">
 
+            <ng-container matColumnDef="missing">
+              <mat-header-cell *matHeaderCellDef>
+                Total de faltantes registrados: {{ dataSourceMissing.data.length }}
+              </mat-header-cell>
+            </ng-container>
+
             <ng-container matColumnDef="sync">
               <mat-header-cell *matHeaderCellDef>
                 {{ 'VIEWS.LIST.SYNC_COLUMN_TABLE' | translate }}
@@ -81,6 +87,7 @@
                 </button>
               </mat-cell>
             </ng-container>
+            <mat-header-row *matHeaderRowDef="['missing']"></mat-header-row>
             <mat-header-row *matHeaderRowDef="displayedColumnsMissing"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumnsMissing;"></mat-row>
           </table>
