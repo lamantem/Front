@@ -177,16 +177,16 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
     this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
 
-    if (this.registration_code !== '' && this.name === '') {
+    if (this.registration_code.trim() !== '' && this.name.trim() === '') {
       this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
         'registration_code': parseInt(this.registration_code),
       });
       return;
     }
 
-    let filter_name = this.name.toLocaleUpperCase();
+    let filter_name = this.name.trim().toLocaleUpperCase();
 
-    if (this.name !== '' && this.registration_code === '') {
+    if (this.name.trim() !== '' && this.registration_code.trim() === '') {
       this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, function (participant) {
         return participant.name.toLocaleUpperCase().indexOf(filter_name)>-1;
       });
@@ -204,4 +204,10 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     this.dataSourceMissing.filter = filterValue.trim().toLowerCase();
   }
 
+  clearLocationValues(){
+    this.name = '';
+    this.registration_code = '';
+    this.protocolReaderDataSource = [];
+
+  }
 }
