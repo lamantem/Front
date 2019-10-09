@@ -45,6 +45,7 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   name : string = '';
   registration_code : string = '';
   categorie_id: number = 0;
+  categories: number = 0;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -188,9 +189,20 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
     this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
 
+    let participants = [];
+
+    if (this.categorie_id === 0) {
+      participants = _.filter(this.groupsReader[0].participants);
+    } else {
+      participants = _.filter(this.groupsReader[0].participants, {
+        'categories_id': this.categorie_id
+      });
+    }
+
     if (this.registration_code.trim() !== '' && this.name.trim() === '') {
-      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, {
+      this.protocolReaderDataSource = _.filter(participants, {
         'registration_code': parseInt(this.registration_code),
+        'categories_id': this.categorie_id
       });
       return;
     }
@@ -198,14 +210,14 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     let filter_name = this.name.trim().toLocaleUpperCase();
 
     if (this.name.trim() !== '' && this.registration_code.trim() === '') {
-      this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, function (participant) {
+      this.protocolReaderDataSource = _.filter(participants, function (participant) {
         return participant.name.toLocaleUpperCase().indexOf(filter_name)>-1;
       });
       return;
     }
 
     let filter_registration_code = parseInt(this.registration_code);
-    this.protocolReaderDataSource = _.filter(this.groupsReader[0].participants, function (participant) {
+    this.protocolReaderDataSource = _.filter(participants, function (participant) {
       return (participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
               participant.registration_code === filter_registration_code);
     });
@@ -219,6 +231,6 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     this.name = '';
     this.registration_code = '';
     this.protocolReaderDataSource = [];
-
+    this.categories = 0;
   }
 }

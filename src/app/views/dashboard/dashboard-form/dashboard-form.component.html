@@ -127,6 +127,17 @@
           <input matInput [(ngModel)]="name">
         </mat-form-field>
 
+        <mat-form-field class="search-termMissing back-ground"
+                        appearance="outline">
+          <mat-label>Setor</mat-label>
+          <mat-select [(ngModel)]="categories" (selectionChange)="categorie_id = $event.value">
+            <mat-option [value]="0">Todos os Setores</mat-option>
+            <mat-option *ngFor="let categories of groupsReader[0].categories" [value]="categories.id">
+              {{ categories.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <div class="button-search">
           <button type="submit" (click)="loadGroupReader()" class="btn btn-primary px-4">
             Buscar
