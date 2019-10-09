@@ -148,7 +148,7 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private getProtocolReader(categorie_id): void {
+  public getProtocolReader(categorie_id): void {
     this.categorie_id = categorie_id;
     let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
     let group = JSON.parse(localStorage['groups']);
