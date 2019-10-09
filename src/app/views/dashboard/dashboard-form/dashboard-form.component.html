@@ -28,17 +28,25 @@
                          [diameter]="75">
             </mat-spinner>
           </div>
-          <mat-form-field id="search-termMissing"
-                          appearance="outline"
-                          style="background-color: #f3f4f5;
-                          width: 100%;">
+          <mat-form-field class="search-termMissing"
+                          appearance="outline">
             <mat-label>Buscar</mat-label>
             <input matInput (keyup)="applyFilterMissing($event.target.value)" placeholder="">
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
 
-          <mat-divider></mat-divider>
+          <mat-form-field class="search-termMissing"
+                          appearance="outline">
+            <mat-label>Setor</mat-label>
+            <mat-select (selectionChange)="getProtocolReader($event.value)">
+              <mat-option [value]="0">Todos os Setores</mat-option>
+              <mat-option *ngFor="let categories of groupsReader[0].categories" [value]="categories.id">
+                {{ categories.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
+          <mat-divider></mat-divider>
 
           <table mat-table [dataSource]="dataSourceMissing">
 

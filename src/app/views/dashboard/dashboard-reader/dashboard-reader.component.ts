@@ -113,6 +113,7 @@ export class DashboardReaderComponent implements OnInit {
       this.newProtocol = {
         'id': null,
         'participant_id': participants[0].id,
+        'categories_id': participants[0].categories_id,
         'moderator_id': mod[0].id,
         'group_reader_id': parseInt(this.data.group_id),
         'participant_name': participants[0].name,
