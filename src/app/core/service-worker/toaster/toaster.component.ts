@@ -1,8 +1,4 @@
 import { Component, Input} from '@angular/core';
-import * as _ from 'lodash';
-import { LayoutComponent } from "../../../shared/layout";
-import { Router } from "@angular/router";
-import { LocalStorageService } from "../../services";
 
 @Component({
   selector: 'app-toaster',
@@ -26,23 +22,7 @@ export class ToasterComponent {
 
   @Input() show = false;
 
-  constructor(
-    private sync: LayoutComponent,
-    private localStorage: LocalStorageService,
-    private router: Router
-  ) {}
-
   reload() {
-    let synchronized = JSON.parse(localStorage['synchronized']);
-
-    if (!synchronized) {
-      this.sync.synchronizeProtocols();
-    }
-
-    this.router.navigate(['/sair'])
-      .catch(reason => {
-        console.warn(reason);
-      });
     document.location.reload();
   }
 

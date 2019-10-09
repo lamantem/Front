@@ -98,9 +98,18 @@ export class LoginComponent implements OnInit {
                   .subscribe(
                     (response) => {
                       if (response.status === 200) {
-                        let localStorage = this.localStorage;
+                        if (typeof localStorage === 'object') {
+                          try {
+                            localStorage.setItem('localStorage', '1');
+                            localStorage.removeItem('localStorage');
+                          } catch (e) {
+                            Storage.prototype._setItem = Storage.prototype.setItem;
+                            Storage.prototype.setItem = function() {};
+                            alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
+                          }
+                        }
                         let groups = response.data;
-                        localStorage.setItem('groups', JSON.stringify(groups));
+                        this.localStorage.setItem('groups', JSON.stringify(groups));
                         let protocols = [];
                         groups.forEach(function (group) {
                           group.protocols.forEach(function (protocol) {
@@ -121,7 +130,7 @@ export class LoginComponent implements OnInit {
                             protocols.push(protocol_local);
                           });
                         });
-                        localStorage.setItem('protocols', JSON.stringify(protocols));
+                        this.localStorage.setItem('protocols', JSON.stringify(protocols));
                         this.synchronized = true;
                         this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
                         this.submitted = false;
