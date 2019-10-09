@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { LayoutComponent } from "./layout";
 
 @NgModule({
   imports: [
@@ -19,6 +20,9 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
+  ],
+  providers: [
+    LayoutComponent
   ]
 })
 export class SharedModule {}
