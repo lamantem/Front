@@ -163,6 +163,23 @@ export class LayoutComponent implements OnDestroy {
                   });
             }
           });
+
+      }
+      if (_.isEmpty(protocols)) {
+          this.loading = false;
+
+          this.synchronized = true;
+          this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+
+          Swal.fire('Bom trabalho!', 'Registros sincronizados com sucesso!', 'success')
+              .then((result) => {
+                  if (result.value) {
+                      this.router.navigate(['/'])
+                          .catch(reason => {
+                              console.warn(reason);
+                          });
+                  }
+              });
       }
     }
   }
