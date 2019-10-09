@@ -167,6 +167,34 @@ export class LayoutComponent implements OnDestroy {
     }
   }
 
+  cleanProtocols() {
+      Swal.fire({
+          title: 'Deseja limpar os faltantes?',
+          text: "Você perderá todos que não foram sincronizados",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sim, pretendo limpar',
+          cancelButtonText: 'Cancelar'
+      }).then((result) => {
+          if (result.value) {
+              this.localStorage.setItem('protocols', JSON.stringify([]));
+              this.router.navigate(['/'])
+                  .catch(reason => {
+                      console.warn(reason);
+                  });
+              this.synchronized = true;
+              this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+              Swal.fire(
+                  'Deletado!',
+                  'Faltantes removidos.',
+                  'success'
+              )
+          }
+      })
+  }
+
   verifySynchronized(): void {
     if (!this.isSynchronized()) {
       Swal.fire('Ops!', 'Você precisa sincronizar antes de sair!', 'error');
