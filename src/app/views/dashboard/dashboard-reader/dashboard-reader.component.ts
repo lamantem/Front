@@ -98,9 +98,8 @@ export class DashboardReaderComponent implements OnInit {
     user = JSON.parse(user);
 
     let groups = _.filter(this.groupsReader, {'id': parseInt(this.data.group_id)});
-    let participants = _.filter(groups[0].participants, {'registration_code': parseInt(code)});
+    let participants = _.filter(groups[0].participants[0], {'registration_code': parseInt(code)});
     let mod = _.filter(groups[0].moderators, {'user_id': user['id']});
-
     this.resetNewParticipant(false);
 
     if (participants.length > 0) {

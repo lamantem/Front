@@ -10,10 +10,10 @@ import { TranslateService } from "@ngx-translate/core";
 import { LocalStorageService } from "../../../core/services";
 import { DashboardFormService } from "./dashboard-form.service";
 import { DashboardReaderComponent } from "../dashboard-reader/dashboard-reader.component";
+import { LZStringService } from "ng-lz-string";
 
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
-import { LZStringService } from "ng-lz-string";
 
 @Component({
   selector: 'app-dashboard-form',
@@ -34,7 +34,7 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   displayedColumnsMissing: string[] = ['sync', 'registration_code', 'participant_name', 'actions'];
   displayedColumnsSearch: string[] = ['registration_code', 'name'];
-  ColumnNames: string[] = ['Cód.', 'Nome'];
+  ColumnNames: string[] = ['Insc.', 'Nome'];
 
   protocolReaderDataSource: DashboardModel.ProtocolReader[] = [];
   groupsReader: DashboardModel.GroupsReader[] = [];
@@ -193,9 +193,9 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     let participants = [];
 
     if (this.categorie_id === 0) {
-      participants = _.filter(this.groupsReader[0].participants);
+      participants = _.filter(this.groupsReader[0].participants[0]);
     } else {
-      participants = _.filter(this.groupsReader[0].participants, {
+      participants = _.filter(this.groupsReader[0].participants[0], {
         'categories_id': this.categorie_id
       });
     }
