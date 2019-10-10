@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { DateAdapter, MatPaginator } from "@angular/material";
 import { TranslateService } from "@ngx-translate/core";
 import { DashboardListService } from "./dashboard-list.service";
+import { LZStringService } from "ng-lz-string";
 
 @Component({
   selector: 'dashboard-list',
@@ -28,6 +29,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     private dashboardListService: DashboardListService,
     private router: Router,
     private adapter: DateAdapter<any>,
+    private lz: LZStringService
   ) {
     this.adapter.setLocale('pt-PT');
     translate.setDefaultLang('pt-br');
@@ -44,8 +46,11 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
   }
 
   private getGroupReader(): void {
-      let groups = localStorage.getItem('groups');
-      this.groupsReaderDataSource = JSON.parse(groups)
+      this.groupsReaderDataSource = JSON.parse(
+        this.lz.decompress(
+          localStorage.getItem('groups')
+        )
+      )
   }
 
   translateMatPaginator() {

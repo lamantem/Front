@@ -13,6 +13,7 @@ import { DashboardReaderComponent } from "../dashboard-reader/dashboard-reader.c
 
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
+import { LZStringService } from "ng-lz-string";
 
 @Component({
   selector: 'app-dashboard-form',
@@ -54,7 +55,8 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     private localStorage: LocalStorageService,
     private dashboardFormService: DashboardFormService,
     private dialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private lz: LZStringService
   ) {
     this.adapter.setLocale('pt-PT');
     translate.setDefaultLang('pt-br');
@@ -151,7 +153,7 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   public getProtocolReader(categorie_id): void {
     this.categorie_id = categorie_id;
     let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
-    let group = JSON.parse(localStorage['groups']);
+    let group = this.prepareGroup();
 
     let user = localStorage.getItem('appUser');
     user = JSON.parse(user);
@@ -182,8 +184,7 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   }
 
   public loadGroupReader(): void {
-    let groups = localStorage.getItem('groups');
-    let group  = JSON.parse(groups);
+    let group = this.prepareGroup();
 
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
@@ -232,5 +233,13 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     this.registration_code = '';
     this.protocolReaderDataSource = [];
     this.categories = 0;
+  }
+
+  prepareGroup() {
+    return JSON.parse(
+      this.lz.decompress(
+        localStorage.getItem('groups')
+      )
+    );
   }
 }

@@ -9,6 +9,7 @@ import { LocalStorageService } from "../../../core/services";
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
+import { LZStringService } from "ng-lz-string";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -35,7 +36,8 @@ export class DashboardReaderComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private localStorage: LocalStorageService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private lz: LZStringService,
+  @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit() {
@@ -83,8 +85,11 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   rawSearchByCode(code): Observable<any> {
-    let group = localStorage.getItem('groups');
-    this.groupsReader = JSON.parse(group);
+    this.groupsReader = JSON.parse(
+      this.lz.decompress(
+        localStorage.getItem('groups')
+      )
+    );
 
     let protocol = localStorage.getItem('protocols');
     this.protocolReader = JSON.parse(protocol);

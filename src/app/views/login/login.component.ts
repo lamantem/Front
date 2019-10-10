@@ -7,6 +7,7 @@ import { AuthenticationService } from '../../core/authentication';
 import { DashboardListService } from "../dashboard/dashboard-list/dashboard-list.service";
 import { LocalStorageService } from "../../core/services";
 import { environment } from "../../../environments/environment";
+import { LZStringService } from "ng-lz-string";
 
 import Swal from 'sweetalert2';
 
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit {
     public translate: TranslateService,
     public dashboardListService: DashboardListService,
     public localStorage: LocalStorageService,
+    private lz: LZStringService
   ) {
     translate.setDefaultLang('pt-br');
     const browserLang = translate.getBrowserLang();
@@ -99,7 +101,7 @@ export class LoginComponent implements OnInit {
                     (response) => {
                       if (response.status === 200) {
                         let groups = response.data;
-                        this.localStorage.setItem('groups', JSON.stringify(groups));
+                        this.localStorage.setItem('groups', this.lz.compress(JSON.stringify(groups)));
                         let protocols = [];
                         groups.forEach(function (group) {
                           group.protocols.forEach(function (protocol) {
