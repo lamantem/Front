@@ -193,9 +193,9 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     let participants = [];
 
     if (this.categorie_id === 0) {
-      participants = _.filter(this.groupsReader[0].participants[0]);
+      participants = _.filter(this.groupsReader[0].participants);
     } else {
-      participants = _.filter(this.groupsReader[0].participants[0], {
+      participants = _.filter(this.groupsReader[0].participants, {
         'categories_id': this.categorie_id
       });
     }
