@@ -11,6 +11,7 @@
     {{ this.groupsReader[0].name }}
   </li>
 </ol>
+
 <mat-tab-group (selectedTabChange)="clearLocationValues()">
   <mat-tab label="Faltantes">
     <div class="container-fluid scroller_content">
@@ -107,14 +108,19 @@
     </div>
   </mat-tab>
   <mat-tab label="Local de prova">
-
+    <div class="loading-indicator" *ngIf="loading_search">
+      <mat-spinner
+              class="spinner"
+              strokeWidth="3"
+              [diameter]="75">
+      </mat-spinner>
+      <br>
+      Carregando participantes...
+      <br>
+      Por favor aguarde
+    </div>
     <div>
       <mat-card class="mat-elevation-z8 mat-card-search">
-        <div class="loading-indicator" *ngIf="loading">
-          <mat-spinner strokeWidth="3"
-                       [diameter]="75">
-          </mat-spinner>
-        </div>
         <mat-form-field class="search-termSearch"
                         appearance="outline">
           <mat-label>Inscrição</mat-label>

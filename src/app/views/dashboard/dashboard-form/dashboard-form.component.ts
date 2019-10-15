@@ -42,6 +42,7 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   dataSourceMissing: any;
   loading: boolean;
+  loading_search: boolean;
   synchronized: boolean;
   name : string = '';
   registration_code : string = '';
@@ -154,7 +155,6 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     this.categorie_id = categorie_id;
     let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
     let group = this.prepareGroup();
-
     let user = localStorage.getItem('appUser');
     user = JSON.parse(user);
 
@@ -184,12 +184,10 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   }
 
   public loadGroupReader(): void {
+    this.loading_search = true;
     let group = this.prepareGroup();
-
     let group_id = this.route.snapshot.paramMap.get('group_id');
-
     this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
-
     let participants = [];
 
     if (this.categorie_id === 0) {
@@ -203,8 +201,8 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     if (this.registration_code.trim() !== '' && this.name.trim() === '') {
       this.protocolReaderDataSource = _.filter(participants, {
         'registration_code': parseInt(this.registration_code),
-        'categories_id': this.categorie_id
       });
+      this.loading_search = false;
       return;
     }
 
@@ -214,14 +212,17 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
       this.protocolReaderDataSource = _.filter(participants, function (participant) {
         return participant.name.toLocaleUpperCase().indexOf(filter_name)>-1;
       });
+      this.loading_search = false;
       return;
     }
 
     let filter_registration_code = parseInt(this.registration_code);
+
     this.protocolReaderDataSource = _.filter(participants, function (participant) {
       return (participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
               participant.registration_code === filter_registration_code);
     });
+    this.loading_search = false;
   }
 
   applyFilterMissing(filterValue: string) : void {
