@@ -43,8 +43,11 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.loading = true;
-    this.prepareGroupReader();
+    if(!this.localStorage.getItem('groups')) {
+      this.prepareGroupReader();
+    } else {
+      this.getGroupReader();
+    }
     // this.translateMatPaginator();
   }
 
@@ -52,6 +55,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
   }
 
   private prepareGroupReader() {
+    this.loading = true;
     this.dashboardListService.getGroupReaderUrl();
     this.dashboardListService.getAll()
         .pipe()
@@ -91,7 +95,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
             },);
   }
 
-  private getGroupReader(): void {
+  public getGroupReader(): void {
     this.groupsReaderDataSource = JSON.parse(
         this.lz.decompress(
             localStorage.getItem('groups')
