@@ -87,7 +87,7 @@ export class LayoutComponent implements OnDestroy {
               let protocols_local = [];
               protocols = this.loadProtocols();
               protocols.forEach(function (protocol) {
-                if (protocol.id !== remove[0].id) {
+                if (protocol.active !== remove[0].active) {
                   protocols_local.push(protocol);
                 }
               });
