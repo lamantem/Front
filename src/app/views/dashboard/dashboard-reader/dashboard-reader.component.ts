@@ -26,6 +26,7 @@ export class DashboardReaderComponent implements OnInit {
 
   newProtocol: object;
   spinner: boolean;
+  input_code:string;
   show: boolean;
   reader: boolean;
   message: string;
@@ -146,6 +147,10 @@ export class DashboardReaderComponent implements OnInit {
     if (this.newProtocol != null) {
       this.protocolReader.push(<DashboardModel.ProtocolReader>this.newProtocol);
       this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
+      this.resetNewParticipant(true);
+      this.input_code = '';
+      this.newProtocol = null;
+      this.message = 'Candidato registrado com sucesso';
     }
   }
 
