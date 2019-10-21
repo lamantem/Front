@@ -1,3 +1,8 @@
+<div class="loading-indicator" *ngIf="loading">
+  <mat-spinner strokeWidth="3"
+               [diameter]="50">
+  </mat-spinner>
+</div>
 <app-header
         [navbarBrandRouterLink]="['/']"
         [fixed]="true"
@@ -21,13 +26,21 @@
       </div>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
         <div class="dropdown-header text-center">
-          <strong>Conta</strong>
+          <strong>Ações</strong>
         </div>
         <a class="dropdown-item"
            (click)="synchronizeProtocols()">
           <i class="fa fa-refresh"></i>
           Sincronizar
         </a>
+        <a class="dropdown-item"
+           (click)="cleanProtocols()">
+          <i class="fa fa-trash"></i>
+          Limpar Faltantes
+        </a>
+        <div class="dropdown-header text-center">
+          <strong>Conta</strong>
+        </div>
         <a class="dropdown-item"
            (click)="verifySynchronized()">
           <i class="fa fa-power-off"></i>

@@ -11,7 +11,8 @@
     {{ this.groupsReader[0].name }}
   </li>
 </ol>
-<mat-tab-group>
+
+<mat-tab-group (selectedTabChange)="clearLocationValues()">
   <mat-tab label="Faltantes">
     <div class="container-fluid scroller_content">
       <div class="animated fadeIn">
@@ -28,19 +29,33 @@
                          [diameter]="75">
             </mat-spinner>
           </div>
-          <mat-form-field id="search-termMissing"
-                          appearance="outline"
-                          style="background-color: #f3f4f5;
-                          width: 100%;">
+          <mat-form-field class="search-termMissing"
+                          appearance="outline">
             <mat-label>Buscar</mat-label>
             <input matInput (keyup)="applyFilterMissing($event.target.value)" placeholder="">
             <mat-icon matSuffix>search</mat-icon>
           </mat-form-field>
 
+          <mat-form-field class="search-termMissing"
+                          appearance="outline">
+            <mat-label>Setor</mat-label>
+            <mat-select (selectionChange)="getProtocolReader($event.value)">
+              <mat-option [value]="0">Todos os Setores</mat-option>
+              <mat-option *ngFor="let categories of groupsReader[0].categories" [value]="categories.id">
+                {{ categories.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <mat-divider></mat-divider>
 
-
           <table mat-table [dataSource]="dataSourceMissing">
+
+            <ng-container matColumnDef="missing">
+              <mat-header-cell *matHeaderCellDef>
+                Total de faltantes registrados: {{ dataSourceMissing.data.length }}
+              </mat-header-cell>
+            </ng-container>
 
             <ng-container matColumnDef="sync">
               <mat-header-cell *matHeaderCellDef>
@@ -81,6 +96,7 @@
                 </button>
               </mat-cell>
             </ng-container>
+            <mat-header-row *matHeaderRowDef="['missing']"></mat-header-row>
             <mat-header-row *matHeaderRowDef="displayedColumnsMissing"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumnsMissing;"></mat-row>
           </table>
@@ -92,17 +108,22 @@
     </div>
   </mat-tab>
   <mat-tab label="Local de prova">
-
+    <div class="loading-indicator" *ngIf="loading_search">
+      <mat-spinner
+              class="spinner"
+              strokeWidth="3"
+              [diameter]="75">
+      </mat-spinner>
+      <br>
+      Carregando participantes...
+      <br>
+      Por favor aguarde
+    </div>
     <div>
       <mat-card class="mat-elevation-z8 mat-card-search">
-        <div class="loading-indicator" *ngIf="loading">
-          <mat-spinner strokeWidth="3"
-                       [diameter]="75">
-          </mat-spinner>
-        </div>
         <mat-form-field class="search-termSearch"
                         appearance="outline">
-          <mat-label>Cód.</mat-label>
+          <mat-label>Inscrição</mat-label>
           <input matInput [(ngModel)]="registration_code">
         </mat-form-field>
 
@@ -110,6 +131,17 @@
                         appearance="outline">
           <mat-label>Nome</mat-label>
           <input matInput [(ngModel)]="name">
+        </mat-form-field>
+
+        <mat-form-field class="search-termMissing back-ground"
+                        appearance="outline">
+          <mat-label>Setor</mat-label>
+          <mat-select [(ngModel)]="categories" (selectionChange)="categorie_id = $event.value">
+            <mat-option [value]="0">Todos os Setores</mat-option>
+            <mat-option *ngFor="let categories of groupsReader[0].categories" [value]="categories.id">
+              {{ categories.name }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
 
         <div class="button-search">

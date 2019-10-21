@@ -16,6 +16,7 @@ import { ViewsService } from './views.service';
 import { ChartsModule } from 'ng2-charts';
 import { NgxCaptchaModule } from "ngx-captcha";
 import { BrMaskerModule } from 'br-mask';
+import { LZStringModule, LZStringService } from "ng-lz-string";
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -38,6 +39,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AppSidebarModule,
     PerfectScrollbarModule,
     AppMaterialModule,
+    LZStringModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     TranslateModule.forRoot({
@@ -55,7 +57,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     LayoutComponent
   ],
   providers: [
-    ViewsService
+    ViewsService,
+    LZStringService
   ]
 })
 export class ViewsModule { }

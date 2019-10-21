@@ -9,6 +9,7 @@ import { LocalStorageService } from "../../../core/services";
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
+import { LZStringService } from "ng-lz-string";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -23,8 +24,10 @@ export class DashboardReaderComponent implements OnInit {
   protocolReader: DashboardModel.ProtocolReader[] = [];
   newParticipant: DashboardModel.NewParticipant[] = [];
 
+  synchronized: boolean;
   newProtocol: object;
   spinner: boolean;
+  input_code:string;
   show: boolean;
   reader: boolean;
   message: string;
@@ -35,7 +38,8 @@ export class DashboardReaderComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private localStorage: LocalStorageService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private lz: LZStringService,
+  @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit() {
@@ -83,8 +87,11 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   rawSearchByCode(code): Observable<any> {
-    let group = localStorage.getItem('groups');
-    this.groupsReader = JSON.parse(group);
+    this.groupsReader = JSON.parse(
+      this.lz.decompress(
+        localStorage.getItem('groups')
+      )
+    );
 
     let protocol = localStorage.getItem('protocols');
     this.protocolReader = JSON.parse(protocol);
@@ -95,7 +102,6 @@ export class DashboardReaderComponent implements OnInit {
     let groups = _.filter(this.groupsReader, {'id': parseInt(this.data.group_id)});
     let participants = _.filter(groups[0].participants, {'registration_code': parseInt(code)});
     let mod = _.filter(groups[0].moderators, {'user_id': user['id']});
-
     this.resetNewParticipant(false);
 
     if (participants.length > 0) {
@@ -113,6 +119,7 @@ export class DashboardReaderComponent implements OnInit {
       this.newProtocol = {
         'id': null,
         'participant_id': participants[0].id,
+        'categories_id': participants[0].categories_id,
         'moderator_id': mod[0].id,
         'group_reader_id': parseInt(this.data.group_id),
         'participant_name': participants[0].name,
@@ -141,6 +148,12 @@ export class DashboardReaderComponent implements OnInit {
     if (this.newProtocol != null) {
       this.protocolReader.push(<DashboardModel.ProtocolReader>this.newProtocol);
       this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
+      this.synchronized = false;
+      this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+      this.resetNewParticipant(true);
+      this.input_code = '';
+      this.newProtocol = null;
+      this.message = 'Candidato registrado com sucesso';
     }
   }
 

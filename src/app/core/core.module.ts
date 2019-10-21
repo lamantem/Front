@@ -10,6 +10,8 @@ import {
   AuthenticationGuard,
   AuthenticationService
 } from "./authentication";
+import { ToasterComponent } from './service-worker/toaster/toaster.component';
+import { CheckForUpdateService } from "./service-worker/check-for-update.service";
 
 @NgModule({
   imports: [
@@ -24,8 +26,12 @@ import {
     ApiService,
     RestService,
     AuthenticationGuard,
-    AuthenticationService
+    AuthenticationService,
+    CheckForUpdateService
   ],
-  declarations: []
+  exports: [
+    ToasterComponent
+  ],
+  declarations: [ToasterComponent]
 })
 export class CoreModule { }

@@ -12,6 +12,7 @@ import { BrMaskerModule } from 'br-mask';
 import { BarecodeScannerLivestreamModule } from "ngx-barcode-scanner";
 import { DashboardReaderComponent } from './dashboard-reader/dashboard-reader.component';
 import { FilterPipe } from "../../shared/filter/filter.pipe";
+import { LZStringModule, LZStringService } from "ng-lz-string";
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { FilterPipe } from "../../shared/filter/filter.pipe";
     AppMaterialModule,
     DashboardRoutingModule,
     BarecodeScannerLivestreamModule,
+    LZStringModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -35,6 +37,9 @@ import { FilterPipe } from "../../shared/filter/filter.pipe";
     DashboardFormComponent,
     DashboardReaderComponent,
     FilterPipe
+  ],
+  providers: [
+    LZStringService
   ],
   entryComponents: [DashboardReaderComponent]
 })

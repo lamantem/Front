@@ -37,7 +37,7 @@
             <mat-label>
               Codigo de Inscrição
             </mat-label>
-            <input matInput
+            <input matInput [(ngModel)]="input_code"
                    (input)="code.next($event.target.value)"
                    (keydown)="onChange()">
           </mat-form-field>
@@ -73,6 +73,6 @@
 
 </mat-dialog-content>
 <mat-dialog-actions style="display: flex; justify-content: flex-end;">
-  <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-button (click)="saveProtocol()" [mat-dialog-close]="true" cdkFocusInitial>Salvar</button>
+  <button mat-button mat-dialog-close [mat-dialog-close]="true">Fechar</button>
+  <button mat-button (click)="saveProtocol()" cdkFocusInitial>Salvar</button>
 </mat-dialog-actions>

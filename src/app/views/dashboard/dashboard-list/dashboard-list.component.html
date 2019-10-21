@@ -10,9 +10,15 @@
   <div class="animated fadeIn">
     <div class="mat-elevation-z8">
       <div class="loading-indicator" *ngIf="loading">
-        <mat-spinner strokeWidth="3"
-                     [diameter]="75">
+        <mat-spinner
+                class="spinner"
+                strokeWidth="3"
+                [diameter]="75">
         </mat-spinner>
+        <br>
+        Carregando concursos...
+        <br>
+        Por favor aguarde
       </div>
 
       <mat-form-field id="search-term"
