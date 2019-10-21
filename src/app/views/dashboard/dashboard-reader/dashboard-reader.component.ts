@@ -24,6 +24,7 @@ export class DashboardReaderComponent implements OnInit {
   protocolReader: DashboardModel.ProtocolReader[] = [];
   newParticipant: DashboardModel.NewParticipant[] = [];
 
+  synchronized: boolean;
   newProtocol: object;
   spinner: boolean;
   input_code:string;
@@ -147,6 +148,8 @@ export class DashboardReaderComponent implements OnInit {
     if (this.newProtocol != null) {
       this.protocolReader.push(<DashboardModel.ProtocolReader>this.newProtocol);
       this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
+      this.synchronized = false;
+      this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
       this.resetNewParticipant(true);
       this.input_code = '';
       this.newProtocol = null;

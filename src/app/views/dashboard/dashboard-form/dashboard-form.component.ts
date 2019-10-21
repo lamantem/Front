@@ -89,8 +89,6 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.synchronized = false;
-        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
         this.getProtocolReader(this.categorie_id);
       }
     });
