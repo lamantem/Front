@@ -183,23 +183,50 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   public loadGroupReader(): void {
     this.loading_search = true;
+
     let group = this.prepareGroup();
     let group_id = this.route.snapshot.paramMap.get('group_id');
     this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
     let participants = [];
 
     if (this.categorie_id === 0) {
-      participants = _.filter(this.groupsReader[0].participants);
-    } else {
+      participants = this.groupsReader[0].participants;
+    }
+
+    if (this.categorie_id > 0) {
       participants = _.filter(this.groupsReader[0].participants, {
-        'categories_id': this.categorie_id
+        'categorie_id': this.categorie_id
       });
     }
 
-    if (this.registration_code.trim() !== '' && this.name.trim() === '') {
-      this.protocolReaderDataSource = _.filter(participants, {
-        'registration_code': parseInt(this.registration_code),
-      });
+    if (
+      this.registration_code.trim() === '' &&
+      this.name.trim() === '' &&
+      this.categorie_id > 0
+    ) {
+      this.protocolReaderDataSource = participants;
+      this.loading_search = false;
+      return;
+    }
+
+    if (
+      this.registration_code.trim() !== '' &&
+      this.name.trim() === ''
+    ) {
+      let attribs = {};
+
+      if (group_id !== '8') {
+        attribs = {
+          'registration_code': parseInt(this.registration_code),
+        };
+      }
+      if (group_id === '8') {
+        attribs = {
+          'origin_code': this.registration_code,
+        };
+      }
+
+      this.protocolReaderDataSource = _.filter(participants, attribs);
       this.loading_search = false;
       return;
     }
@@ -214,11 +241,13 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    let filter_registration_code = parseInt(this.registration_code);
+    let filter_registration_code = (group_id !== '8') ? parseInt(this.registration_code) : this.registration_code;
 
     this.protocolReaderDataSource = _.filter(participants, function (participant) {
-      return (participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
-              participant.registration_code === filter_registration_code);
+      let has_origin_code = (group_id === '8') ?
+        (participant.origin_code === filter_registration_code) :
+        (participant.registration_code === filter_registration_code);
+      return (participant.name.toLocaleUpperCase().indexOf(filter_name) > -1 && has_origin_code);
     });
     this.loading_search = false;
   }
