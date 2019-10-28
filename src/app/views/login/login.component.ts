@@ -104,6 +104,10 @@ export class LoginComponent implements OnInit {
                 },
                 error => {
                     this.submitted = false;
+                    if(!navigator.onLine){
+                        Swal.fire('Ops!', 'Você não está conectado à internet', 'error');
+                        return;
+                    }
                     Swal.fire('Ops!', 'E-mail informado não existe ou a senha está incorreta!', 'error');
                 }
             );
