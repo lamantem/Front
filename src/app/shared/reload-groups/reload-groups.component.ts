@@ -5,6 +5,7 @@ import {DateAdapter} from "@angular/material/core";
 import {TranslateService} from "@ngx-translate/core";
 import {Router} from "@angular/router";
 import {LocalStorageService} from "../../core/services";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-reload-groups',
@@ -32,7 +33,16 @@ export class ReloadGroupsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('olá');
+    if (!navigator.onLine) {
+      this.getGroupReader();
+      this.router.navigate(['/']);
+      Swal.fire(
+          'Ops!',
+          'Você não está conectado à internet',
+          'warning'
+      );
+      return;
+    }
     this.prepareGroupReader();
   }
 
