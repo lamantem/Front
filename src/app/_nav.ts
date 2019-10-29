@@ -35,8 +35,8 @@ export const navItems: NavData[] = [
     name: 'Menu'
   },
   {
-    name: 'Concursos',
-    url: '/',
-    icon: 'icon-list'
+    name: 'Atualizar Concursos',
+    url: '/reload',
+    icon: 'icon-refresh'
   }
 ];

@@ -17,6 +17,7 @@ import { ChartsModule } from 'ng2-charts';
 import { NgxCaptchaModule } from "ngx-captcha";
 import { BrMaskerModule } from 'br-mask';
 import { LZStringModule, LZStringService } from "ng-lz-string";
+import { ReloadGroupsComponent } from "../shared/reload-groups/reload-groups.component";
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -52,6 +53,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     BrMaskerModule
   ],
   declarations: [
+    ReloadGroupsComponent,
     LoginComponent,
     LogoutComponent,
     LayoutComponent
