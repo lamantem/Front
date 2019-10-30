@@ -16,7 +16,7 @@ const viewsRoutes: Routes = [
     component: LogoutComponent
   },
   {
-    path: 'reload',
+    path: 'recarregar',
     component: ReloadGroupsComponent,
     canActivate: [AuthenticationGuard]
   },

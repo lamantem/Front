@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {DashboardListService} from "../../views/dashboard/dashboard-list/dashboard-list.service";
-import {LZStringService} from "ng-lz-string";
-import {DateAdapter} from "@angular/material/core";
-import {TranslateService} from "@ngx-translate/core";
-import {Router} from "@angular/router";
-import {LocalStorageService} from "../../core/services";
+import { Router } from "@angular/router";
+import { DashboardListService } from "../../views/dashboard/dashboard-list/dashboard-list.service";
+import { DateAdapter } from "@angular/material/core";
+import { TranslateService } from "@ngx-translate/core";
+import { LocalStorageService } from "../../core/services";
+import { LZStringService } from "ng-lz-string";
 import Swal from "sweetalert2";
 
 @Component({
