@@ -121,22 +121,31 @@
     </div>
     <div>
       <mat-card class="mat-elevation-z8 mat-card-search">
+        <form name="searchForm" [formGroup]="searchForm" novalidate>
+
         <mat-form-field class="search-termSearch"
                         appearance="outline">
           <mat-label>Inscrição</mat-label>
-          <input matInput [(ngModel)]="registration_code">
+          <input matInput
+                 formControlName="registration_code">
         </mat-form-field>
 
         <mat-form-field class="search-termSearch"
                         appearance="outline">
           <mat-label>Nome</mat-label>
-          <input matInput [(ngModel)]="name">
+          <input matInput
+                 formControlName="name">
+          <mat-error class="nameError">
+            Mínimo de 2 caracteres
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="search-termMissing back-ground"
                         appearance="outline">
           <mat-label>Setor</mat-label>
-          <mat-select [(ngModel)]="categories" (selectionChange)="category_id = $event.value">
+          <mat-select
+                  formControlName="category_id"
+                  (selectionChange)="category_id = $event.value">
             <mat-option [value]="0">Todos os Setores</mat-option>
             <mat-option *ngFor="let categories of groupsReader[0].categories" [value]="categories.id">
               {{ categories.name }}
@@ -144,12 +153,12 @@
           </mat-select>
         </mat-form-field>
 
-        <div class="button-search">
-          <button type="submit" (click)="loadGroupReader()" class="btn btn-primary px-4">
-            Buscar
-          </button>
-        </div>
-
+      <div class="button-search">
+      <button type="submit" (click)="onSubmit()" class="btn btn-primary px-4">
+      Buscar
+      </button>
+    </div>
+        </form>
           <mat-divider [inset]="true"></mat-divider>
           <table mat-table [dataSource]="protocolReaderDataSource" multiTemplateDataRows>
             <ng-container matColumnDef="{{ column }}" *ngFor="let column of displayedColumnsSearch; let i= index">

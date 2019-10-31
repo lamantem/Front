@@ -76,22 +76,30 @@ table {
   background-color: rgba(0,0,0,0.3);
 }
 
+
 mat-cell:last-of-type,
 mat-footer-cell:last-of-type,
 mat-header-cell:last-of-type {
   padding-right: 0;
 }
 
-@media screen and (max-width: 600px) {
-
+@media screen and (max-width: 660px) {
+.search-termSearch {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 }
 
-@media (min-width: 600px) and (max-width: 1300px) {
-
+@media (min-width: 660px) and (max-width: 1300px) {
+  .search-termSearch {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
 }
 
-
-
+.nameError{
+  margin-top: 10px;
+}
 
 table {
   width: 100%;

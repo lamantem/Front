@@ -14,6 +14,7 @@ import { LZStringService } from "ng-lz-string";
 
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-dashboard-form',
@@ -44,16 +45,15 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   loading: boolean;
   loading_search: boolean;
   synchronized: boolean;
-  name : string = '';
-  registration_code : string = '';
   category_id: number = 0;
-  categories: number = 0;
+  searchForm: FormGroup;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private adapter: DateAdapter<any>,
     public translate: TranslateService,
     private localStorage: LocalStorageService,
+    private formBuilder: FormBuilder,
     private dashboardFormService: DashboardFormService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -73,6 +73,12 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
         || data.period.toLowerCase().includes(filter)
         || data.registration_code.toString() === filter;
     };
+    this.searchForm = this.formBuilder.group(
+        {
+          registration_code: [''],
+          name: ['', Validators.minLength(2)],
+          category_id: ['']
+        });
   }
 
   ngAfterViewInit() {
@@ -181,17 +187,26 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     this.dataSourceMissing = new MatTableDataSource(protocolReaderDataSource);
   }
 
+  public onSubmit() {
+     if (this.searchForm.valid) {
+       this.loadGroupReader();
+     }
+  }
+
   public loadGroupReader(): void {
+
     this.loading_search = true;
 
     let participants = [];
     let group = this.prepareGroup();
     let group_id = this.route.snapshot.paramMap.get('group_id');
     this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
-    let filter_registration_code = parseInt(this.registration_code);
+    let filter_registration_code = parseInt(this.searchForm.get('registration_code').value);
 
-    if (this.category_id === 0) {
-     participants = this.groupsReader[0].participants;
+    if (this.category_id === 0
+        && this.searchForm.get('name').value.trim() !== ''
+        || this.searchForm.get('registration_code').value.trim() !== '') {
+      participants = this.groupsReader[0].participants;
     }
 
     if (this.category_id > 0) {
@@ -201,8 +216,8 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     }
 
     if (
-      this.registration_code.trim() === '' &&
-      this.name.trim() === '' &&
+      this.searchForm.get('registration_code').value.trim() === '' &&
+      this.searchForm.get('name').value.trim() === '' &&
       this.category_id > 0
     ) {
       this.protocolReaderDataSource = participants;
@@ -211,13 +226,13 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     }
 
     if (
-      this.registration_code.trim() !== '' &&
-      this.name.trim() === ''
+        this.searchForm.get('registration_code').value.trim() !== '' &&
+        this.searchForm.get('name').value.trim() === ''
     ) {
       let attribs: {};
 
         attribs = {
-          'registration_code': parseInt(this.registration_code)
+          'registration_code': parseInt(this.searchForm.get('registration_code').value)
         };
 
       this.protocolReaderDataSource = _.filter(participants, attribs);
@@ -225,16 +240,20 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    let filter_name = this.name.trim().toLocaleUpperCase();
+    let filter_name = this.searchForm.get('name').value.trim().toLocaleUpperCase();
 
-    if (this.name.trim() !== '' && this.registration_code.trim() === '') {
+    if (this.searchForm.get('name').value.trim() !== ''
+        && this.searchForm.get('registration_code').value.trim() === '') {
       this.protocolReaderDataSource = _.filter(participants, function (participant) {
         return participant.name.toLocaleUpperCase().indexOf(filter_name)>-1;
       });
       this.loading_search = false;
       return;
 
-    } if (this.name.trim() !== '' && this.registration_code.trim() !== '') {
+    }
+
+    if (this.searchForm.get('name').value.trim() !== ''
+        && this.searchForm.get('registration_code').value.trim() !== '') {
       this.protocolReaderDataSource = _.filter(participants, function (participant) {
         return (participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
             participant.registration_code === filter_registration_code);
@@ -254,10 +273,10 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   }
 
   clearLocationValues(){
-    this.name = '';
-    this.registration_code = '';
+    this.searchForm.get('name').setValue('');
+    this.searchForm.get('registration_code').setValue('');
     this.protocolReaderDataSource = [];
-    this.categories = 0;
+    this.searchForm.get('category_id').setValue(0);
   }
 
   prepareGroup() {
