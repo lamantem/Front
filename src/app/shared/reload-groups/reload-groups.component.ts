@@ -33,17 +33,22 @@ export class ReloadGroupsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!navigator.onLine) {
-      this.getGroupReader();
-      this.router.navigate(['/']);
-      Swal.fire(
-          'Ops!',
-          'Você não está conectado à internet',
-          'warning'
-      );
-      return;
-    }
-    this.prepareGroupReader();
+    return Swal.fire({
+      title: 'Deseja atualizar os concursos?',
+      text: "Você perderá todos os faltantes que não foram sincronizados",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, pretendo atualizar',
+      cancelButtonText: 'Cancelar'
+    },).then((result) => {
+      if (result.value != true) {
+        this.router.navigate(['/']);
+        return;
+      }
+      this.prepareGroupReader();
+    })
   }
 
   private prepareGroupReader() {
