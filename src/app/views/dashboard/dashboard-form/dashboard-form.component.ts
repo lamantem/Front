@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { DateAdapter } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatPaginator } from "@angular/material/paginator";
@@ -6,15 +6,15 @@ import { ActivatedRoute } from "@angular/router";
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from "@angular/material/dialog";
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
 import { LocalStorageService } from "../../../core/services";
 import { DashboardFormService } from "./dashboard-form.service";
 import { DashboardReaderComponent } from "../dashboard-reader/dashboard-reader.component";
-import { LZStringService } from "ng-lz-string";
 
+import { LZStringService } from "ng-lz-string";
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: 'app-dashboard-form',

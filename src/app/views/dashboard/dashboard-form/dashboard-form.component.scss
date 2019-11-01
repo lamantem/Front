@@ -83,22 +83,26 @@ mat-header-cell:last-of-type {
   padding-right: 0;
 }
 
-@media screen and (max-width: 660px) {
+@media screen and (max-width: 320px) {
 .search-termSearch {
   padding-top: 5px;
   padding-bottom: 5px;
 }
-}
-
-@media (min-width: 660px) and (max-width: 1300px) {
-  .search-termSearch {
-    padding-top: 3px;
-    padding-bottom: 3px;
+  .nameError{
+    height: 42px;
+    margin-top:10.5px;
   }
 }
 
-.nameError{
-  margin-top: 10px;
+@media (min-width: 320.1px) and (max-width: 1300px) {
+  .search-termSearch {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  .nameError{
+    height: 42px;
+    margin-top:11.5px;
+  }
 }
 
 table {
