@@ -36,7 +36,7 @@ export const navItems: NavData[] = [
   },
   {
     name: 'Atualizar Concursos',
-    url: '/reload',
+    url: '/recarregar',
     icon: 'icon-refresh'
   }
 ];
