@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
   styleUrls: ['./reload-groups.component.scss']
 })
 export class ReloadGroupsComponent implements OnInit {
-  private loading: boolean;
+  public loading: boolean;
   private synchronized: boolean;
   private submitted: boolean;
   groupsReaderDataSource: DashboardModel.GroupsReader[] = [];
