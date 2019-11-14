@@ -1,29 +1,6 @@
 <mat-dialog-content class="mat-typography">
 
   <mat-tab-group (selectedTabChange)="resetNewParticipant(true)">
-    
-    <mat-tab>
-      <div class="container">
-
-        <ng-template mat-tab-label>
-          <mat-icon class="tab-icon">photo_camera</mat-icon>
-          Leitor
-        </ng-template>
-
-        <div>
-          <barcode-scanner-livestream type="code_39"
-                                      (valueChanges)="onValueChanges($event)">
-          </barcode-scanner-livestream>
-        </div>
-
-        <div *ngIf="show">
-          <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
-          <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
-        </div>
-
-      </div>
-    </mat-tab>
-
     <mat-tab>
       <div class="container">
 
@@ -38,6 +15,8 @@
               Codigo de Inscrição
             </mat-label>
             <input matInput [(ngModel)]="input_code"
+                   type="text"
+                   inputmode="numeric"
                    (input)="code.next($event.target.value)"
                    (keydown)="onChange()">
           </mat-form-field>
@@ -68,6 +47,28 @@
 
       </div>
 
+    </mat-tab>
+
+    <mat-tab>
+      <div class="container">
+
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">photo_camera</mat-icon>
+          Leitor
+        </ng-template>
+
+        <div>
+          <barcode-scanner-livestream type="code_39"
+                                      (valueChanges)="onValueChanges($event)">
+          </barcode-scanner-livestream>
+        </div>
+
+        <div *ngIf="show">
+          <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
+          <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
+        </div>
+
+      </div>
     </mat-tab>
   </mat-tab-group>
 
