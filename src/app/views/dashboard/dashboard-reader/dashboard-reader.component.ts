@@ -80,7 +80,7 @@ export class DashboardReaderComponent implements OnInit {
   doSearchbyCode(codes: Observable<any>) {
     return codes
       .pipe(
-        debounceTime(400),
+        debounceTime(800),
         distinctUntilChanged(),
         switchMap(code => this.rawSearchByCode(code)),
       );
@@ -99,9 +99,21 @@ export class DashboardReaderComponent implements OnInit {
     let user = localStorage.getItem('appUser');
     user = JSON.parse(user);
 
-    let groups = _.filter(this.groupsReader, {'id': parseInt(this.data.group_id)});
-    let participants = _.filter(groups[0].participants, {'registration_code': parseInt(code)});
-    let mod = _.filter(groups[0].moderators, {'user_id': user['id']});
+    let group_id     = this.data.group_id;
+    let participants = [];
+    let mod          = [];
+
+    this.groupsReader.forEach(function (group) {
+      if (parseInt(group.id) === parseInt(group_id)) {
+        participants = _.filter(group.participants, {
+          'registration_code': parseInt(code)
+        });
+        mod = _.filter(group.moderators, {
+          'user_id': user['id']
+        });
+      }
+    });
+
     this.resetNewParticipant(false);
 
     if (participants.length > 0) {
@@ -112,7 +124,7 @@ export class DashboardReaderComponent implements OnInit {
       if (!_.isEmpty(participantsExist)) {
         Swal.fire('Ops!', 'Candidato já foi registrado!', 'error');
         this.barecodeScanner.retart();
-        debounceTime(400);
+        debounceTime(800);
         return of('O candidato já foi registrado!');
       }
 

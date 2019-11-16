@@ -66,7 +66,6 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.loading = false;
     this.getProtocolReader(this.category_id);
     this.dataSourceMissing.filterPredicate = function(data, filter: string): boolean {
       return data.participant_name.toLowerCase().includes(filter)
@@ -93,8 +92,15 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
         group_id: this.route.snapshot.paramMap.get('group_id')
       }});
 
+    this.loading = true;
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+
+        setTimeout(() => {
+          this.loading = false;
+        }, 300);
+
         this.getProtocolReader(this.category_id);
       }
     });
@@ -157,17 +163,26 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
 
   public getProtocolReader(category_id): void {
     this.category_id = category_id;
+
     let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
-    let group = this.prepareGroup();
+    let groups_ = JSON.parse(localStorage.getItem('groups_'));
     let user = localStorage.getItem('appUser');
     user = JSON.parse(user);
 
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
-    this.groupsReader = _.filter(group,
-      {'id': parseInt(group_id)});
+    let groupsReader = null;
+    groups_.forEach(function (group,key) {
+      if (group.id === parseInt(group_id)) {
+        groupsReader = group;
+      }
+    });
 
-    let mod = _.filter(this.groupsReader[0].moderators, {'user_id': user['id']});
+    this.groupsReader[0] = groupsReader;
+
+    let mod = _.filter(this.groupsReader[0].moderators, {
+      'user_id': user['id']
+    });
 
     if (category_id === 0) {
       protocolReaderDataSource = _.filter(protocolReaderDataSource, {
@@ -175,7 +190,9 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
         'active': 1,
         'moderator_id': mod[0].id
       });
-    } else {
+    }
+
+    if (category_id > 0) {
       protocolReaderDataSource = _.filter(protocolReaderDataSource, {
         'group_reader_id': parseInt(group_id),
         'categories_id': parseInt(category_id),

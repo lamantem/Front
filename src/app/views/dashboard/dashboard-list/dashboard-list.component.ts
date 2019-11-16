@@ -48,7 +48,6 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
     } else {
       this.getGroupReader();
     }
-    // this.translateMatPaginator();
   }
 
   ngAfterViewInit() {
@@ -62,12 +61,15 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
         .subscribe(
             (response) => {
               if (response.status === 200) {
-                let groups = response.data;
+                let groups  = response.data;
+                let groups_ = response.data;
                 this.localStorage.setItem('groups', this.lz.compress(JSON.stringify(groups)));
                 this.getGroupReader();
                 this.loading = false;
                 let protocols = [];
-                groups.forEach(function (group) {
+
+                groups.forEach(function (group,key) {
+                  delete groups_[key].participants;
                   group.protocols.forEach(function (protocol) {
                     let protocol_local = {
                       id:                protocol.id,
@@ -86,6 +88,7 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
                     protocols.push(protocol_local);
                   });
                 });
+                this.localStorage.setItem('groups_', JSON.stringify(groups_));
                 this.localStorage.setItem('protocols', JSON.stringify(protocols));
                 this.synchronized = true;
                 this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
