@@ -90,7 +90,7 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    // this.barecodeScanner.scanner.start();
+    this.barecodeScanner.scanner.start();
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
@@ -106,7 +106,9 @@ export class DashboardReaderComponent implements OnInit {
       this.barcodeValue = parseInt(code[1]);
     }
 
-    this.rawSearchByCode(parseInt(this.barcodeValue));
+    if (!this.show) {
+      this.rawSearchByCode(parseInt(this.barcodeValue));
+    }
   }
 
   doSearchbyCode(codes: Observable<any>) {
@@ -119,6 +121,7 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   rawSearchByCode(code): Observable<any> {
+    console.log(code);
     this.groupsReader = JSON.parse(
       this.lz.decompress(
         localStorage.getItem('groups')
@@ -135,6 +138,8 @@ export class DashboardReaderComponent implements OnInit {
     let participants = [];
     let mod          = [];
 
+    console.log('antes');
+
     this.groupsReader.forEach(function (group) {
       if (parseInt(group.id) === parseInt(group_id)) {
         participants = _.filter(group.participants, {
@@ -146,9 +151,15 @@ export class DashboardReaderComponent implements OnInit {
       }
     });
 
+    console.log('depois');
+
+
     this.resetNewParticipant();
 
     if (participants.length > 0) {
+
+      console.log('participantes1 ')
+
 
       let participantsExist = _.filter(this.protocolReader,
         {'registration_code': parseInt(code), 'active': 1});
@@ -158,6 +169,8 @@ export class DashboardReaderComponent implements OnInit {
         debounceTime(800);
         return of('O candidato já foi registrado!');
       }
+
+      console.log('participantes 2')
 
       this.newProtocol = {
         'id': null,
