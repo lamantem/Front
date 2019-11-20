@@ -67,6 +67,7 @@
     "ngx-bootstrap": "^5.0.0",
     "ngx-captcha": "^7.0.0",
     "ngx-perfect-scrollbar": "^8.0.0",
+    "ngx-scanner-barcode": "^1.0.5",
     "popper.js": "1.14.7",
     "quagga": "^0.12.1",
     "rxjs": "^6.5.2",

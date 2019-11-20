@@ -57,19 +57,9 @@
           Leitor
         </ng-template>
 
-        <header>
-          <mat-form-field appearance="fill">
-            <select matNativeControl matInput (change)="onDeviceSelectChange($event.target.value)">
-              <option value="" [selected]="!currentDevice">No Device Selected</option>
-              <option *ngFor="let device of availableDevices" [value]="device.deviceId"
-                      [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
-            </select>
-          </mat-form-field>
-        </header>
-
-        <div>
+        <div *ngIf="!show">
           <zxing-scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
-                         [formats]="formatsEnabled" [tryHarder]="tryHarder"
+                         [formats]="formatsEnabled" [tryHarder]="tryHarder" [autofocusEnabled]="true"
                          (camerasFound)="onCamerasFound($event)"></zxing-scanner>
         </div>
 
@@ -79,6 +69,10 @@
         </div>
       </div>
     </mat-tab>
+
+    <barcode-scanner-livestream-overlay type="code_39"
+                                (valueChanges)="onValueChanges($event)">
+    </barcode-scanner-livestream-overlay>
   </mat-tab-group>
 
 </mat-dialog-content>

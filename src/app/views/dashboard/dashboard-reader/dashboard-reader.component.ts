@@ -10,6 +10,7 @@ import { BarcodeFormat } from '@zxing/library';
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
+import { BarecodeScannerLivestreamOverlayComponent } from "ngx-barcode-scanner";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -17,6 +18,8 @@ import * as moment from "moment";
   styleUrls: ['./dashboard-reader.component.scss']
 })
 export class DashboardReaderComponent implements OnInit {
+
+  @ViewChild(BarecodeScannerLivestreamOverlayComponent, {static: true}) barecodeScanner: BarecodeScannerLivestreamOverlayComponent;
 
   groupsReader: DashboardModel.GroupsReader[] = [];
   protocolReader: DashboardModel.ProtocolReader[] = [];
@@ -86,6 +89,10 @@ export class DashboardReaderComponent implements OnInit {
     this.rawSearchByCode(parseInt(this.barcodeValue));
   }
 
+  ngAfterViewInit() {
+    this.barecodeScanner.scanner.start();
+  }
+
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
     this.hasDevices = Boolean(devices && devices.length);
@@ -102,11 +109,6 @@ export class DashboardReaderComponent implements OnInit {
     this.rawSearchByCode(parseInt(this.barcodeValue));
   }
 
-  onDeviceSelectChange(selected: string) {
-    const device = this.availableDevices.find(x => x.deviceId === selected);
-    this.currentDevice = device || null;
-  }
-
   doSearchbyCode(codes: Observable<any>) {
     return codes
       .pipe(
@@ -117,7 +119,6 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   rawSearchByCode(code): Observable<any> {
-    console.log(code);
     this.groupsReader = JSON.parse(
       this.lz.decompress(
         localStorage.getItem('groups')
