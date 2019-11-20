@@ -58,7 +58,7 @@
           Leitor
         </ng-template>
 
-        <div *ngIf="!show" style="padding-bottom: 10px; text-align: right">
+        <div *ngIf="!show" class="toggle">
           <i class="fa fa-qrcode fa-2x"></i>
           <mat-slide-toggle [(ngModel)]="toggle" (change)="onToggleChange()"></mat-slide-toggle>
           <i class="fa fa-barcode fa-2x"></i>

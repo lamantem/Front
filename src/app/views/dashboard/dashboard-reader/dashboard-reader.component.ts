@@ -100,6 +100,7 @@ export class DashboardReaderComponent implements OnInit {
 
   onValueChanges(result){
     this.barcodeValue = result.codeResult.code;
+    this.loading = true;
 
     if (this.barcodeValue.indexOf('-') >= 0) {
       let code = this.barcodeValue.split('-');
@@ -111,6 +112,7 @@ export class DashboardReaderComponent implements OnInit {
 
   onCodeResult(resultString: string) {
     this.barcodeValue = resultString;
+    this.loading = true;
 
     if (this.barcodeValue.indexOf('-') >= 0) {
       let code = this.barcodeValue.split('-');
@@ -132,7 +134,6 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   rawSearchByCode(code): Observable<any> {
-    this.loading = true;
     this.show = true;
     this.groupsReader = JSON.parse(
       this.lz.decompress(
@@ -191,14 +192,14 @@ export class DashboardReaderComponent implements OnInit {
 
       this.newParticipant['participant_name']  = participants[0].name;
       this.newParticipant['registration_code'] = participants[0].registration_code;
-      this.loading = false;
       this.show = true;
+      this.loading = false;
       this.barecodeScanner.stop();
 
       return of('Candidato encontrado!');
     }
 
-    this.show = true;
+    this.show = false;
     this.loading = false;
     return of('Código de inscrição inválido!');
   }
@@ -214,6 +215,7 @@ export class DashboardReaderComponent implements OnInit {
       this.newProtocol = null;
       this.show = false;
       this.message = 'Candidato registrado com sucesso';
+      this.barecodeScanner.retart();
     }
   }
 
