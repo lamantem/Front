@@ -2,7 +2,6 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
 import { Observable, of, Subject } from "rxjs";
-import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { LocalStorageService } from "../../../core/services";
 
@@ -17,8 +16,6 @@ import { LZStringService } from "ng-lz-string";
   styleUrls: ['./dashboard-reader.component.scss']
 })
 export class DashboardReaderComponent implements OnInit {
-
-  @ViewChild(BarecodeScannerLivestreamComponent, {static: true}) barecodeScanner: BarecodeScannerLivestreamComponent;
 
   groupsReader: DashboardModel.GroupsReader[] = [];
   protocolReader: DashboardModel.ProtocolReader[] = [];
@@ -74,7 +71,6 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.barecodeScanner.start();
   }
 
   doSearchbyCode(codes: Observable<any>) {
@@ -114,7 +110,7 @@ export class DashboardReaderComponent implements OnInit {
       }
     });
 
-    this.resetNewParticipant(false);
+    this.resetNewParticipant();
 
     if (participants.length > 0) {
 
@@ -123,7 +119,6 @@ export class DashboardReaderComponent implements OnInit {
 
       if (!_.isEmpty(participantsExist)) {
         Swal.fire('Ops!', 'Candidato já foi registrado!', 'error');
-        this.barecodeScanner.retart();
         debounceTime(800);
         return of('O candidato já foi registrado!');
       }
@@ -143,8 +138,6 @@ export class DashboardReaderComponent implements OnInit {
         'sync': 0
       };
 
-      this.barecodeScanner.stop();
-
       this.newParticipant['participant_name']  = participants[0].name;
       this.newParticipant['registration_code'] = participants[0].registration_code;
       this.show = true;
@@ -162,22 +155,16 @@ export class DashboardReaderComponent implements OnInit {
       this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
       this.synchronized = false;
       this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-      this.resetNewParticipant(true);
+      this.resetNewParticipant();
       this.input_code = '';
       this.newProtocol = null;
       this.message = 'Candidato registrado com sucesso';
     }
   }
 
-  resetNewParticipant(withReload:boolean) : void {
+  resetNewParticipant() : void {
     this.show = false;
     this.newParticipant = [];
     this.message = '';
-    if (withReload) {
-      if (!this.barecodeScanner.isStarted()) {
-        this.barecodeScanner.start();
-      }
-      this.barecodeScanner.retart();
-    }
   }
 }

@@ -9,7 +9,6 @@ import { DashboardRoutingModule } from "./dashboard.routing.module";
 import { AppMaterialModule } from "../../app.material.module";
 import { HttpLoaderFactory } from "../views.module";
 import { BrMaskerModule } from 'br-mask';
-import { BarecodeScannerLivestreamModule } from "ngx-barcode-scanner";
 import { DashboardReaderComponent } from './dashboard-reader/dashboard-reader.component';
 import { FilterPipe } from "../../shared/filter/filter.pipe";
 import { LZStringModule, LZStringService } from "ng-lz-string";
@@ -21,7 +20,6 @@ import { LZStringModule, LZStringService } from "ng-lz-string";
     ReactiveFormsModule,
     AppMaterialModule,
     DashboardRoutingModule,
-    BarecodeScannerLivestreamModule,
     LZStringModule,
     TranslateModule.forRoot({
       loader: {

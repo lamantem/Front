@@ -57,12 +57,6 @@
           Cód. Barra
         </ng-template>
 
-        <div>
-          <barcode-scanner-livestream type="code_39"
-                                      (valueChanges)="onValueChanges($event)">
-          </barcode-scanner-livestream>
-        </div>
-
         <div *ngIf="show">
           <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
           <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
