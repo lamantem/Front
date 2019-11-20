@@ -90,7 +90,7 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.barecodeScanner.scanner.start();
+    // this.barecodeScanner.scanner.start();
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
