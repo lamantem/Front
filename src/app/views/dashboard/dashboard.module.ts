@@ -13,7 +13,7 @@ import { DashboardReaderComponent } from './dashboard-reader/dashboard-reader.co
 import { FilterPipe } from "../../shared/filter/filter.pipe";
 import { LZStringModule, LZStringService } from "ng-lz-string";
 import { ZXingScannerModule } from "@zxing/ngx-scanner";
-import { BarecodeScannerLivestreamOverlayModule } from "ngx-barcode-scanner";
+import { BarecodeScannerLivestreamModule, BarecodeScannerLivestreamOverlayModule } from "ngx-barcode-scanner";
 
 @NgModule({
   imports: [
@@ -32,7 +32,8 @@ import { BarecodeScannerLivestreamOverlayModule } from "ngx-barcode-scanner";
     }),
     BrMaskerModule,
     ZXingScannerModule,
-    BarecodeScannerLivestreamOverlayModule
+    BarecodeScannerLivestreamOverlayModule,
+    BarecodeScannerLivestreamModule
   ],
   declarations: [
     DashboardListComponent,

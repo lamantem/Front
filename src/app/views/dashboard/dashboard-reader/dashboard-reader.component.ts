@@ -10,7 +10,7 @@ import { BarcodeFormat } from '@zxing/library';
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
-import { BarecodeScannerLivestreamOverlayComponent } from "ngx-barcode-scanner";
+import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -19,7 +19,7 @@ import { BarecodeScannerLivestreamOverlayComponent } from "ngx-barcode-scanner";
 })
 export class DashboardReaderComponent implements OnInit {
 
-  @ViewChild(BarecodeScannerLivestreamOverlayComponent, {static: true}) barecodeScanner: BarecodeScannerLivestreamOverlayComponent;
+  @ViewChild(BarecodeScannerLivestreamComponent, {static: true}) barecodeScanner: BarecodeScannerLivestreamComponent;
 
   groupsReader: DashboardModel.GroupsReader[] = [];
   protocolReader: DashboardModel.ProtocolReader[] = [];
@@ -33,6 +33,7 @@ export class DashboardReaderComponent implements OnInit {
   reader: boolean;
   message: string;
   barcodeValue;
+  loading: boolean;
 
   code = new Subject<any>();
 
@@ -59,6 +60,7 @@ export class DashboardReaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loading = false;
     this.show = false;
     this.reader = true;
     this.doSearchbyCode(this.code)
@@ -78,6 +80,10 @@ export class DashboardReaderComponent implements OnInit {
     debounceTime(800);
   }
 
+  ngAfterViewInit() {
+    // this.barecodeScanner.start();
+  }
+
   onValueChanges(result){
     this.barcodeValue = result.codeResult.code;
 
@@ -87,10 +93,6 @@ export class DashboardReaderComponent implements OnInit {
     }
 
     this.rawSearchByCode(parseInt(this.barcodeValue));
-  }
-
-  ngAfterViewInit() {
-    this.barecodeScanner.scanner.start();
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
@@ -121,7 +123,8 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   rawSearchByCode(code): Observable<any> {
-    console.log(code);
+    this.loading = true;
+    this.show = true;
     this.groupsReader = JSON.parse(
       this.lz.decompress(
         localStorage.getItem('groups')
@@ -138,8 +141,6 @@ export class DashboardReaderComponent implements OnInit {
     let participants = [];
     let mod          = [];
 
-    console.log('antes');
-
     this.groupsReader.forEach(function (group) {
       if (parseInt(group.id) === parseInt(group_id)) {
         participants = _.filter(group.participants, {
@@ -151,15 +152,9 @@ export class DashboardReaderComponent implements OnInit {
       }
     });
 
-    console.log('depois');
-
-
     this.resetNewParticipant();
 
     if (participants.length > 0) {
-
-      console.log('participantes1 ')
-
 
       let participantsExist = _.filter(this.protocolReader,
         {'registration_code': parseInt(code), 'active': 1});
@@ -169,8 +164,6 @@ export class DashboardReaderComponent implements OnInit {
         debounceTime(800);
         return of('O candidato já foi registrado!');
       }
-
-      console.log('participantes 2')
 
       this.newProtocol = {
         'id': null,
@@ -189,12 +182,14 @@ export class DashboardReaderComponent implements OnInit {
 
       this.newParticipant['participant_name']  = participants[0].name;
       this.newParticipant['registration_code'] = participants[0].registration_code;
+      this.loading = false;
       this.show = true;
 
       return of('Candidato encontrado!');
     }
 
-    this.show = false;
+    this.show = true;
+    this.loading = false;
     return of('Código de inscrição inválido!');
   }
 
@@ -207,6 +202,7 @@ export class DashboardReaderComponent implements OnInit {
       this.resetNewParticipant();
       this.input_code = '';
       this.newProtocol = null;
+      this.show = false;
       this.message = 'Candidato registrado com sucesso';
     }
   }

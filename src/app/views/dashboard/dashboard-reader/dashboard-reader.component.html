@@ -50,12 +50,19 @@
     </mat-tab>
 
     <mat-tab>
+
       <div class="container">
 
         <ng-template mat-tab-label>
           <mat-icon class="tab-icon">photo_camera</mat-icon>
           Leitor
         </ng-template>
+
+        <div class="loading-indicator" *ngIf="loading">
+          <mat-spinner strokeWidth="3"
+                       [diameter]="50">
+          </mat-spinner>
+        </div>
 
         <div *ngIf="!show">
           <zxing-scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
@@ -70,9 +77,6 @@
       </div>
     </mat-tab>
 
-    <barcode-scanner-livestream-overlay type="code_39"
-                                (valueChanges)="onValueChanges($event)">
-    </barcode-scanner-livestream-overlay>
   </mat-tab-group>
 
 </mat-dialog-content>
