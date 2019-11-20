@@ -4,11 +4,12 @@ import { ActivatedRoute } from "@angular/router";
 import { Observable, of, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { LocalStorageService } from "../../../core/services";
+import { LZStringService } from "ng-lz-string";
+import { BarcodeFormat } from '@zxing/library';
 
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
-import { LZStringService } from "ng-lz-string";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -31,6 +32,21 @@ export class DashboardReaderComponent implements OnInit {
   barcodeValue;
 
   code = new Subject<any>();
+
+  availableDevices: MediaDeviceInfo[];
+  currentDevice: MediaDeviceInfo = null;
+  hasDevices: boolean;
+
+  torchEnabled = false;
+  tryHarder = false;
+
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.CODE_39,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -70,7 +86,25 @@ export class DashboardReaderComponent implements OnInit {
     this.rawSearchByCode(parseInt(this.barcodeValue));
   }
 
-  ngAfterViewInit() {
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+    this.hasDevices = Boolean(devices && devices.length);
+  }
+
+  onCodeResult(resultString: string) {
+    this.barcodeValue = resultString;
+
+    if (this.barcodeValue.indexOf('-') >= 0) {
+      let code = this.barcodeValue.split('-');
+      this.barcodeValue = parseInt(code[1]);
+    }
+
+    this.rawSearchByCode(parseInt(this.barcodeValue));
+  }
+
+  onDeviceSelectChange(selected: string) {
+    const device = this.availableDevices.find(x => x.deviceId === selected);
+    this.currentDevice = device || null;
   }
 
   doSearchbyCode(codes: Observable<any>) {
@@ -83,6 +117,7 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   rawSearchByCode(code): Observable<any> {
+    console.log(code);
     this.groupsReader = JSON.parse(
       this.lz.decompress(
         localStorage.getItem('groups')

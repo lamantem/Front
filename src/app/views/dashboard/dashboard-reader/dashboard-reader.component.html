@@ -54,14 +54,29 @@
 
         <ng-template mat-tab-label>
           <mat-icon class="tab-icon">photo_camera</mat-icon>
-          Cód. Barra
+          Leitor
         </ng-template>
+
+        <header>
+          <mat-form-field appearance="fill">
+            <select matNativeControl matInput (change)="onDeviceSelectChange($event.target.value)">
+              <option value="" [selected]="!currentDevice">No Device Selected</option>
+              <option *ngFor="let device of availableDevices" [value]="device.deviceId"
+                      [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{device.label}}</option>
+            </select>
+          </mat-form-field>
+        </header>
+
+        <div>
+          <zxing-scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
+                         [formats]="formatsEnabled" [tryHarder]="tryHarder"
+                         (camerasFound)="onCamerasFound($event)"></zxing-scanner>
+        </div>
 
         <div *ngIf="show">
           <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
           <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
         </div>
-
       </div>
     </mat-tab>
   </mat-tab-group>

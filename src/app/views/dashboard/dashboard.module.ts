@@ -12,6 +12,7 @@ import { BrMaskerModule } from 'br-mask';
 import { DashboardReaderComponent } from './dashboard-reader/dashboard-reader.component';
 import { FilterPipe } from "../../shared/filter/filter.pipe";
 import { LZStringModule, LZStringService } from "ng-lz-string";
+import { ZXingScannerModule } from "@zxing/ngx-scanner";
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { LZStringModule, LZStringService } from "ng-lz-string";
         deps: [HttpClient]
       }
     }),
-    BrMaskerModule
+    BrMaskerModule,
+    ZXingScannerModule
   ],
   declarations: [
     DashboardListComponent,
