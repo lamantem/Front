@@ -215,7 +215,7 @@ export class DashboardReaderComponent implements OnInit {
       this.newProtocol = null;
       this.show = false;
       this.message = 'Candidato registrado com sucesso';
-      this.barecodeScanner.retart();
+      this.barecodeScanner.start();
     }
   }
 
