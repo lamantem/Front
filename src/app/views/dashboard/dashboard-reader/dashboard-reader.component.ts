@@ -32,8 +32,9 @@ export class DashboardReaderComponent implements OnInit {
   show: boolean;
   reader: boolean;
   message: string;
-  barcodeValue;
   loading: boolean;
+  toggle: boolean;
+  barcodeValue;
 
   code = new Subject<any>();
 
@@ -80,8 +81,21 @@ export class DashboardReaderComponent implements OnInit {
     debounceTime(800);
   }
 
-  ngAfterViewInit() {
-    // this.barecodeScanner.start();
+  onToggleChange() {
+    if (this.toggle) {
+      this.barecodeScanner.start();
+    }
+
+    if (!this.toggle) {
+      this.barecodeScanner.stop();
+
+      this.onCamerasFound(this.availableDevices)
+    }
+  }
+
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+    this.hasDevices = Boolean(devices && devices.length);
   }
 
   onValueChanges(result){
@@ -93,11 +107,6 @@ export class DashboardReaderComponent implements OnInit {
     }
 
     this.rawSearchByCode(parseInt(this.barcodeValue));
-  }
-
-  onCamerasFound(devices: MediaDeviceInfo[]): void {
-    this.availableDevices = devices;
-    this.hasDevices = Boolean(devices && devices.length);
   }
 
   onCodeResult(resultString: string) {
@@ -184,6 +193,7 @@ export class DashboardReaderComponent implements OnInit {
       this.newParticipant['registration_code'] = participants[0].registration_code;
       this.loading = false;
       this.show = true;
+      this.barecodeScanner.stop();
 
       return of('Candidato encontrado!');
     }

@@ -45,3 +45,11 @@
   height: 100%;
   background-color: transparent;
 }
+
+::ng-deep.mat-slide-toggle-bar {
+  height: 20px !important;
+}
+::ng-deep.mat-slide-toggle-thumb {
+  height: 25px !important;
+  width: 25px !important;
+}

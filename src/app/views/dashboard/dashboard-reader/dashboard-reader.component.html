@@ -58,16 +58,28 @@
           Leitor
         </ng-template>
 
+        <div *ngIf="!show" style="padding-bottom: 10px; text-align: right">
+          <i class="fa fa-qrcode fa-2x"></i>
+          <mat-slide-toggle [(ngModel)]="toggle" (change)="onToggleChange()"></mat-slide-toggle>
+          <i class="fa fa-barcode fa-2x"></i>
+        </div>
+
         <div class="loading-indicator" *ngIf="loading">
           <mat-spinner strokeWidth="3"
                        [diameter]="50">
           </mat-spinner>
         </div>
 
-        <div *ngIf="!show">
+        <div>
+          <barcode-scanner-livestream type="code_39"
+                                      (valueChanges)="onValueChanges($event)">
+          </barcode-scanner-livestream>
+        </div>
+
+        <div *ngIf="!show && !toggle">
           <zxing-scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
                          [formats]="formatsEnabled" [tryHarder]="tryHarder" [autofocusEnabled]="true"
-                         (camerasFound)="onCamerasFound($event)"></zxing-scanner>
+                         [enable]="!toggle" (camerasFound)="onCamerasFound($event)"></zxing-scanner>
         </div>
 
         <div *ngIf="show">
