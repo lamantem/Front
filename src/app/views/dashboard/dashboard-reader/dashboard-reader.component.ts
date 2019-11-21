@@ -11,6 +11,7 @@ import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
+import { ZXingScannerComponent } from "@zxing/ngx-scanner";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -20,6 +21,7 @@ import * as moment from "moment";
 export class DashboardReaderComponent implements OnInit {
 
   @ViewChild(BarecodeScannerLivestreamComponent, {static: true}) barecodeScanner: BarecodeScannerLivestreamComponent;
+  @ViewChild(ZXingScannerComponent, {static : true}) scanner: ZXingScannerComponent;
 
   groupsReader: DashboardModel.GroupsReader[] = [];
   protocolReader: DashboardModel.ProtocolReader[] = [];
@@ -39,7 +41,6 @@ export class DashboardReaderComponent implements OnInit {
   code = new Subject<any>();
 
   availableDevices: MediaDeviceInfo[];
-  currentDevice: MediaDeviceInfo = null;
   hasDevices: boolean;
 
   torchEnabled = false;
@@ -61,6 +62,7 @@ export class DashboardReaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.scanner)
     this.loading = false;
     this.show = false;
     this.reader = true;
@@ -88,8 +90,6 @@ export class DashboardReaderComponent implements OnInit {
 
     if (!this.toggle) {
       this.barecodeScanner.stop();
-
-      this.onCamerasFound(this.availableDevices)
     }
   }
 
@@ -166,12 +166,11 @@ export class DashboardReaderComponent implements OnInit {
       this.loading = false;
       Swal.fire('Ops!', 'Código de inscrição inválido!!', 'error');
       this.barecodeScanner.retart();
-      debounceTime(800);
-      this.onCamerasFound(this.availableDevices);
+      debounceTime(1200);
       return;
     }
 
-    this.resetNewParticipant();
+    this.resetNewParticipant(false);
 
     if (participants.length > 0) {
 
@@ -213,7 +212,7 @@ export class DashboardReaderComponent implements OnInit {
       this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
       this.synchronized = false;
       this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-      this.resetNewParticipant();
+      this.resetNewParticipant(false);
       this.input_code = '';
       this.newProtocol = null;
       this.show = false;
@@ -222,9 +221,15 @@ export class DashboardReaderComponent implements OnInit {
     }
   }
 
-  resetNewParticipant() : void {
+  resetNewParticipant(withReload:boolean) : void {
     this.show = false;
     this.newParticipant = [];
     this.message = '';
+
+    if (withReload) {
+      this.toggle = true;
+      this.barecodeScanner.start();
+      this.barecodeScanner.retart();
+    }
   }
 }
