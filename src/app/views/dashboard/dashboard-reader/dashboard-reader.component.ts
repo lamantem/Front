@@ -6,11 +6,11 @@ import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { LocalStorageService } from "../../../core/services";
 import { LZStringService } from "ng-lz-string";
 import { BarcodeFormat } from '@zxing/library';
+import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
-import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 
 @Component({
   selector: 'app-dashboard-reader',
