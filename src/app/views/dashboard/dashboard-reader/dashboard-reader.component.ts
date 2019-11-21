@@ -2,14 +2,15 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
 import { Observable, of, Subject } from "rxjs";
-import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 import { debounceTime, distinctUntilChanged, switchMap } from "rxjs/operators";
 import { LocalStorageService } from "../../../core/services";
+import { LZStringService } from "ng-lz-string";
+import { BarcodeFormat } from '@zxing/library';
+import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
-import { LZStringService } from "ng-lz-string";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -31,9 +32,26 @@ export class DashboardReaderComponent implements OnInit {
   show: boolean;
   reader: boolean;
   message: string;
+  loading: boolean;
+  toggle: boolean;
   barcodeValue;
 
   code = new Subject<any>();
+
+  availableDevices: MediaDeviceInfo[];
+  currentDevice: MediaDeviceInfo = null;
+  hasDevices: boolean;
+
+  torchEnabled = false;
+  tryHarder = false;
+
+  formatsEnabled: BarcodeFormat[] = [
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.CODE_39,
+    BarcodeFormat.DATA_MATRIX,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.QR_CODE,
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -43,6 +61,7 @@ export class DashboardReaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loading = false;
     this.show = false;
     this.reader = true;
     this.doSearchbyCode(this.code)
@@ -62,8 +81,26 @@ export class DashboardReaderComponent implements OnInit {
     debounceTime(800);
   }
 
+  onToggleChange() {
+    if (this.toggle) {
+      this.barecodeScanner.start();
+    }
+
+    if (!this.toggle) {
+      this.barecodeScanner.stop();
+
+      this.onCamerasFound(this.availableDevices)
+    }
+  }
+
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+    this.hasDevices = Boolean(devices && devices.length);
+  }
+
   onValueChanges(result){
     this.barcodeValue = result.codeResult.code;
+    this.loading = true;
 
     if (this.barcodeValue.indexOf('-') >= 0) {
       let code = this.barcodeValue.split('-');
@@ -73,8 +110,18 @@ export class DashboardReaderComponent implements OnInit {
     this.rawSearchByCode(parseInt(this.barcodeValue));
   }
 
-  ngAfterViewInit() {
-    this.barecodeScanner.start();
+  onCodeResult(resultString: string) {
+    this.barcodeValue = resultString;
+    this.loading = true;
+
+    if (this.barcodeValue.indexOf('-') >= 0) {
+      let code = this.barcodeValue.split('-');
+      this.barcodeValue = parseInt(code[1]);
+    }
+
+    if (!this.show) {
+      this.rawSearchByCode(parseInt(this.barcodeValue));
+    }
   }
 
   doSearchbyCode(codes: Observable<any>) {
@@ -114,7 +161,17 @@ export class DashboardReaderComponent implements OnInit {
       }
     });
 
-    this.resetNewParticipant(false);
+    if (_.isEmpty(participants)) {
+      this.show = false;
+      this.loading = false;
+      Swal.fire('Ops!', 'Código de inscrição inválido!!', 'error');
+      this.barecodeScanner.retart();
+      debounceTime(800);
+      this.onCamerasFound(this.availableDevices);
+      return;
+    }
+
+    this.resetNewParticipant();
 
     if (participants.length > 0) {
 
@@ -123,9 +180,8 @@ export class DashboardReaderComponent implements OnInit {
 
       if (!_.isEmpty(participantsExist)) {
         Swal.fire('Ops!', 'Candidato já foi registrado!', 'error');
-        this.barecodeScanner.retart();
+        this.loading = false;
         debounceTime(800);
-        return of('O candidato já foi registrado!');
       }
 
       this.newProtocol = {
@@ -143,17 +199,12 @@ export class DashboardReaderComponent implements OnInit {
         'sync': 0
       };
 
-      this.barecodeScanner.stop();
-
       this.newParticipant['participant_name']  = participants[0].name;
       this.newParticipant['registration_code'] = participants[0].registration_code;
       this.show = true;
-
-      return of('Candidato encontrado!');
+      this.loading = false;
+      this.barecodeScanner.stop();
     }
-
-    this.show = false;
-    return of('Código de inscrição inválido!');
   }
 
   saveProtocol() {
@@ -162,22 +213,18 @@ export class DashboardReaderComponent implements OnInit {
       this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
       this.synchronized = false;
       this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-      this.resetNewParticipant(true);
+      this.resetNewParticipant();
       this.input_code = '';
       this.newProtocol = null;
+      this.show = false;
       this.message = 'Candidato registrado com sucesso';
+      this.barecodeScanner.start();
     }
   }
 
-  resetNewParticipant(withReload:boolean) : void {
+  resetNewParticipant() : void {
     this.show = false;
     this.newParticipant = [];
     this.message = '';
-    if (withReload) {
-      if (!this.barecodeScanner.isStarted()) {
-        this.barecodeScanner.start();
-      }
-      this.barecodeScanner.retart();
-    }
   }
 }
