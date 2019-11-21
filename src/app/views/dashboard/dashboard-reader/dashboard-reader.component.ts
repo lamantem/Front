@@ -11,7 +11,6 @@ import { BarecodeScannerLivestreamComponent } from "ngx-barcode-scanner";
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 import * as moment from "moment";
-import { ZXingScannerComponent } from "@zxing/ngx-scanner";
 
 @Component({
   selector: 'app-dashboard-reader',
@@ -21,7 +20,6 @@ import { ZXingScannerComponent } from "@zxing/ngx-scanner";
 export class DashboardReaderComponent implements OnInit {
 
   @ViewChild(BarecodeScannerLivestreamComponent, {static: true}) barecodeScanner: BarecodeScannerLivestreamComponent;
-  @ViewChild(ZXingScannerComponent, {static : true}) scanner: ZXingScannerComponent;
 
   groupsReader: DashboardModel.GroupsReader[] = [];
   protocolReader: DashboardModel.ProtocolReader[] = [];
@@ -62,7 +60,6 @@ export class DashboardReaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.scanner)
     this.loading = false;
     this.show = false;
     this.reader = true;
