@@ -29,7 +29,7 @@ import * as _ from 'lodash';
   ],
   preserveWhitespaces: false
 })
-export class DashboardFormComponent implements OnInit, AfterViewInit {
+export class DashboardFormComponent implements OnInit{
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -78,9 +78,6 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
           name: ['', Validators.minLength(2)],
           category_id: ['']
         });
-  }
-
-  ngAfterViewInit() {
   }
 
   openReader() {

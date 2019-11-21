@@ -39,7 +39,6 @@ export class DashboardReaderComponent implements OnInit {
   code = new Subject<any>();
 
   availableDevices: MediaDeviceInfo[];
-  currentDevice: MediaDeviceInfo = null;
   hasDevices: boolean;
 
   torchEnabled = false;
@@ -88,8 +87,6 @@ export class DashboardReaderComponent implements OnInit {
 
     if (!this.toggle) {
       this.barecodeScanner.stop();
-
-      this.onCamerasFound(this.availableDevices)
     }
   }
 
@@ -166,12 +163,11 @@ export class DashboardReaderComponent implements OnInit {
       this.loading = false;
       Swal.fire('Ops!', 'Código de inscrição inválido!!', 'error');
       this.barecodeScanner.retart();
-      debounceTime(800);
-      this.onCamerasFound(this.availableDevices);
+      debounceTime(1200);
       return;
     }
 
-    this.resetNewParticipant();
+    this.resetNewParticipant(false);
 
     if (participants.length > 0) {
 
@@ -213,7 +209,7 @@ export class DashboardReaderComponent implements OnInit {
       this.localStorage.setItem('protocols', JSON.stringify(this.protocolReader));
       this.synchronized = false;
       this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-      this.resetNewParticipant();
+      this.resetNewParticipant(false);
       this.input_code = '';
       this.newProtocol = null;
       this.show = false;
@@ -222,9 +218,15 @@ export class DashboardReaderComponent implements OnInit {
     }
   }
 
-  resetNewParticipant() : void {
+  resetNewParticipant(withReload:boolean) : void {
     this.show = false;
     this.newParticipant = [];
     this.message = '';
+
+    if (withReload) {
+      this.toggle = true;
+      this.barecodeScanner.start();
+      this.barecodeScanner.retart();
+    }
   }
 }
