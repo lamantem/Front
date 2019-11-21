@@ -134,7 +134,6 @@ export class DashboardReaderComponent implements OnInit {
   }
 
   rawSearchByCode(code): Observable<any> {
-    this.show = true;
     this.groupsReader = JSON.parse(
       this.lz.decompress(
         localStorage.getItem('groups')
@@ -162,6 +161,16 @@ export class DashboardReaderComponent implements OnInit {
       }
     });
 
+    if (_.isEmpty(participants)) {
+      this.show = false;
+      this.loading = false;
+      Swal.fire('Ops!', 'Código de inscrição inválido!!', 'error');
+      this.barecodeScanner.retart();
+      debounceTime(800);
+      this.onCamerasFound(this.availableDevices);
+      return;
+    }
+
     this.resetNewParticipant();
 
     if (participants.length > 0) {
@@ -171,8 +180,8 @@ export class DashboardReaderComponent implements OnInit {
 
       if (!_.isEmpty(participantsExist)) {
         Swal.fire('Ops!', 'Candidato já foi registrado!', 'error');
+        this.loading = false;
         debounceTime(800);
-        return of('O candidato já foi registrado!');
       }
 
       this.newProtocol = {
@@ -195,13 +204,7 @@ export class DashboardReaderComponent implements OnInit {
       this.show = true;
       this.loading = false;
       this.barecodeScanner.stop();
-
-      return of('Candidato encontrado!');
     }
-
-    this.show = false;
-    this.loading = false;
-    return of('Código de inscrição inválido!');
   }
 
   saveProtocol() {

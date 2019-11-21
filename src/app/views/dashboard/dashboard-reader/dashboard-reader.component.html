@@ -1,6 +1,46 @@
 <mat-dialog-content class="mat-typography">
 
   <mat-tab-group (selectedTabChange)="resetNewParticipant()">
+
+    <mat-tab>
+      <div class="container">
+
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">photo_camera</mat-icon>
+          Leitor
+        </ng-template>
+
+        <div class="loading-indicator" *ngIf="loading">
+          <mat-spinner strokeWidth="3"
+                       [diameter]="50">
+          </mat-spinner>
+        </div>
+
+        <div *ngIf="!show" class="toggle">
+          <i class="fa fa-qrcode fa-2x"></i>
+          <mat-slide-toggle [(ngModel)]="toggle" (change)="onToggleChange()"></mat-slide-toggle>
+          <i class="fa fa-barcode fa-2x"></i>
+        </div>
+
+        <div>
+          <barcode-scanner-livestream type="code_39"
+                                      (valueChanges)="onValueChanges($event)">
+          </barcode-scanner-livestream>
+        </div>
+
+        <div *ngIf="!show && !toggle">
+          <zxing-scanner [torch]="torchEnabled" (scanSuccess)="onCodeResult($event)"
+                         [formats]="formatsEnabled" [tryHarder]="tryHarder" [autofocusEnabled]="true"
+                         [enable]="!toggle" (camerasFound)="onCamerasFound($event)"></zxing-scanner>
+        </div>
+
+        <div *ngIf="show">
+          <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
+          <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
+        </div>
+      </div>
+    </mat-tab>
+
     <mat-tab>
       <div class="container">
 
@@ -47,46 +87,6 @@
 
       </div>
 
-    </mat-tab>
-
-    <mat-tab>
-
-      <div class="container">
-
-        <ng-template mat-tab-label>
-          <mat-icon class="tab-icon">photo_camera</mat-icon>
-          Leitor
-        </ng-template>
-
-        <div *ngIf="!show" class="toggle">
-          <i class="fa fa-qrcode fa-2x"></i>
-          <mat-slide-toggle [(ngModel)]="toggle" (change)="onToggleChange()"></mat-slide-toggle>
-          <i class="fa fa-barcode fa-2x"></i>
-        </div>
-
-        <div class="loading-indicator" *ngIf="loading">
-          <mat-spinner strokeWidth="3"
-                       [diameter]="50">
-          </mat-spinner>
-        </div>
-
-        <div>
-          <barcode-scanner-livestream type="code_39"
-                                      (valueChanges)="onValueChanges($event)">
-          </barcode-scanner-livestream>
-        </div>
-
-        <div *ngIf="!show && !toggle">
-          <zxing-scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
-                         [formats]="formatsEnabled" [tryHarder]="tryHarder" [autofocusEnabled]="true"
-                         [enable]="!toggle" (camerasFound)="onCamerasFound($event)"></zxing-scanner>
-        </div>
-
-        <div *ngIf="show">
-          <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
-          <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
-        </div>
-      </div>
     </mat-tab>
 
   </mat-tab-group>
