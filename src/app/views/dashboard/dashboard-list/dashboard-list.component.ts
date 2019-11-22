@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DateAdapter, MatPaginator } from "@angular/material";
 import { TranslateService } from "@ngx-translate/core";
 import { DashboardListService } from "./dashboard-list.service";
@@ -32,6 +32,7 @@ export class DashboardListComponent implements OnInit{
       public localStorage: LocalStorageService,
       private dashboardListService: DashboardListService,
       private router: Router,
+      private route: ActivatedRoute,
       private adapter: DateAdapter<any>,
       private lz: LZStringService
   ) {
@@ -42,6 +43,7 @@ export class DashboardListComponent implements OnInit{
   }
 
   ngOnInit() {
+    this.localStorage.setItem('group_id', null);
     if(!this.localStorage.getItem('groups')) {
       this.prepareGroupReader();
       return;
@@ -64,7 +66,6 @@ export class DashboardListComponent implements OnInit{
                 this.getGroupReader();
                 this.loading = false;
                 let protocols = [];
-
                 groups.forEach(function (group,key) {
                   delete groups_[key].participants;
                   group.protocols.forEach(function (protocol) {
