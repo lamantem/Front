@@ -33,7 +33,7 @@ export class LayoutComponent implements OnDestroy {
     private layoutService: LayoutService,
     private dashboardListService: DashboardListService,
     @Inject(DOCUMENT) _document?: any,
-    @Inject(AuthenticationService) _auth? : any,
+    @Inject(AuthenticationService) _auth?: any,
   ) {
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = _document.body.classList.contains('sidebar-minimized');
@@ -48,7 +48,7 @@ export class LayoutComponent implements OnDestroy {
     });
   }
 
-  userName() : any {
+  userName(): any {
     if (!this.user) {
       this.user = this.auth.getCurrentUser();
     }
@@ -83,32 +83,35 @@ export class LayoutComponent implements OnDestroy {
         this.layoutService.deleteSyncProtocolUrl();
         this.layoutService.deleteAllWithToken(remove)
           .subscribe((resp) => {
-            if (resp.status === 202) {
-              let protocols_local = [];
-              protocols = this.loadProtocols();
-              protocols.forEach(function (protocol) {
-                if (protocol.active !== remove[0].active) {
-                  protocols_local.push(protocol);
-                }
-              });
+              if (resp.status === 202) {
+                let protocols_local = [];
+                protocols = this.loadProtocols();
+                protocols.forEach(function (protocol) {
+                  if (protocol.active !== remove[0].active) {
+                    protocols_local.push(protocol);
+                  }
+                });
 
-              this.synchronized = true;
-              this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+                this.synchronized = true;
+                this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
 
-              this.localStorage.clearItem('protocols');
-              this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
-              return;
-            }
-          },
-          error => {
-            this.loading = false;
-            Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
-          });
+                this.localStorage.clearItem('protocols');
+                this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
+                return;
+              }
+            },
+            error => {
+              this.loading = false;
+              Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
+            });
       }
 
       if (!_.isEmpty(protocols)) {
+
+        let protocolSave = _.filter(protocols, {'sync': 0});
+
         this.layoutService.prepareSyncProtocolUrl();
-        this.layoutService.createWithToken(protocols)
+        this.layoutService.createWithToken(protocolSave)
           .subscribe((resp) => {
             if (resp.status === 201) {
               this.dashboardListService.getGroupReaderUrl();
@@ -167,50 +170,50 @@ export class LayoutComponent implements OnDestroy {
 
       }
       if (_.isEmpty(protocols)) {
-          this.loading = false;
+        this.loading = false;
 
-          this.synchronized = true;
-          this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+        this.synchronized = true;
+        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
 
-          Swal.fire('Bom trabalho!', 'Registros sincronizados com sucesso!', 'success')
-              .then((result) => {
-                  if (result.value) {
-                      this.router.navigate(['/'])
-                          .catch(reason => {
-                              console.warn(reason);
-                          });
-                  }
-              });
+        Swal.fire('Bom trabalho!', 'Registros sincronizados com sucesso!', 'success')
+          .then((result) => {
+            if (result.value) {
+              this.router.navigate(['/'])
+                .catch(reason => {
+                  console.warn(reason);
+                });
+            }
+          });
       }
     }
   }
 
   cleanProtocols() {
-      Swal.fire({
-          title: 'Deseja limpar os faltantes?',
-          text: "Você perderá todos que não foram sincronizados",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sim, pretendo limpar',
-          cancelButtonText: 'Cancelar'
-      }).then((result) => {
-          if (result.value) {
-              this.localStorage.setItem('protocols', JSON.stringify([]));
-              this.router.navigate(['/'])
-                  .catch(reason => {
-                      console.warn(reason);
-                  });
-              this.synchronized = true;
-              this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-              Swal.fire(
-                  'Deletado!',
-                  'Faltantes removidos.',
-                  'success'
-              )
-          }
-      })
+    Swal.fire({
+      title: 'Deseja limpar os faltantes?',
+      text: "Você perderá todos que não foram sincronizados",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, pretendo limpar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.value) {
+        this.localStorage.setItem('protocols', JSON.stringify([]));
+        this.router.navigate(['/'])
+          .catch(reason => {
+            console.warn(reason);
+          });
+        this.synchronized = true;
+        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
+        Swal.fire(
+          'Deletado!',
+          'Faltantes removidos.',
+          'success'
+        )
+      }
+    })
   }
 
   verifySynchronized(): void {
@@ -225,11 +228,11 @@ export class LayoutComponent implements OnDestroy {
       });
   }
 
-  isSynchronized() : boolean {
+  isSynchronized(): boolean {
     return JSON.parse(localStorage['synchronized']);
   }
 
-  loadProtocols() : any {
+  loadProtocols(): any {
     return JSON.parse(localStorage['protocols']);
   }
 
