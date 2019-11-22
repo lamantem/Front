@@ -11,8 +11,8 @@ import { TranslateService } from "@ngx-translate/core";
 import { LocalStorageService } from "../../../core/services";
 import { DashboardFormService } from "./dashboard-form.service";
 import { DashboardReaderComponent } from "../dashboard-reader/dashboard-reader.component";
-
 import { LZStringService } from "ng-lz-string";
+
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
 
@@ -163,13 +163,12 @@ export class DashboardFormComponent implements OnInit{
 
     let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
     let groups_ = JSON.parse(localStorage.getItem('groups_'));
-    let user = localStorage.getItem('appUser');
-    user = JSON.parse(user);
+    let user =  JSON.parse(localStorage.getItem('appUser'));
 
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
     let groupsReader = null;
-    groups_.forEach(function (group,key) {
+    groups_.forEach(function (group) {
       if (group.id === parseInt(group_id)) {
         groupsReader = group;
       }

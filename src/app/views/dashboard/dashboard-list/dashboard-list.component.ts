@@ -6,7 +6,6 @@ import { TranslateService } from "@ngx-translate/core";
 import { DashboardListService } from "./dashboard-list.service";
 import { LocalStorageService } from "../../../core/services";
 import { LZStringService } from "ng-lz-string";
-import {debounceTime} from "rxjs/operators";
 
 @Component({
   selector: 'dashboard-list',
@@ -14,7 +13,7 @@ import {debounceTime} from "rxjs/operators";
   styleUrls: ['./dashboard-list.component.scss'],
   preserveWhitespaces: false
 })
-export class DashboardListComponent implements OnInit, AfterViewInit {
+export class DashboardListComponent implements OnInit{
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -45,12 +44,10 @@ export class DashboardListComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     if(!this.localStorage.getItem('groups')) {
       this.prepareGroupReader();
-    } else {
-      this.getGroupReader();
+      return;
     }
-  }
 
-  ngAfterViewInit() {
+    this.getGroupReader();
   }
 
   private prepareGroupReader() {
