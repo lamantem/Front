@@ -10,12 +10,6 @@
           Leitor
         </ng-template>
 
-        <div class="loading-indicator" *ngIf="loading">
-          <mat-spinner strokeWidth="3"
-                       [diameter]="50">
-          </mat-spinner>
-        </div>
-
         <div *ngIf="!show" class="toggle">
           <i class="fa fa-qrcode fa-2x"></i>
           <mat-slide-toggle [(ngModel)]="toggle" (change)="onToggleChange()"></mat-slide-toggle>
@@ -24,7 +18,7 @@
 
         <div>
           <barcode-scanner-livestream type="code_39"
-                                      (valueChanges)="onValueChanges($event)">
+                                      (valueChanges)="onCodeResult($event)">
           </barcode-scanner-livestream>
         </div>
 
@@ -34,9 +28,27 @@
                          [enable]="!toggle" (camerasFound)="onCamerasFound($event)"></zxing-scanner>
         </div>
 
-        <div *ngIf="show">
-          <p class="text-modal">Nome do candidato: {{ newParticipant['participant_name'] }}</p>
-          <p class="text-modal">Codigo de inscrição: {{ newParticipant['registration_code'] }}</p>
+        <div class="flex-container text-center" fxLayout="row" fxLayoutAlign="center center">
+          <div class="flex-item">
+            <mat-spinner color="Primary"
+                         class="app-spinner"
+                         strokeWidth="3"
+                         [diameter]="30"
+                         *ngIf="spinner">
+            </mat-spinner>
+          </div>
+          <div class="flex-item" *ngIf="!spinner">
+            <mat-card class="mat-elevation-z0 text-modal" *ngIf="message"> {{message}}</mat-card>
+          </div>
+        </div>
+
+        <div *ngIf="show && !spinner">
+          <p class="text-modal">
+            Nome do candidato: {{ newParticipant['participant_name'] }}
+          </p>
+          <p class="text-modal">
+            Codigo de inscrição: {{ newParticipant['registration_code'] }}
+          </p>
         </div>
       </div>
     </mat-tab>
