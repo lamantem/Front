@@ -1,0 +1,68 @@
+table {
+  width: 100%;
+}
+
+.text-modal-header {
+  text-align: left;
+  margin-top: 6px;
+
+  @media screen and (min-width: 600px) {
+    font-size: larger;
+  }
+  font-weight: bold;
+}
+
+.text-modal {
+  text-align: left;
+  margin-top: 20px;
+
+  @media screen and (min-width: 600px) {
+    font-size: larger;
+  }
+  font-weight: normal;
+}
+.mat-fab.mat-primary,
+.mat-flat-button.mat-primary,
+.mat-mini-fab.mat-primary,
+.mat-raised-button.mat-primary {
+  background-color: #009688;
+}
+
+.footer_search {
+  margin: 10%;
+}
+
+.mat-dialog-content{
+  padding: 0 10px !important;
+}
+mat-form-field.mat-form-field {
+  padding-left: 2px;
+  padding-right: 2px;
+  width:100%;
+  background-color: white;
+}
+
+th.mat-header-cell{
+  text-align: left !important;
+  padding-right: 1%;
+}
+
+td.mat-cell:nth-child(2), td.mat-cell:nth-child(3) {
+  text-align: center !important;
+}
+
+td.mat-cell, td.mat-footer-cell {
+  font-size: small;
+  text-align: left !important;
+  padding-right: 1%;
+}
+
+@media screen and (max-width: 600px) {
+
+}
+
+@media (min-width: 600px) and (max-width: 1300px) {
+
+}
+
+

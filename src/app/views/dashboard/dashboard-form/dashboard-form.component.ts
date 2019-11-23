@@ -66,6 +66,8 @@ export class DashboardFormComponent implements OnInit{
   }
 
   ngOnInit() {
+    this.localStorage.setItem('group_id',
+        JSON.stringify(this.route.snapshot.paramMap.get('group_id')));
     this.getProtocolReader(this.category_id);
     this.dataSourceMissing.filterPredicate = function(data, filter: string): boolean {
       return data.participant_name.toLowerCase().includes(filter)

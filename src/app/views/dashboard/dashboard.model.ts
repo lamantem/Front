@@ -16,6 +16,14 @@ declare namespace DashboardModel {
     protocols: any;
   }
 
+  export interface ReportSync {
+    id: number;
+    created_at: any;
+    added: number;
+    reject: number;
+    group_id: any;
+  }
+
   export interface ProtocolReader {
     participant_id: number;
     categories_id: number;
