@@ -17,7 +17,7 @@
     <div class="container-fluid scroller_content">
       <div class="animated fadeIn">
         <div class="button_fab_list">
-          <a mat-mini-fab color="primary"
+          <a mat-fab color="primary"
              matTooltip="{{ 'VIEWS.LIST.TOOLTIP_ADD_BUTTON' | translate }}"
              (click)="openReader()">
             <mat-icon>add</mat-icon>
@@ -121,37 +121,48 @@
     </div>
     <div>
       <mat-card class="mat-elevation-z8 mat-card-search">
+        <form name="searchForm" [formGroup]="searchForm" novalidate>
+
         <mat-form-field class="search-termSearch"
                         appearance="outline">
           <mat-label>Inscrição</mat-label>
-          <input matInput [(ngModel)]="registration_code">
+          <input matInput
+                 type="text"
+                 inputmode="numeric"
+                 formControlName="registration_code">
         </mat-form-field>
 
         <mat-form-field class="search-termSearch"
                         appearance="outline">
           <mat-label>Nome</mat-label>
-          <input matInput [(ngModel)]="name">
+          <input matInput
+                 formControlName="name">
+          <mat-error class="nameError">
+            Mínimo de 2 caracteres
+          </mat-error>
         </mat-form-field>
-
         <mat-form-field class="search-termMissing back-ground"
                         appearance="outline">
           <mat-label>Setor</mat-label>
-          <mat-select [(ngModel)]="categories" (selectionChange)="categorie_id = $event.value">
+          <mat-select
+                  formControlName="category_id"
+                  (selectionChange)="category_id = $event.value">
             <mat-option [value]="0">Todos os Setores</mat-option>
-            <mat-option *ngFor="let categories of groupsReader[0].categories" [value]="categories.id">
+            <mat-option *ngFor="let categories of groupsReader[0].categories"
+                        [value]="categories.id">
               {{ categories.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <div class="button-search">
-          <button type="submit" (click)="loadGroupReader()" class="btn btn-primary px-4">
-            Buscar
-          </button>
-        </div>
-
+      <div class="button-search">
+      <button type="submit" (click)="onSubmit()" class="btn btn-primary px-4">
+      Buscar
+      </button>
+    </div>
+        </form>
           <mat-divider [inset]="true"></mat-divider>
-          <table mat-table [dataSource]="protocolReaderDataSource" multiTemplateDataRows>
+          <table mat-table [dataSource]="groupReaderDataSource" multiTemplateDataRows>
             <ng-container matColumnDef="{{ column }}" *ngFor="let column of displayedColumnsSearch; let i= index">
               <th class="padding-rows" mat-header-cell *matHeaderCellDef> {{ ColumnNames[i] }} </th>
               <td class="padding-rows" mat-cell *matCellDef="let element"> {{ element[column] }} </td>
@@ -179,7 +190,7 @@
             </tr>
             <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
           </table>
-        <div *ngIf="protocolReaderDataSource.length === 0" class="no-return">
+        <div *ngIf="groupReaderDataSource.length === 0" class="no-return">
           {{ 'COMPONENT.EMPTY_DATA' | translate }}
         </div>
       </mat-card>

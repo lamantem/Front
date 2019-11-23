@@ -1,38 +1,28 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute, Router } from "@angular/router";
-import { DateAdapter, MatPaginator } from "@angular/material";
+import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+import { DateAdapter } from "@angular/material/core";
 import { TranslateService } from "@ngx-translate/core";
-import { DashboardListService } from "./dashboard-list.service";
-import { LocalStorageService } from "../../../core/services";
+import { DashboardListService } from "../../views/dashboard/dashboard-list/dashboard-list.service";
+import { LocalStorageService } from "../../core/services";
 import { LZStringService } from "ng-lz-string";
+import Swal from "sweetalert2";
 
 @Component({
-  selector: 'dashboard-list',
-  templateUrl: './dashboard-list.component.html',
-  styleUrls: ['./dashboard-list.component.scss'],
-  preserveWhitespaces: false
+  selector: 'app-reload-groups',
+  templateUrl: './reload-groups.component.html',
+  styleUrls: ['./reload-groups.component.scss']
 })
-export class DashboardListComponent implements OnInit{
-
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-
-  displayedColumns: string[] = ['name','actions'];
+export class ReloadGroupsComponent implements OnInit {
+  public loading: boolean;
+  private synchronized: boolean;
+  private submitted: boolean;
   groupsReaderDataSource: DashboardModel.GroupsReader[] = [];
-  searchTerm: string;
-
-  submitted: boolean;
-  synchronized: boolean;
-  loading: boolean;
-  filter: any;
 
   constructor(
-      private http: HttpClient,
       public translate: TranslateService,
+      private router: Router,
       public localStorage: LocalStorageService,
       private dashboardListService: DashboardListService,
-      private router: Router,
-      private route: ActivatedRoute,
       private adapter: DateAdapter<any>,
       private lz: LZStringService
   ) {
@@ -43,13 +33,22 @@ export class DashboardListComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.localStorage.setItem('group_id', null);
-    if(!this.localStorage.getItem('groups')) {
+    return Swal.fire({
+      title: 'Deseja atualizar os concursos?',
+      text: "Você perderá todos os faltantes que não foram sincronizados",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, pretendo atualizar',
+      cancelButtonText: 'Cancelar'
+    },).then((result) => {
+      if (result.value != true) {
+        this.router.navigate(['/']);
+        return;
+      }
       this.prepareGroupReader();
-      return;
-    }
-
-    this.getGroupReader();
+    })
   }
 
   private prepareGroupReader() {
@@ -60,14 +59,12 @@ export class DashboardListComponent implements OnInit{
         .subscribe(
             (response) => {
               if (response.status === 200) {
-                let groups  = response.data;
-                let groups_ = response.data;
+                let groups = response.data;
                 this.localStorage.setItem('groups', this.lz.compress(JSON.stringify(groups)));
                 this.getGroupReader();
                 this.loading = false;
                 let protocols = [];
-                groups.forEach(function (group,key) {
-                  delete groups_[key].participants;
+                groups.forEach(function (group) {
                   group.protocols.forEach(function (protocol) {
                     let protocol_local = {
                       id:                protocol.id,
@@ -86,7 +83,6 @@ export class DashboardListComponent implements OnInit{
                     protocols.push(protocol_local);
                   });
                 });
-                this.localStorage.setItem('groups_', JSON.stringify(groups_));
                 this.localStorage.setItem('protocols', JSON.stringify(protocols));
                 this.synchronized = true;
                 this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
@@ -96,6 +92,7 @@ export class DashboardListComponent implements OnInit{
             },);
   }
 
+
   public getGroupReader(): void {
     this.groupsReaderDataSource = JSON.parse(
         this.lz.decompress(
@@ -104,16 +101,4 @@ export class DashboardListComponent implements OnInit{
     )
   }
 
-  translateMatPaginator() {
-    this.translate.get([
-      'COMPONENT.PAGINATOR.ITEMS_PER_PAGE',
-      'COMPONENT.PAGINATOR.NEXT_PAGE',
-      'COMPONENT.PAGINATOR.PREVIOUS_PAGE',
-    ])
-        .subscribe(translation => {
-          this.paginator._intl.itemsPerPageLabel = translation['COMPONENT.PAGINATOR.ITEMS_PER_PAGE'];
-          this.paginator._intl.nextPageLabel     = translation['COMPONENT.PAGINATOR.NEXT_PAGE'];
-          this.paginator._intl.previousPageLabel = translation['COMPONENT.PAGINATOR.PREVIOUS_PAGE'];
-        });
-  }
 }

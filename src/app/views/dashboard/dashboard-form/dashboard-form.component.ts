@@ -1,11 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DateAdapter } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { MatPaginator } from "@angular/material/paginator";
 import { ActivatedRoute } from "@angular/router";
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from "@angular/material/dialog";
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { TranslateService } from "@ngx-translate/core";
 import { LocalStorageService } from "../../../core/services";
 import { DashboardFormService } from "./dashboard-form.service";
@@ -26,17 +26,16 @@ import * as _ from 'lodash';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   preserveWhitespaces: false
 })
-export class DashboardFormComponent implements OnInit, AfterViewInit {
-
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+export class DashboardFormComponent implements OnInit{
 
   displayedColumnsMissing: string[] = ['sync', 'registration_code', 'participant_name', 'actions'];
   displayedColumnsSearch: string[] = ['registration_code', 'name'];
   ColumnNames: string[] = ['Insc.', 'Nome'];
 
-  protocolReaderDataSource: DashboardModel.ProtocolReader[] = [];
+  groupReaderDataSource: DashboardModel.ProtocolReader[] = [];
   groupsReader: DashboardModel.GroupsReader[] = [];
   expandedElement: DashboardModel.GroupsReader[] | null;
 
@@ -44,16 +43,15 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   loading: boolean;
   loading_search: boolean;
   synchronized: boolean;
-  name : string = '';
-  registration_code : string = '';
-  categorie_id: number = 0;
-  categories: number = 0;
+  category_id: number = 0;
+  searchForm: FormGroup;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private adapter: DateAdapter<any>,
     public translate: TranslateService,
     private localStorage: LocalStorageService,
+    private formBuilder: FormBuilder,
     private dashboardFormService: DashboardFormService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -66,32 +64,43 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.loading = false;
-    this.getProtocolReader(this.categorie_id);
-    this.dataSourceMissing.filterPredicate = function(data, filter: string): boolean {
-      return data.participant_name.toLowerCase().includes(filter)
-        || data.period.toLowerCase().includes(filter)
-        || data.registration_code.toString() === filter;
-    };
+    this.localStorage.setItem('group_id',
+        JSON.stringify(this.route.snapshot.paramMap.get('group_id'))
+    );
+    this.getProtocolReader(this.category_id);
+    this.searchForm = this.formBuilder.group(
+      {
+        registration_code: [''],
+        name: ['', Validators.minLength(2)],
+        category_id: ['']
+      });
   }
 
-  ngAfterViewInit() {
-  }
+  openReader(): void {
+    this.loading = true;
 
-  openReader() {
-    const dialogRef = this.dialog.open(DashboardReaderComponent, {
-      panelClass: 'dialog',
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      data: {
-        group_id: this.route.snapshot.paramMap.get('group_id')
-      }});
+    const dialogRef = this.dialog.open(
+      DashboardReaderComponent,
+      {
+        disableClose: true,
+        panelClass: 'dialog',
+        maxWidth: '100vw',
+        maxHeight: '100vh',
+        data: {
+          group_id: this.route.snapshot.paramMap.get('group_id')
+        }
+       }
+      );
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getProtocolReader(this.categorie_id);
-      }
-    });
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          setTimeout(() => {
+            this.loading = false;
+          }, 300);
+          this.getProtocolReader(this.category_id);
+        }
+      });
   }
 
   removeProtocol(cod) {
@@ -119,7 +128,7 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
           protocol[0].active = 0;
           let newProtocol = _.concat(protocols, protocol);
           localStorage.setItem('protocols', JSON.stringify(newProtocol));
-          this.getProtocolReader(this.categorie_id);
+          this.getProtocolReader(this.category_id);
           Swal.fire(
             'Deletado!',
             'Candidato deletado com sucesso.',
@@ -140,7 +149,7 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
           'success'
         );
 
-        this.getProtocolReader(this.categorie_id);
+        this.getProtocolReader(this.category_id);
       }
       if (_.isEmpty(protocols)){
         this.synchronized = true;
@@ -149,30 +158,40 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public getProtocolReader(categorie_id): void {
-    this.categorie_id = categorie_id;
+  public getProtocolReader(category_id): void {
+    this.category_id = category_id;
+
     let protocolReaderDataSource = JSON.parse(localStorage['protocols']);
-    let group = this.prepareGroup();
-    let user = localStorage.getItem('appUser');
-    user = JSON.parse(user);
+    let groups_ = JSON.parse(localStorage.getItem('groups_'));
+    let user =  JSON.parse(localStorage.getItem('appUser'));
 
     let group_id = this.route.snapshot.paramMap.get('group_id');
 
-    this.groupsReader = _.filter(group,
-      {'id': parseInt(group_id)});
+    let groupsReader = null;
+    groups_.forEach(function (group) {
+      if (group.id === parseInt(group_id)) {
+        groupsReader = group;
+      }
+    });
 
-    let mod = _.filter(this.groupsReader[0].moderators, {'user_id': user['id']});
+    this.groupsReader[0] = groupsReader;
 
-    if (categorie_id === 0) {
+    let mod = _.filter(this.groupsReader[0].moderators, {
+      'user_id': user['id']
+    });
+
+    if (category_id === 0) {
       protocolReaderDataSource = _.filter(protocolReaderDataSource, {
         'group_reader_id': parseInt(group_id),
         'active': 1,
         'moderator_id': mod[0].id
       });
-    } else {
+    }
+
+    if (category_id > 0) {
       protocolReaderDataSource = _.filter(protocolReaderDataSource, {
         'group_reader_id': parseInt(group_id),
-        'categories_id': parseInt(categorie_id),
+        'categories_id': parseInt(category_id),
         'active': 1,
         'moderator_id': mod[0].id
       });
@@ -181,57 +200,102 @@ export class DashboardFormComponent implements OnInit, AfterViewInit {
     this.dataSourceMissing = new MatTableDataSource(protocolReaderDataSource);
   }
 
+  public onSubmit() {
+     if (this.searchForm.valid) {
+       this.loadGroupReader();
+     }
+  }
+
   public loadGroupReader(): void {
     this.loading_search = true;
-    let group = this.prepareGroup();
-    let group_id = this.route.snapshot.paramMap.get('group_id');
-    this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
-    let participants = [];
 
-    if (this.categorie_id === 0) {
-      participants = _.filter(this.groupsReader[0].participants);
-    } else {
+    let participants = [];
+    let group = this.prepareGroup();
+
+    let group_id = this.route.snapshot.paramMap.get('group_id');
+    let filter_registration_code = parseInt(this.searchForm.get('registration_code').value);
+    this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
+
+    if (
+      this.category_id === 0 &&
+      this.searchForm.get('name').value.trim() !== '' ||
+      this.searchForm.get('registration_code').value.trim() !== ''
+    ) {
+      participants = this.groupsReader[0].participants;
+    }
+
+    if (this.category_id > 0) {
       participants = _.filter(this.groupsReader[0].participants, {
-        'categories_id': this.categorie_id
+        'categories_id': this.category_id
       });
     }
 
-    if (this.registration_code.trim() !== '' && this.name.trim() === '') {
-      this.protocolReaderDataSource = _.filter(participants, {
-        'registration_code': parseInt(this.registration_code),
-      });
+    if (
+      this.searchForm.get('registration_code').value.trim() === '' &&
+      this.searchForm.get('name').value.trim() === '' &&
+      this.category_id > 0
+    ) {
+      this.groupReaderDataSource = participants;
       this.loading_search = false;
       return;
     }
 
-    let filter_name = this.name.trim().toLocaleUpperCase();
+    if (
+      this.searchForm.get('registration_code').value.trim() !== '' &&
+      this.searchForm.get('name').value.trim() === ''
+    ) {
+      let attribs: {};
+      attribs = {
+        'registration_code': parseInt(this.searchForm.get('registration_code').value)
+      };
 
-    if (this.name.trim() !== '' && this.registration_code.trim() === '') {
-      this.protocolReaderDataSource = _.filter(participants, function (participant) {
+      this.groupReaderDataSource = _.filter(participants, attribs);
+      this.loading_search = false;
+      return;
+    }
+
+    let filter_name = this.searchForm.get('name').value.trim().toLocaleUpperCase();
+
+    if (
+      this.searchForm.get('name').value.trim() !== '' &&
+      this.searchForm.get('registration_code').value.trim() === ''
+    ) {
+      this.groupReaderDataSource = _.filter(participants, function (participant) {
         return participant.name.toLocaleUpperCase().indexOf(filter_name)>-1;
       });
       this.loading_search = false;
       return;
     }
 
-    let filter_registration_code = parseInt(this.registration_code);
+    if (
+      this.searchForm.get('name').value.trim() !== '' &&
+      this.searchForm.get('registration_code').value.trim() !== ''
+    ) {
+      this.groupReaderDataSource = _.filter(participants, function (participant) {
+        return (
+          participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
+          participant.registration_code === filter_registration_code
+        );
+      });
+      this.loading_search = false;
+      return;
+    }
 
-    this.protocolReaderDataSource = _.filter(participants, function (participant) {
-      return (participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
-              participant.registration_code === filter_registration_code);
+    this.groupReaderDataSource = _.filter(participants, function (participant) {
+      return participant.name.toLocaleUpperCase().indexOf(filter_name) > -1 ;
     });
     this.loading_search = false;
   }
-
+  
   applyFilterMissing(filterValue: string) : void {
     this.dataSourceMissing.filter = filterValue.trim().toLowerCase();
   }
 
   clearLocationValues(){
-    this.name = '';
-    this.registration_code = '';
-    this.protocolReaderDataSource = [];
-    this.categories = 0;
+    this.searchForm.get('name').setValue('');
+    this.searchForm.get('registration_code').setValue('');
+    this.groupReaderDataSource = [];
+    this.searchForm.get('category_id').setValue(0);
   }
 
   prepareGroup() {
