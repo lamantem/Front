@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DateAdapter } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ActivatedRoute } from "@angular/router";
@@ -26,6 +26,7 @@ import * as _ from 'lodash';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   preserveWhitespaces: false
 })
 export class DashboardFormComponent implements OnInit{
@@ -34,7 +35,7 @@ export class DashboardFormComponent implements OnInit{
   displayedColumnsSearch: string[] = ['registration_code', 'name'];
   ColumnNames: string[] = ['Insc.', 'Nome'];
 
-  protocolReaderDataSource: DashboardModel.ProtocolReader[] = [];
+  groupReaderDataSource: DashboardModel.ProtocolReader[] = [];
   groupsReader: DashboardModel.GroupsReader[] = [];
   expandedElement: DashboardModel.GroupsReader[] | null;
 
@@ -234,7 +235,7 @@ export class DashboardFormComponent implements OnInit{
       this.searchForm.get('name').value.trim() === '' &&
       this.category_id > 0
     ) {
-      this.protocolReaderDataSource = participants;
+      this.groupReaderDataSource = participants;
       this.loading_search = false;
       return;
     }
@@ -248,7 +249,7 @@ export class DashboardFormComponent implements OnInit{
         'registration_code': parseInt(this.searchForm.get('registration_code').value)
       };
 
-      this.protocolReaderDataSource = _.filter(participants, attribs);
+      this.groupReaderDataSource = _.filter(participants, attribs);
       this.loading_search = false;
       return;
     }
@@ -259,7 +260,7 @@ export class DashboardFormComponent implements OnInit{
       this.searchForm.get('name').value.trim() !== '' &&
       this.searchForm.get('registration_code').value.trim() === ''
     ) {
-      this.protocolReaderDataSource = _.filter(participants, function (participant) {
+      this.groupReaderDataSource = _.filter(participants, function (participant) {
         return participant.name.toLocaleUpperCase().indexOf(filter_name)>-1;
       });
       this.loading_search = false;
@@ -270,7 +271,7 @@ export class DashboardFormComponent implements OnInit{
       this.searchForm.get('name').value.trim() !== '' &&
       this.searchForm.get('registration_code').value.trim() !== ''
     ) {
-      this.protocolReaderDataSource = _.filter(participants, function (participant) {
+      this.groupReaderDataSource = _.filter(participants, function (participant) {
         return (
           participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
           participant.registration_code === filter_registration_code
@@ -280,7 +281,7 @@ export class DashboardFormComponent implements OnInit{
       return;
     }
 
-    this.protocolReaderDataSource = _.filter(participants, function (participant) {
+    this.groupReaderDataSource = _.filter(participants, function (participant) {
       return participant.name.toLocaleUpperCase().indexOf(filter_name) > -1 ;
     });
     this.loading_search = false;
@@ -293,7 +294,7 @@ export class DashboardFormComponent implements OnInit{
   clearLocationValues(){
     this.searchForm.get('name').setValue('');
     this.searchForm.get('registration_code').setValue('');
-    this.protocolReaderDataSource = [];
+    this.groupReaderDataSource = [];
     this.searchForm.get('category_id').setValue(0);
   }
 
