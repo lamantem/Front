@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { DashboardReportService } from "./dashboard-report.service";
-import * as _ from 'lodash';
-import { debounceTime } from "rxjs/operators";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { LayoutComponent } from "../../../shared/layout";
-import ReportSync = DashboardModel.ReportSync;
 import { ActivatedRoute } from "@angular/router";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { debounceTime } from "rxjs/operators";
+import { DashboardReportService } from "./dashboard-report.service";
+import { LayoutComponent } from "../../../shared/layout";
 import { LocalStorageService } from "../../../core/services";
+import ReportSync = DashboardModel.ReportSync;
+
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-dashboard-report',
@@ -20,12 +21,11 @@ export class DashboardReportComponent implements OnInit {
   user: any;
 
   constructor(
-      public dialogRef: MatDialogRef<LayoutComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: ReportSync,
-      public localStorage: LocalStorageService,
-      private dashboardReportService: DashboardReportService,
-      private route: ActivatedRoute,
-
+    public dialogRef: MatDialogRef<LayoutComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ReportSync,
+    public localStorage: LocalStorageService,
+    private dashboardReportService: DashboardReportService,
+    private route: ActivatedRoute
   ) {
 
   };
@@ -43,49 +43,44 @@ export class DashboardReportComponent implements OnInit {
     });
 
     if (!concurso_id) {
-
       let dataSourceReport = [];
-
       for (let key=0; key < groups_.length; key++) {
         this.dashboardReportService.prepareReportSyncUrl(groups_[key].id);
         this.dashboardReportService.getAll()
-            .pipe()
-            .subscribe(
-                (response) => {
-                  if (response.status === 200) {
-                    for (let i=0; i < response.data.length; i++) {
-                      dataSourceReport.push(response.data[i]);
-                    }
-
-                    if (key === (groups_.length -1)) {
-                        this.dataSourceReport = dataSourceReport;
-                    }
-
-                  }
-                },
-                error => {
-                  console.warn(error.toString())
+          .pipe()
+          .subscribe(
+            (response) => {
+              if (response.status === 200) {
+                for (let i=0; i < response.data.length; i++) {
+                  dataSourceReport.push(response.data[i]);
                 }
-            );
-      }
 
+                if (key === (groups_.length -1)) {
+                    this.dataSourceReport = dataSourceReport;
+                }
+              }
+            },
+            error => {
+              console.warn(error.toString())
+            }
+          );
+      }
     }
 
     if (concurso_id) {
-      console.log("epa 'algo'")
       this.dashboardReportService.prepareReportSyncUrl(concurso_id);
       this.dashboardReportService.getAll()
-          .pipe(debounceTime(300))
-          .subscribe(
-              (response) => {
-                if (response.status === 200) {
-                  this.dataSourceReport = (response.data);
-                }
-              },
-              error => {
-                console.warn(error.toString())
-              }
-          );
+        .pipe(debounceTime(300))
+        .subscribe(
+          (response) => {
+            if (response.status === 200) {
+              this.dataSourceReport = (response.data);
+            }
+          },
+          error => {
+            console.warn(error.toString())
+          }
+        );
     }
   }
 }

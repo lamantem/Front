@@ -159,6 +159,7 @@ export class DashboardReaderComponent implements OnInit {
       Swal.fire('Ops!', 'Código de inscrição inválido!', 'error');
       this.barecodeScanner.retart();
       debounceTime(1200);
+      this.resetNewParticipant(false);
       return of('Código de inscrição inválido!');
     }
 
@@ -173,6 +174,7 @@ export class DashboardReaderComponent implements OnInit {
         Swal.fire('Ops!', 'Candidato já foi registrado!', 'error');
         this.spinner = false;
         debounceTime(800);
+        return of('Candidato já foi registrado!');
       }
 
       this.newProtocol = {
@@ -212,7 +214,10 @@ export class DashboardReaderComponent implements OnInit {
       this.newProtocol = null;
       this.show = false;
       this.message = 'Candidato registrado com sucesso';
-      this.barecodeScanner.start();
+
+      if (this.toggle) {
+        this.barecodeScanner.start();
+      }
     }
   }
 

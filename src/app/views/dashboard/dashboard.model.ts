@@ -23,6 +23,7 @@ declare namespace DashboardModel {
     reject: number;
     group_id: any;
   }
+
   export interface ProtocolReader {
     participant_id: number;
     categories_id: number;
