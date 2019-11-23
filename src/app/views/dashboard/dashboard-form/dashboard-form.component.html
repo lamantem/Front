@@ -162,7 +162,7 @@
     </div>
         </form>
           <mat-divider [inset]="true"></mat-divider>
-          <table mat-table [dataSource]="protocolReaderDataSource" multiTemplateDataRows>
+          <table mat-table [dataSource]="groupReaderDataSource" multiTemplateDataRows>
             <ng-container matColumnDef="{{ column }}" *ngFor="let column of displayedColumnsSearch; let i= index">
               <th class="padding-rows" mat-header-cell *matHeaderCellDef> {{ ColumnNames[i] }} </th>
               <td class="padding-rows" mat-cell *matCellDef="let element"> {{ element[column] }} </td>
@@ -190,7 +190,7 @@
             </tr>
             <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
           </table>
-        <div *ngIf="protocolReaderDataSource.length === 0" class="no-return">
+        <div *ngIf="groupReaderDataSource.length === 0" class="no-return">
           {{ 'COMPONENT.EMPTY_DATA' | translate }}
         </div>
       </mat-card>

@@ -1,7 +1,6 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DateAdapter } from '@angular/material';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { MatPaginator } from "@angular/material/paginator";
 import { ActivatedRoute } from "@angular/router";
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from "@angular/material/dialog";
@@ -27,17 +26,16 @@ import * as _ from 'lodash';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   preserveWhitespaces: false
 })
 export class DashboardFormComponent implements OnInit{
-
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   displayedColumnsMissing: string[] = ['sync', 'registration_code', 'participant_name', 'actions'];
   displayedColumnsSearch: string[] = ['registration_code', 'name'];
   ColumnNames: string[] = ['Insc.', 'Nome'];
 
-  protocolReaderDataSource: DashboardModel.ProtocolReader[] = [];
+  groupReaderDataSource: DashboardModel.ProtocolReader[] = [];
   groupsReader: DashboardModel.GroupsReader[] = [];
   expandedElement: DashboardModel.GroupsReader[] | null;
 
@@ -67,19 +65,15 @@ export class DashboardFormComponent implements OnInit{
 
   ngOnInit() {
     this.localStorage.setItem('group_id',
-        JSON.stringify(this.route.snapshot.paramMap.get('group_id')));
+        JSON.stringify(this.route.snapshot.paramMap.get('group_id'))
+    );
     this.getProtocolReader(this.category_id);
-    this.dataSourceMissing.filterPredicate = function(data, filter: string): boolean {
-      return data.participant_name.toLowerCase().includes(filter)
-        || data.period.toLowerCase().includes(filter)
-        || data.registration_code.toString() === filter;
-    };
     this.searchForm = this.formBuilder.group(
-        {
-          registration_code: [''],
-          name: ['', Validators.minLength(2)],
-          category_id: ['']
-        });
+      {
+        registration_code: [''],
+        name: ['', Validators.minLength(2)],
+        category_id: ['']
+      });
   }
 
   openReader(): void {
@@ -213,18 +207,20 @@ export class DashboardFormComponent implements OnInit{
   }
 
   public loadGroupReader(): void {
-
     this.loading_search = true;
 
     let participants = [];
     let group = this.prepareGroup();
-    let group_id = this.route.snapshot.paramMap.get('group_id');
-    this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
-    let filter_registration_code = parseInt(this.searchForm.get('registration_code').value);
 
-    if (this.category_id === 0
-        && this.searchForm.get('name').value.trim() !== ''
-        || this.searchForm.get('registration_code').value.trim() !== '') {
+    let group_id = this.route.snapshot.paramMap.get('group_id');
+    let filter_registration_code = parseInt(this.searchForm.get('registration_code').value);
+    this.groupsReader = _.filter(group, {'id': parseInt(group_id)});
+
+    if (
+      this.category_id === 0 &&
+      this.searchForm.get('name').value.trim() !== '' ||
+      this.searchForm.get('registration_code').value.trim() !== ''
+    ) {
       participants = this.groupsReader[0].participants;
     }
 
@@ -239,49 +235,53 @@ export class DashboardFormComponent implements OnInit{
       this.searchForm.get('name').value.trim() === '' &&
       this.category_id > 0
     ) {
-      this.protocolReaderDataSource = participants;
+      this.groupReaderDataSource = participants;
       this.loading_search = false;
       return;
     }
 
     if (
-        this.searchForm.get('registration_code').value.trim() !== '' &&
-        this.searchForm.get('name').value.trim() === ''
+      this.searchForm.get('registration_code').value.trim() !== '' &&
+      this.searchForm.get('name').value.trim() === ''
     ) {
       let attribs: {};
+      attribs = {
+        'registration_code': parseInt(this.searchForm.get('registration_code').value)
+      };
 
-        attribs = {
-          'registration_code': parseInt(this.searchForm.get('registration_code').value)
-        };
-
-      this.protocolReaderDataSource = _.filter(participants, attribs);
+      this.groupReaderDataSource = _.filter(participants, attribs);
       this.loading_search = false;
       return;
     }
 
     let filter_name = this.searchForm.get('name').value.trim().toLocaleUpperCase();
 
-    if (this.searchForm.get('name').value.trim() !== ''
-        && this.searchForm.get('registration_code').value.trim() === '') {
-      this.protocolReaderDataSource = _.filter(participants, function (participant) {
+    if (
+      this.searchForm.get('name').value.trim() !== '' &&
+      this.searchForm.get('registration_code').value.trim() === ''
+    ) {
+      this.groupReaderDataSource = _.filter(participants, function (participant) {
         return participant.name.toLocaleUpperCase().indexOf(filter_name)>-1;
       });
       this.loading_search = false;
       return;
-
     }
 
-    if (this.searchForm.get('name').value.trim() !== ''
-        && this.searchForm.get('registration_code').value.trim() !== '') {
-      this.protocolReaderDataSource = _.filter(participants, function (participant) {
-        return (participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
-            participant.registration_code === filter_registration_code);
+    if (
+      this.searchForm.get('name').value.trim() !== '' &&
+      this.searchForm.get('registration_code').value.trim() !== ''
+    ) {
+      this.groupReaderDataSource = _.filter(participants, function (participant) {
+        return (
+          participant.name.toLocaleUpperCase().indexOf(filter_name)>-1 &&
+          participant.registration_code === filter_registration_code
+        );
       });
       this.loading_search = false;
       return;
     }
 
-    this.protocolReaderDataSource = _.filter(participants, function (participant) {
+    this.groupReaderDataSource = _.filter(participants, function (participant) {
       return participant.name.toLocaleUpperCase().indexOf(filter_name) > -1 ;
     });
     this.loading_search = false;
@@ -294,7 +294,7 @@ export class DashboardFormComponent implements OnInit{
   clearLocationValues(){
     this.searchForm.get('name').setValue('');
     this.searchForm.get('registration_code').setValue('');
-    this.protocolReaderDataSource = [];
+    this.groupReaderDataSource = [];
     this.searchForm.get('category_id').setValue(0);
   }
 
