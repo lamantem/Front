@@ -82,27 +82,31 @@ export class DashboardFormComponent implements OnInit{
         });
   }
 
-  openReader() {
-    const dialogRef = this.dialog.open(DashboardReaderComponent, {
-      panelClass: 'dialog',
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      data: {
-        group_id: this.route.snapshot.paramMap.get('group_id')
-      }});
-
+  openReader(): void {
     this.loading = true;
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+    const dialogRef = this.dialog.open(
+      DashboardReaderComponent,
+      {
+        disableClose: true,
+        panelClass: 'dialog',
+        maxWidth: '100vw',
+        maxHeight: '100vh',
+        data: {
+          group_id: this.route.snapshot.paramMap.get('group_id')
+        }
+       }
+      );
 
-        setTimeout(() => {
-          this.loading = false;
-        }, 300);
-
-        this.getProtocolReader(this.category_id);
-      }
-    });
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          setTimeout(() => {
+            this.loading = false;
+          }, 300);
+          this.getProtocolReader(this.category_id);
+        }
+      });
   }
 
   removeProtocol(cod) {
