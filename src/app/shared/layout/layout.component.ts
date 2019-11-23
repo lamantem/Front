@@ -246,6 +246,7 @@ export class LayoutComponent implements OnDestroy {
   openReport(): void {
     const dialogRef = this.dialog.open(DashboardReportComponent,
       {
+        disableClose: true,
         panelClass: 'dialog',
         maxWidth: '100vw',
         maxHeight: '100vh',
@@ -255,7 +256,14 @@ export class LayoutComponent implements OnDestroy {
       }
     );
 
-    dialogRef.afterClosed().subscribe(result => {
-    });
+    dialogRef.afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.router.navigate(['/'])
+            .catch(reason => {
+              console.warn(reason);
+            });
+        }
+      });
   }
 }

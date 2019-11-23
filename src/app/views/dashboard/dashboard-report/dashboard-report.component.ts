@@ -12,9 +12,11 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-dashboard-report',
   templateUrl: './dashboard-report.component.html',
-  styleUrls: ['./dashboard-report.component.scss']
+  styleUrls: ['./dashboard-report.component.scss'],
+  preserveWhitespaces: false
 })
 export class DashboardReportComponent implements OnInit {
+
   displayedColumns: string[] = ['created_at','added','reject'];
   dataSourceReport: DashboardModel.ReportSync[] = [];
   name: any;
@@ -26,46 +28,16 @@ export class DashboardReportComponent implements OnInit {
     public localStorage: LocalStorageService,
     private dashboardReportService: DashboardReportService,
     private route: ActivatedRoute
-  ) {
-
-  };
+  ) {};
 
   ngOnInit() {
     this.loadReportSync();
   }
 
-  loadReportSync() {
-    this.user = JSON.parse(localStorage['appUser']);
+  loadReportSync(): void {
+    this.user       = JSON.parse(localStorage['appUser']);
     let concurso_id = JSON.parse(localStorage['group_id']);
-    let groups_ = JSON.parse(localStorage['groups_']);
-      let moderador = _.filter(groups_[0].moderators, {
-      'user_id': parseInt(this.user.id)
-    });
-
-    if (!concurso_id) {
-      let dataSourceReport = [];
-      for (let key=0; key < groups_.length; key++) {
-        this.dashboardReportService.prepareReportSyncUrl(groups_[key].id);
-        this.dashboardReportService.getAll()
-          .pipe()
-          .subscribe(
-            (response) => {
-              if (response.status === 200) {
-                for (let i=0; i < response.data.length; i++) {
-                  dataSourceReport.push(response.data[i]);
-                }
-
-                if (key === (groups_.length -1)) {
-                    this.dataSourceReport = dataSourceReport;
-                }
-              }
-            },
-            error => {
-              console.warn(error.toString())
-            }
-          );
-      }
-    }
+    let groups_     = JSON.parse(localStorage['groups_']);
 
     if (concurso_id) {
       this.dashboardReportService.prepareReportSyncUrl(concurso_id);
@@ -81,6 +53,30 @@ export class DashboardReportComponent implements OnInit {
             console.warn(error.toString())
           }
         );
+    }
+
+    if (!concurso_id) {
+      let dataSourceReport = [];
+      for (let key=0; key < groups_.length; key++) {
+        this.dashboardReportService.prepareReportSyncUrl(groups_[key].id);
+        this.dashboardReportService.getAll()
+          .pipe()
+          .subscribe(
+            (response) => {
+              if (response.status === 200) {
+                for (let i=0; i < response.data.length; i++) {
+                  dataSourceReport.push(response.data[i]);
+                }
+                if (key === (groups_.length -1)) {
+                  this.dataSourceReport = dataSourceReport;
+                }
+              }
+            },
+            error => {
+              console.warn(error.toString())
+            }
+          );
+      }
     }
   }
 }
