@@ -31,12 +31,58 @@ export interface NavData {
 
 export const navItems: NavData[] = [
   {
-    title: true,
-    name: 'Menu'
+    name: 'Dashboard',
+    url: '/dashboard',
+    icon: 'icon-speedometer',
+    badge: {
+      variant: 'info',
+      text: 'NEW'
+    }
   },
   {
-    name: 'Atualizar Concursos',
-    url: '/recarregar',
-    icon: 'icon-refresh'
+    name: 'Criar Questões',
+    url: '/criar',
+    icon: 'icon-note',
+    attributes: { },
+  },
+  {
+    name: 'Gerar Provas',
+    url: '/gerar',
+    icon: 'icon-docs',
+    attributes: {  },
+  },
+  {
+    name: 'Avaliador',
+    url: '/avaliar',
+    icon: 'icon-drawer',
+    attributes: { },
+  },
+  {
+    name: 'Administração',
+    url: '/administrar',
+    icon: 'icon-wrench',
+    attributes: { },
+  },
+  {
+    name: 'Disabled',
+    url: '/dashboard',
+    icon: 'icon-close',
+    attributes: { disabled: true },
+  },
+  {
+    name: 'Download CoreUI',
+    url: 'http://coreui.io/angular/',
+    icon: 'icon-cloud-download',
+    class: 'mt-auto',
+    variant: 'success',
+    attributes: { target: '_blank', rel: 'noopener' }
+  },
+  {
+    name: 'Try CoreUI PRO',
+    url: 'http://coreui.io/pro/angular/',
+    icon: 'icon-layers',
+    variant: 'danger',
+    attributes: { target: '_blank', rel: 'noopener' }
   }
 ];
+

@@ -4,10 +4,9 @@ import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../core/authentication';
-import { DashboardListService } from "../dashboard/dashboard-list/dashboard-list.service";
-import { LocalStorageService } from "../../core/services";
-import { environment } from "../../../environments/environment";
-import { LZStringService } from "ng-lz-string";
+import {LocalStorageService} from '../../core/services';
+import {environment} from '../../../environments/environment';
+import {LZStringService} from 'ng-lz-string';
 
 import Swal from 'sweetalert2';
 
@@ -30,7 +29,6 @@ export class LoginComponent implements OnInit {
         private formBuilder: FormBuilder,
         private router: Router,
         public translate: TranslateService,
-        public dashboardListService: DashboardListService,
         public localStorage: LocalStorageService,
         private lz: LZStringService
     ) {
@@ -56,13 +54,13 @@ export class LoginComponent implements OnInit {
         return this.loginForm.controls;
     }
 
-    prepareAppVersion() : void {
+    prepareAppVersion(): void {
         this.app_version = environment.app_version;
     }
 
     onSubmit() {
-        let email    = this.loginForm.get('email').value;
-        let password = this.loginForm.get('password').value;
+        const email = this.loginForm.get('email').value;
+        const password = this.loginForm.get('password').value;
 
         if (this.loginForm.valid) {
             this.login(
@@ -78,7 +76,7 @@ export class LoginComponent implements OnInit {
     }
 
     private login(email, password): void {
-        let authservice = this.authService;
+        const authservice = this.authService;
         this.submitted  = true;
         authservice.login(
             email,
@@ -98,13 +96,13 @@ export class LoginComponent implements OnInit {
                             },
                             error_auth => {
                                 this.submitted = false;
-                                console.warn(error_auth)
+                                console.warn(error_auth);
                             }
                         );
                 },
                 error => {
                     this.submitted = false;
-                    if(!navigator.onLine){
+                    if (!navigator.onLine) {
                         Swal.fire('Ops!', 'Você não está conectado à internet', 'error');
                         return;
                     }

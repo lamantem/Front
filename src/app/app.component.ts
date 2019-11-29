@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { SwUpdate } from "@angular/service-worker";
-import { CheckForUpdateService } from "./core/service-worker/check-for-update.service";
+import { SwUpdate } from '@angular/service-worker';
+import { CheckForUpdateService } from './core/service-worker/check-for-update.service';
 
 @Component({
   selector: 'body',
@@ -31,6 +31,6 @@ export class AppComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() : void {}
+  ngOnDestroy(): void {}
 
 }

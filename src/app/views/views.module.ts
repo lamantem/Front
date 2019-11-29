@@ -1,23 +1,22 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
 import { AppAsideModule, AppBreadcrumbModule, AppFooterModule, AppHeaderModule, AppSidebarModule } from '@coreui/angular';
-import { AppMaterialModule } from "../app.material.module";
-import { ViewsRoutingModule } from "./views.routing.module";
+import { AppMaterialModule } from '../app.material.module';
+import { ViewsRoutingModule } from './views.routing.module';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './login';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { BsDropdownModule, ButtonsModule, TabsModule } from 'ngx-bootstrap';
 import { LayoutComponent } from '../shared/layout';
-import { LogoutComponent } from './logout/logout.component';
+import { LogoutComponent } from './logout';
 import { ViewsService } from './views.service';
 import { ChartsModule } from 'ng2-charts';
-import { NgxCaptchaModule } from "ngx-captcha";
+import { NgxCaptchaModule } from 'ngx-captcha';
 import { BrMaskerModule } from 'br-mask';
-import { LZStringModule, LZStringService } from "ng-lz-string";
-import { ReloadGroupsComponent } from "../shared/reload-groups/reload-groups.component";
+import { LZStringModule, LZStringService } from 'ng-lz-string';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -53,7 +52,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     BrMaskerModule
   ],
   declarations: [
-    ReloadGroupsComponent,
     LoginComponent,
     LogoutComponent,
     LayoutComponent

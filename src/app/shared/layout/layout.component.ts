@@ -1,17 +1,15 @@
 import { Component, OnDestroy, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import { debounceTime } from "rxjs/operators";
-import { AuthenticationService } from "../../core/authentication";
-import { LocalStorageService } from "../../core/services";
-import { LayoutService } from "./layout.service";
-import { DashboardListService } from "../../views/dashboard/dashboard-list/dashboard-list.service";
-import { DashboardReportComponent } from "../../views/dashboard/dashboard-report/dashboard-report.component";
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { debounceTime } from 'rxjs/operators';
+import { AuthenticationService } from '../../core/authentication';
+import { LocalStorageService } from '../../core/services';
+import { LayoutService } from './layout.service';
 
 import { navItems } from '../../_nav';
 import * as _ from 'lodash';
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,7 +33,6 @@ export class LayoutComponent implements OnDestroy {
     private layoutService: LayoutService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private dashboardListService: DashboardListService,
     @Inject(DOCUMENT) _document?: any,
     @Inject(AuthenticationService) _auth?: any,
   ) {
@@ -59,211 +56,7 @@ export class LayoutComponent implements OnDestroy {
     return (this.user) ? this.user.name : '';
   }
 
-  synchronizeProtocols() {
-    this.loading = true;
-    if (!navigator.onLine) {
-      this.loading = false;
-      Swal.fire('Ops!',
-          'Você precisa conectar a internet!',
-          'error');
-      return;
-    }
-
-    if (this.isSynchronized()) {
-      this.loading = false;
-      Swal.fire('Ops!',
-          'No momento não existe registro para sincronizar!',
-          'warning');
-      return;
-    }
-
-    let protocols = this.loadProtocols();
-
-    if (_.isEmpty(protocols)) {
-      this.synchronized = true;
-      this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-    }
-
-    if (!_.isEmpty(protocols)) {
-      let remove = _.remove(protocols, {'active': 0});
-
-      if (!_.isEmpty(remove)) {
-        this.layoutService.deleteSyncProtocolUrl();
-        this.layoutService.deleteAllWithToken(remove)
-          .subscribe((resp) => {
-            if (resp.status === 202) {
-              let protocols_local = [];
-              protocols = this.loadProtocols();
-              protocols.forEach(function (protocol) {
-                if (protocol.active !== remove[0].active) {
-                  protocols_local.push(protocol);
-                }
-              });
-
-              this.synchronized = true;
-              this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-
-              this.localStorage.clearItem('protocols');
-              this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
-              return;
-            }
-          },
-          error => {
-            this.loading = false;
-            Swal.fire('Ops!', 'Ocorreu um erro, tente novamente!', 'error');
-          });
-      }
-
-      if (!_.isEmpty(protocols)) {
-        let protocolSave = _.filter(protocols, {'sync': 0});
-
-        this.layoutService.prepareSyncProtocolUrl();
-        this.layoutService.createWithToken(protocolSave)
-          .subscribe((resp) => {
-            if (resp.status === 201) {
-              this.dashboardListService.getGroupReaderUrl();
-              this.dashboardListService.getAll()
-                .pipe(debounceTime(300))
-                .subscribe((response) => {
-                    if (response.status === 200) {
-                      let protocols_local = [];
-
-                      response.data.forEach(function (group) {
-                        group.protocols.forEach(function (protocol) {
-                          protocols_local.push({
-                            id: protocol.id,
-                            date_reader: protocol.date_reader,
-                            categories_id: protocol.categories_id,
-                            group_reader_id: protocol.group_reader_id,
-                            moderator_id: protocol.moderator_id,
-                            participant_id: protocol.participant_id,
-                            participant_name: protocol.participant_name,
-                            protocol_type: protocol.protocol_type,
-                            registration_code: protocol.registration_code,
-                            period: protocol.period,
-                            active: 1,
-                            sync: 1
-                          });
-                        });
-                      });
-
-                      if (protocols_local.length > 0) {
-                        this.localStorage.clearItem('protocols');
-                        this.localStorage.setItem('protocols', JSON.stringify(protocols_local));
-                      }
-
-                      this.openReport();
-                      this.loading = false;
-
-                      this.synchronized = true;
-                      this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-                    }
-                  },
-                  error => {
-                    this.loading = false;
-                    Swal.fire('Ops!',
-                        'Ocorreu um erro, tente novamente!',
-                        'error');
-                    return;
-                  });
-            }
-          });
-      }
-
-      if (_.isEmpty(protocols)) {
-        this.loading      = false;
-        this.synchronized = true;
-        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-        Swal.fire('Bom trabalho!',
-          'Registros sincronizados com sucesso!',
-          'success')
-          .then((result) => {
-            if (result.value) {
-              this.router.navigate(['/'])
-                .catch(reason => {
-                  console.warn(reason);
-                });
-            }
-          });
-      }
-    }
-  }
-
-  cleanProtocols() {
-    Swal.fire({
-      title: 'Deseja limpar os faltantes?',
-      text: "Você perderá todos que não foram sincronizados",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sim, pretendo limpar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.value) {
-        this.localStorage.setItem('protocols', JSON.stringify([]));
-        this.router.navigate(['/'])
-          .catch(reason => {
-            console.warn(reason);
-          });
-        this.synchronized = true;
-        this.localStorage.setItem('synchronized', JSON.stringify(this.synchronized));
-        Swal.fire(
-          'Deletado!',
-          'Faltantes removidos.',
-          'success'
-        )
-      }
-    })
-  }
-
-  verifySynchronized(): void {
-    if (!this.isSynchronized()) {
-      Swal.fire('Ops!',
-          'Você precisa sincronizar antes de sair!',
-          'error');
-      return;
-    }
-
-    this.router.navigate(['/sair'])
-      .catch(reason => {
-        console.warn(reason);
-      });
-  }
-
-  isSynchronized(): boolean {
-    return JSON.parse(localStorage['synchronized']);
-  }
-
-  loadProtocols(): any {
-    return JSON.parse(localStorage['protocols']);
-  }
-
   ngOnDestroy(): void {
     this.changes.disconnect();
-  }
-
-  openReport(): void {
-    const dialogRef = this.dialog.open(DashboardReportComponent,
-      {
-        disableClose: true,
-        panelClass: 'dialog',
-        maxWidth: '100vw',
-        maxHeight: '100vh',
-        data: {
-          group_id: this.route.snapshot.paramMap.get('group_id')
-        }
-      }
-    );
-
-    dialogRef.afterClosed()
-      .subscribe(result => {
-        if (result) {
-          this.router.navigate(['/'])
-            .catch(reason => {
-              console.warn(reason);
-            });
-        }
-      });
   }
 }

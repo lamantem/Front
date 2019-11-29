@@ -3,10 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatTableModule } from "@angular/material/table";
-import { DashboardReportComponent } from "../views/dashboard/dashboard-report/dashboard-report.component";
-import { LayoutComponent } from "./layout";
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatTableModule} from '@angular/material/table';
+import {LayoutComponent} from './layout';
 
 @NgModule({
   imports: [
@@ -19,7 +18,6 @@ import { LayoutComponent } from "./layout";
     MatDialogModule
   ],
   declarations: [
-    DashboardReportComponent
   ],
   exports: [
     CommonModule,
@@ -32,7 +30,6 @@ import { LayoutComponent } from "./layout";
     LayoutComponent
   ],
   entryComponents: [
-    DashboardReportComponent
   ]
 })
 export class SharedModule {}
