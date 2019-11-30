@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpTokenInterceptor } from './interceptors/http.token.interceptor';
+import { HttpTokenInterceptor } from './interceptors';
 import {
   ApiService,
   RestService
@@ -9,9 +9,9 @@ import {
 import {
   AuthenticationGuard,
   AuthenticationService
-} from "./authentication";
+} from './authentication';
 import { ToasterComponent } from './service-worker/toaster/toaster.component';
-import { CheckForUpdateService } from "./service-worker/check-for-update.service";
+import {CheckForUpdateService} from './service-worker/check-for-update.service';
 
 @NgModule({
   imports: [

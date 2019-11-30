@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  api_url: 'https://api.fepese.org.br',
+  api_url: 'http://localhost:8080',
   api_version: 'v1',
   auth_url: 'oauth/token',
   client_id: '1',

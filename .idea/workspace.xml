@@ -14,18 +14,19 @@
   <component name="ProjectId" id="1UDj60pHnUKG4B1goh8WKETX9vd" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/app/views/dashboard" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="ts.external.directory.path" value="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\node_modules\typescript\lib" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\assets\img\brand" />
       <recent name="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\src\app\views\dashboard" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\src\app\views\dashboard" />
     </key>
   </component>
@@ -85,6 +86,7 @@
       <workItem from="1574902844514" duration="770000" />
       <workItem from="1575068272295" duration="210000" />
       <workItem from="1575068957328" duration="2029000" />
+      <workItem from="1575071697172" duration="4459000" />
     </task>
     <servers />
   </component>

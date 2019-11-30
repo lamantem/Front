@@ -78,7 +78,9 @@
             <!--                            [value]="uc.id">-->
             <!--                  {{ uc.name }}-->
           </mat-select>
-
+          <mat-checkbox formControlName="agree" required>
+            ACEITO OS TERMOS
+          </mat-checkbox>
             <div class="submit">
               <button type="submit" (click)="onSubmit()" class="btn btn-primary px-4">
                 Enviar

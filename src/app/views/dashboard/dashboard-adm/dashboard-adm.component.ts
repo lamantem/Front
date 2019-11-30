@@ -6,6 +6,8 @@ import { AfterViewInit, OnInit, Component } from '@angular/core';
   styleUrls: ['./dashboard-adm.component.scss'],
 })
 export class DashboardAdmComponent implements OnInit, AfterViewInit {
+  createuser_userid: any;
+  createuser_usertype: any;
   constructor(
     ) {
     }
@@ -15,5 +17,14 @@ export class DashboardAdmComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+  }
+  createuser() {
+    return;
+  }
+  deleteuser() {
+    return;
+  }
+  updateuser() {
+    return;
   }
 }
