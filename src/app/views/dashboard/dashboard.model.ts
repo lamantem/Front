@@ -21,4 +21,21 @@ declare namespace DashboardModel {
         complaint: string;
         review: string;
     }
+
+    export interface  Difficulty {
+        idDificuldade: number;
+        dificuldade: string;
+    }
+
+    export interface  Uc {
+        idUc: number;
+        nome: string;
+        numero: string;
+        idCurso: number;
+    }
+
+    export interface  Course {
+        idCurso: number;
+        nome: string;
+    }
 }

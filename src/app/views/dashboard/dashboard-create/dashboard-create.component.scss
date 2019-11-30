@@ -73,3 +73,27 @@ td.mat-cell[_ngcontent-kwr-c5]:nth-child(3) {
 }
 
 
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  place-content: flex-start;
+  min-width: 250px;
+  width: 100%;
+  background: #ffffff;
+  margin: 4%;
+
+  @media screen and (min-width: 960px) {
+    width: 90%;
+  }
+
+  @media screen and (max-width: 450px) {
+    display: block;
+  }
+}
+
+.mat-horizontal-content-container  {
+  padding: 24px 0 0 0;
+  width: 100%;
+  margin: 24px 0 24px 0;
+}

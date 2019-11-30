@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  api_url: 'http://localhost:8080',
+  api_url: 'api',
   api_version: 'v1',
   auth_url: 'oauth/token',
   client_id: '1',

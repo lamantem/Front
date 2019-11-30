@@ -1,10 +1,9 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Location } from "@angular/common";
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { _throw } from "rxjs-compat/observable/throw";
-import { LocalStorageService } from "../services";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {_throw} from 'rxjs-compat/observable/throw';
+import {LocalStorageService} from '../services';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +14,7 @@ export abstract class BaseAPIClass {
 
   protected constructor(
     protected httpClient: HttpClient,
-    protected localStorageService: LocalStorageService,
-    protected location: Location
+    protected localStorageService: LocalStorageService
   ) {}
 
   getAll(filterObject?: any): Observable<any> {
@@ -43,9 +41,7 @@ export abstract class BaseAPIClass {
       }
     }
 
-    return this.httpClient.get(
-      `${ this.baseUrl }${ queryString }`,
-      this.getHttpOptions()
+    return this.httpClient.get(`${ this.baseUrl }${ queryString }`, this.getHttpOptions()
     ).pipe(
       map((body: any) => {
         return body;
@@ -116,10 +112,9 @@ export abstract class BaseAPIClass {
   }
 
   deleteAllWithToken(payload: any): Observable<any> {
-    let options = {
+    const options = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': this.getToken()
+        'Content-Type': 'application/json'
       }),
       body: payload,
     };
@@ -142,32 +137,14 @@ export abstract class BaseAPIClass {
     );
   }
 
-  private keyTokenName(): any {
-    let digit_url = this.location.path();
-    let id = digit_url.replace(/\D/g, '');
-    let configurar = '/';
-
-    if (id !== '') {
-      configurar = configurar + "/" + id
-    }
-
-    return 'appToken';
-  }
-
-  public getToken(): string {
-    let token = JSON.parse(this.localStorageService.getItem(this.keyTokenName()));
-    return (token !== '') ? 'Bearer '+ token.access_token : '';
-  }
-
-  public getHttpOptions() : any
-  {
-    const httpOptions = {
+  public getHttpOptions(): any {
+    return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': this.getToken()
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET'
       })
-    }
-    return httpOptions;
+    };
   }
 
 }

@@ -10,92 +10,87 @@
           </ng-template>
         <mat-card class="mat-elevation-z8 mat-card-search">
 
-          <div>Enunciado</div>
-          <input matInput
-                 class="input"
-                 type="text">
+            <form [formGroup]="difficultyFormGroup" class="form">
 
-          <div>Comando</div>
-          <input matInput
-                 class="input"
-                 type="text">
+              <mat-form-field>
+                <input matInput class="mat-form-field-outline" placeholder="Enunciado" formControlName="enunciado"
+                       type="text" required>
+              </mat-form-field>
 
-          <div>Suporte</div>
-          <input matInput
-                 class="input"
-                 type="text">
+              <mat-form-field>
+                <input matInput class="mat-form-field-outline" placeholder="Comando" formControlName="comando"
+                       type="text" required>
+              </mat-form-field>
 
-          <div>Alternativa Correta</div>
-          <input matInput
-                 class="inputC"
-                 type="text">
+              <mat-form-field>
+                <input matInput class="mat-form-field-outline" placeholder="Suporte" formControlName="suporte"
+                       type="text" required>
+              </mat-form-field>
 
-          <div>Alternativa Incorreta - 1</div>
-          <input matInput
-                 class="input"
-                 type="text">
+              <mat-form-field>
+                <input matInput class="mat-form-field-outline" placeholder="Alternativa Correta"
+                       formControlName="alCorreta" type="text" required>
+              </mat-form-field>
 
-          <div>Alternativa Incorreta - 2</div>
-          <input matInput
-                 class="input"
-                 type="text">
+              <mat-form-field>
+                <input matInput class="mat-form-field-outline" placeholder="Alternativa Incorreta - 1"
+                       formControlName="alIncorreta1" type="text" required>
+              </mat-form-field>
 
-          <div>Alternativa Incorreta - 3</div>
-          <input matInput
-                 class="input"
-                 type="text">
+              <mat-form-field>
+                <input matInput class="mat-form-field-outline" placeholder="Alternativa Incorreta - 2"
+                       formControlName="alIncorreta2" type="text" required>
+              </mat-form-field>
 
-          <div>Alternativa Incorreta - 4</div>
-          <input matInput
-                 class="input"
-                 type="text">
+              <mat-form-field>
+                <input matInput class="mat-form-field-outline" placeholder="Alternativa Incorreta - 3"
+                       formControlName="alIncorreta3" type="text" required>
+              </mat-form-field>
 
-          <div>Dificuldade</div>
-          <mat-select class="select"
-            (selectionChange)="Dificuldade = $event.value">
-            <mat-option [value]="1">HARD</mat-option>
-            <mat-option [value]="2">CODED</mat-option>
-            <mat-option [value]="3">OPTIONS</mat-option>
-            <!--                <mat-option *ngFor="let difficulty of difficulty[0].name"-->
-            <!--                            [value]="difficulty.id">-->
-            <!--                  {{ course.name }}-->
-            <!--                </mat-option>-->
-          </mat-select>
-          <!--                </mat-option>-->
+              <mat-form-field>
+                <input matInput class="mat-form-field-outline" placeholder="Alternativa Incorreta - 4"
+                       formControlName="alIncorreta4" type="text" required>
+              </mat-form-field>
 
-          <div>Curso</div>
-          <mat-select class="select"
-            (selectionChange)="Course = $event.value">
-            <mat-option [value]="1">HARD</mat-option>
-            <mat-option [value]="2">CODED</mat-option>
-            <mat-option [value]="3">OPTIONS</mat-option>
-            <!--                <mat-option *ngFor="let course of course[0].name"-->
-            <!--                            [value]="course.id">-->
-            <!--                  {{ course.name }}-->
-            <!--                </mat-option>-->
-          </mat-select>
-          <!--                </mat-option>-->
+              <mat-form-field>
+                <mat-label>Dificuldade</mat-label>
+                <mat-select formControlName="dificuldade" required>
+                  <mat-option *ngFor="let dif of difficultyDataSource" [value]="dif.idDificuldade">
+                    {{ dif.dificuldade }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
-          <div>Unidade Curricular</div>
-          <mat-select class="select"
-          (selectionChange)="CurricularUnit = $event.value">
-            <mat-option [value]="1">HARD</mat-option>
-            <mat-option [value]="2">CODED</mat-option>
-            <mat-option [value]="3">OPTIONS</mat-option>
-            <!--                <mat-option *ngFor="let uc of uc[0].name"-->
-            <!--                            [value]="uc.id">-->
-            <!--                  {{ uc.name }}-->
-          </mat-select>
-          <br>
-          <mat-checkbox>
-            ACEITO OS TERMOS
-          </mat-checkbox>
-          <div class="submit">
-            <button type="submit" (click)="onSubmit()" class="btn btn-primary px-4">
-                Enviar
-            </button>
+              <mat-form-field>
+                <mat-label>Curso</mat-label>
+                <mat-select formControlName="curso" required>
+                  <mat-option *ngFor="let course of courseDataSource" [value]="course.idCurso">
+                    {{ course.nome }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
-          </div>
+              <mat-form-field>
+                <mat-label>Unidade Curricular</mat-label>
+                <mat-select formControlName="uc" required>
+                  <mat-option *ngFor="let uc of ucDataSource" [value]="uc.idUc">
+                    {{ uc.nome }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <br>
+              <mat-checkbox>
+                ACEITO OS TERMOS
+              </mat-checkbox>
+              <div class="submit">
+                <button type="submit" (click)="onSubmit()" class="btn btn-primary px-4">
+                  Enviar
+                </button>
+
+              </div>
+
+            </form>
+
           </mat-card>
         </mat-tab>
 
