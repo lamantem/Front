@@ -1,0 +1,34 @@
+table {
+  width: 100%;
+}
+
+.mat-fab.mat-primary,
+.mat-flat-button.mat-primary,
+.mat-mini-fab.mat-primary,
+.mat-raised-button.mat-primary {
+  background-color: #009688;
+}
+
+.table_empty {
+  text-align: center;
+  padding: 3%;
+  background-color: white;
+  font-weight: bold;
+  font-size: small;
+  color: #2196F3;
+}
+
+th.mat-header-cell:nth-child(3), th.mat-header-cell:nth-child(4),
+td.mat-cell:nth-child(3), td.mat-cell:nth-child(4) {
+  text-align: center !important;
+  padding-right: 4px !important;
+  padding-left: 4px !important;
+}
+
+td.mat-cell:last-of-type, td.mat-cell:nth-child(3)  {
+  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  width: 8% !important;
+  height: auto !important;
+}

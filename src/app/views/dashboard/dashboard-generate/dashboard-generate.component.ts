@@ -1,6 +1,7 @@
 import { AfterViewInit, OnInit, Component } from '@angular/core';
 import GenData = DashboardModel.GenData;
 
+// @ts-ignore
 const Gen_DATA: GenData[] = [
   {uc: 'Curso de análise', question_id: '2' , statement: 'OOOOsadfasfdas sadf asdf asd sda dfas df asdf asdf asdf asdf asd fas fasdf asf fsdf safs sfdOASD', action: 'Adicionar'},
   {uc: 'Curso de chapeiro', question_id: '2' , statement: 'OOOOsdsdadOASD', action: 'Adicionar'},

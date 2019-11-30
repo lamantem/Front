@@ -10,6 +10,7 @@ import {AppMaterialModule} from '../../app.material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {FilterPipe} from '../../shared/filter/filter.pipe';
+import {DashboardReviewComponent} from './dashboard-review/dashboard-review.component';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import {FilterPipe} from '../../shared/filter/filter.pipe';
     DashboardCreateComponent,
     DashboardAdmComponent,
     DashboardGenerateComponent,
-    DashboardRateComponent
+    DashboardRateComponent,
+    DashboardReviewComponent
   ]
 })
 export class DashboardModule { }

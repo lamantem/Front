@@ -13,4 +13,12 @@ declare namespace DashboardModel {
         statement: string;
         action: string;
     }
+    export interface  RateData {
+        uc: string;
+        user_id: string;
+        question_id: string;
+        situation: string;
+        complaint: string;
+        review: string;
+    }
 }
