@@ -7,7 +7,7 @@ export class FilterPipe implements PipeTransform {
   transform(value: any, ...args: any[]): any {
   }
 
-  // transform(groupsReaderDataSource:GroupsReader[], searchTerm : string ) : GroupsReader[]{
+  // transform(gendataSource:GenData[], searchTerm : string ) : GroupsReader[]{
   //   if(!groupsReaderDataSource || !searchTerm){
   //     return groupsReaderDataSource;
   //   }

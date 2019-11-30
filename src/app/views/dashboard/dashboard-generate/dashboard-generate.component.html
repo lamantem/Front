@@ -3,6 +3,82 @@
     <div class="mat-elevation-z8">
       <div>
         <mat-card class="mat-elevation-z8 mat-card-search">
+          <div>Dificuldade</div>
+          <mat-select class="select"
+                      (selectionChange)="Dificuldade = $event.value">
+            <mat-option [value]="1">HARD</mat-option>
+            <mat-option [value]="2">CODED</mat-option>
+            <mat-option [value]="3">OPTIONS</mat-option>
+            <!--                <mat-option *ngFor="let difficulty of difficulty[0].name"-->
+            <!--                            [value]="difficulty.id">-->
+            <!--                  {{ course.name }}-->
+            <!--                </mat-option>-->
+          </mat-select>
+          <!--                </mat-option>-->
+
+          <div>Curso</div>
+          <mat-select class="select"
+                      (selectionChange)="Course = $event.value">
+            <mat-option [value]="1">HARD</mat-option>
+            <mat-option [value]="2">CODED</mat-option>
+            <mat-option [value]="3">OPTIONS</mat-option>
+            <!--                <mat-option *ngFor="let course of course[0].name"-->
+            <!--                            [value]="course.id">-->
+            <!--                  {{ course.name }}-->
+            <!--                </mat-option>-->
+          </mat-select>
+          <!--                </mat-option>-->
+
+          <div>Unidade Curricular</div>
+          <mat-select class="select"
+                      (selectionChange)="CurricularUnit = $event.value">
+            <mat-option [value]="1">HARD</mat-option>
+            <mat-option [value]="2">CODED</mat-option>
+            <mat-option [value]="3">OPTIONS</mat-option>
+            <!--                <mat-option *ngFor="let uc of uc[0].name"-->
+            <!--                            [value]="uc.id">-->
+            <!--                  {{ uc.name }}-->
+          </mat-select>
+          <mat-form-field id="search-termSearch"
+            appearance="outline"
+            style="background-color: #f3f4f5;
+            width: 100%;">
+         <mat-label>Buscar</mat-label>
+            <input matInput (keyup)="applyFilterSearch($event.target.value)" placeholder="">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <table mat-table [dataSource]="gendataSource" class="mat-elevation-z8">
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <ng-container matColumnDef="uc">
+              <th mat-header-cell *matHeaderCellDef> Unidade Curricular </th>
+              <td mat-cell *matCellDef="let element"> {{element.uc}} </td>
+            </ng-container>
+            <!-- Position Column -->
+            <ng-container matColumnDef="statement">
+              <th mat-header-cell *matHeaderCellDef> Enunciado </th>
+              <td mat-cell *matCellDef="let element"> {{element.statement}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef> Ação </th>
+              <td mat-cell *matCellDef="let element" class="actions_tab">
+                <mat-checkbox [checked]=add()></mat-checkbox>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="gencolumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: gencolumns;"></tr>
+          </table>
+
+          <br>
+          
+          <button type="submit" (click)="onSubmit()" class="btn btn-primary px-4">
+            Enviar
+          </button>
 
         </mat-card>
       </div>

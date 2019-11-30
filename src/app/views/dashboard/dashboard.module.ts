@@ -9,6 +9,7 @@ import { DashboardRateComponent } from './dashboard-rate/dashboard-rate.componen
 import {AppMaterialModule} from '../../app.material.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import {FilterPipe} from '../../shared/filter/filter.pipe';
 
 @NgModule({
     imports: [
@@ -19,6 +20,7 @@ import {CommonModule} from '@angular/common';
         FormsModule,
     ],
   declarations: [
+    FilterPipe,
     DashboardComponent,
     DashboardCreateComponent,
     DashboardAdmComponent,

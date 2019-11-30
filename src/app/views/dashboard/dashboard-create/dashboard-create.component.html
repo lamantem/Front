@@ -52,12 +52,12 @@
 
           <div>Dificuldade</div>
           <mat-select class="select"
-            (selectionChange)="Course = $event.value">
+            (selectionChange)="Dificuldade = $event.value">
             <mat-option [value]="1">HARD</mat-option>
             <mat-option [value]="2">CODED</mat-option>
             <mat-option [value]="3">OPTIONS</mat-option>
-            <!--                <mat-option *ngFor="let course of course[0].course"-->
-            <!--                            [value]="course.id">-->
+            <!--                <mat-option *ngFor="let difficulty of difficulty[0].name"-->
+            <!--                            [value]="difficulty.id">-->
             <!--                  {{ course.name }}-->
             <!--                </mat-option>-->
           </mat-select>
@@ -69,7 +69,7 @@
             <mat-option [value]="1">HARD</mat-option>
             <mat-option [value]="2">CODED</mat-option>
             <mat-option [value]="3">OPTIONS</mat-option>
-            <!--                <mat-option *ngFor="let course of course[0].course"-->
+            <!--                <mat-option *ngFor="let course of course[0].name"-->
             <!--                            [value]="course.id">-->
             <!--                  {{ course.name }}-->
             <!--                </mat-option>-->
@@ -82,21 +82,22 @@
             <mat-option [value]="1">HARD</mat-option>
             <mat-option [value]="2">CODED</mat-option>
             <mat-option [value]="3">OPTIONS</mat-option>
-            <!--                <mat-option *ngFor="let uc of useruc[0].uc"-->
+            <!--                <mat-option *ngFor="let uc of uc[0].name"-->
             <!--                            [value]="uc.id">-->
             <!--                  {{ uc.name }}-->
           </mat-select>
+          <br>
           <mat-checkbox>
             ACEITO OS TERMOS
           </mat-checkbox>
-            <div class="submit">
-              <button type="submit" (click)="onSubmit()" class="btn btn-primary px-4">
+          <div class="submit">
+            <button type="submit" (click)="onSubmit()" class="btn btn-primary px-4">
                 Enviar
-              </button>
+            </button>
 
-            </div>
-        </mat-card>
-          </mat-tab>
+          </div>
+          </mat-card>
+        </mat-tab>
 
           <mat-tab>
             <ng-template mat-tab-label>
@@ -104,24 +105,19 @@
             </ng-template>
 
             <mat-card class="mat-elevation-z8 mat-card-search">
-
               <table mat-table [dataSource]="editdataSource" class="mat-elevation-z8">
-
                 <!--- Note that these columns can be defined in any order.
                       The actual rendered columns are set as a property on the row definition" -->
-
                 <!-- Position Column -->
                 <ng-container matColumnDef="statement">
                   <th mat-header-cell *matHeaderCellDef> Enunciado </th>
                   <td mat-cell *matCellDef="let element"> {{element.statement}} </td>
                 </ng-container>
-
                 <!-- Name Column -->
                 <ng-container matColumnDef="situation">
                   <th mat-header-cell *matHeaderCellDef> Situação </th>
                   <td mat-cell *matCellDef="let element"> {{element.situation}} </td>
                 </ng-container>
-
                 <!-- Name Column -->
                 <ng-container matColumnDef="action">
                   <th mat-header-cell *matHeaderCellDef> Ação </th>
@@ -133,8 +129,6 @@
                     </button>
                   </td>
                 </ng-container>
-
-
                 <tr mat-header-row *matHeaderRowDef="editcolumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: editcolumns;"></tr>
               </table>
