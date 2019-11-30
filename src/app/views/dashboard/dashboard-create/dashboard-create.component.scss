@@ -9,9 +9,31 @@ table {
   background-color: #009688;
 }
 
-.footer_search {
-  margin: 10%;
+.select {
+  width: 33%;
 }
+
+.input {
+  width: 40%;
+  border-style: solid !important;
+  border-radius: 1.2px;
+  border-color: #009785 !important;
+}
+
+.inputC {
+  width: 40%;
+  background-color: greenyellow;
+  border-style: solid !important;
+  border-radius: 1.2px;
+  border-color: #009785 !important;
+}
+
+.mat-select {
+  border-style: solid !important;
+  border-radius: 1.2px;
+  border-color: #009785 !important;
+}
+
 
 mat-form-field.mat-form-field {
   padding-left: 2px;

@@ -12,38 +12,46 @@
 
           <div>Enunciado</div>
           <input matInput
+                 class="input"
                  type="text">
 
           <div>Comando</div>
           <input matInput
+                 class="input"
                  type="text">
 
           <div>Suporte</div>
           <input matInput
+                 class="input"
                  type="text">
 
           <div>Alternativa Correta</div>
           <input matInput
+                 class="inputC"
                  type="text">
 
           <div>Alternativa Incorreta - 1</div>
           <input matInput
+                 class="input"
                  type="text">
 
           <div>Alternativa Incorreta - 2</div>
           <input matInput
+                 class="input"
                  type="text">
 
           <div>Alternativa Incorreta - 3</div>
           <input matInput
+                 class="input"
                  type="text">
 
           <div>Alternativa Incorreta - 4</div>
           <input matInput
-          type="text">
+                 class="input"
+                 type="text">
 
           <div>Dificuldade</div>
-          <mat-select
+          <mat-select class="select"
             (selectionChange)="Course = $event.value">
             <mat-option [value]="1">HARD</mat-option>
             <mat-option [value]="2">CODED</mat-option>
@@ -56,7 +64,7 @@
           <!--                </mat-option>-->
 
           <div>Curso</div>
-          <mat-select
+          <mat-select class="select"
             (selectionChange)="Course = $event.value">
             <mat-option [value]="1">HARD</mat-option>
             <mat-option [value]="2">CODED</mat-option>
@@ -69,7 +77,7 @@
           <!--                </mat-option>-->
 
           <div>Unidade Curricular</div>
-          <mat-select
+          <mat-select class="select"
           (selectionChange)="CurricularUnit = $event.value">
             <mat-option [value]="1">HARD</mat-option>
             <mat-option [value]="2">CODED</mat-option>
