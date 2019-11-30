@@ -6,8 +6,22 @@
 
           <div>Criar Usuário</div>
           <div>
-            <mat-select class="selectL" placeholder="Id do Usuário"
-                        (selectionChange)="createuser_userid = $event.value">
+
+            <input matInput
+                   class="input"
+                   [ngModel]="createuser_email"
+                   placeholder="E-mail"
+                   type="text">
+
+            <input matInput
+                   class="input"
+                   [ngModel]="createuser_password"
+                   placeholder="Senha"
+                   type="text">
+
+            <mat-select class="select"
+                        placeholder="Tipo do Usuário"
+                        (selectionChange)="createuser_type = $event.value">
               <mat-option [value]="1">HARD</mat-option>
               <mat-option [value]="2">CODED</mat-option>
               <mat-option [value]="3">OPTIONS</mat-option>
@@ -16,56 +30,8 @@
               <!--                  {{ uc.name }}-->
             </mat-select>
 
-            <mat-select class="selectR"  placeholder="Tipo do Usuário"
-                        (selectionChange)="createuser_usertype = $event.value">
-              <mat-option [value]="1">HARD</mat-option>
-              <mat-option [value]="2">CODED</mat-option>
-              <mat-option [value]="3">OPTIONS</mat-option>
-              <!--                <mat-option *ngFor="let uc of useruc[0].uc"-->
-              <!--                            [value]="uc.id">-->
-              <!--                  {{ uc.name }}-->
-            </mat-select>
           </div>
           <br>
-          <mat-divider></mat-divider>
-          <br>
-          <div>Deletar Usuário</div>
-          <div>
-            <mat-select class="selectL" placeholder="Id do Usuário"
-                        (selectionChange)="createuser_userid = $event.value">
-              <mat-option [value]="1">HARD</mat-option>
-              <mat-option [value]="2">CODED</mat-option>
-              <mat-option [value]="3">OPTIONS</mat-option>
-              <!--                <mat-option *ngFor="let uc of useruc[0].uc"-->
-              <!--                            [value]="uc.id">-->
-              <!--                  {{ uc.name }}-->
-            </mat-select>
-          </div>
-          <br>
-          <mat-divider></mat-divider>
-          <br>
-          <div>Alterar/Adicionar Tipo</div>
-          <div>
-            <mat-select class="selectL" placeholder="Id do Usuário"
-                        (selectionChange)="createuser_userid = $event.value">
-              <mat-option [value]="1">HARD</mat-option>
-              <mat-option [value]="2">CODED</mat-option>
-              <mat-option [value]="3">OPTIONS</mat-option>
-              <!--                <mat-option *ngFor="let uc of useruc[0].uc"-->
-              <!--                            [value]="uc.id">-->
-              <!--                  {{ uc.name }}-->
-            </mat-select>
-
-            <mat-select class="selectR" placeholder="Tipo do Usuário"
-                        (selectionChange)="createuser_usertype = $event.value">
-              <mat-option [value]="1">HARD</mat-option>
-              <mat-option [value]="2">CODED</mat-option>
-              <mat-option [value]="3">OPTIONS</mat-option>
-              <!--                <mat-option *ngFor="let uc of useruc[0].uc"-->
-              <!--                            [value]="uc.id">-->
-              <!--                  {{ uc.name }}-->
-            </mat-select>
-          </div>
 
         </mat-card>
       </div>

@@ -7,16 +7,17 @@ import { DashboardGenerateComponent } from './dashboard-generate/dashboard-gener
 import { DashboardCreateComponent } from './dashboard-create/dashboard-create.component';
 import { DashboardRateComponent } from './dashboard-rate/dashboard-rate.component';
 import {AppMaterialModule} from '../../app.material.module';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 
 @NgModule({
-  imports: [
-    DashboardRoutingModule,
-    AppMaterialModule,
-    ReactiveFormsModule,
-    CommonModule,
-  ],
+    imports: [
+        DashboardRoutingModule,
+        AppMaterialModule,
+        ReactiveFormsModule,
+        CommonModule,
+        FormsModule,
+    ],
   declarations: [
     DashboardComponent,
     DashboardCreateComponent,
