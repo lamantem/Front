@@ -5,10 +5,11 @@ import { debounceTime } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../../core/authentication';
 import {LocalStorageService} from '../../core/services';
-import {environment} from '../../../environments/environment';
 import {LZStringService} from 'ng-lz-string';
+import {LoginService} from './login.service';
 
 import Swal from 'sweetalert2';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-dashboard',
@@ -21,16 +22,14 @@ export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     submitted: boolean;
     hide: boolean;
-    synchronized: boolean;
-    app_version: string;
 
     constructor(
         private authService: AuthenticationService,
+        private loginService: LoginService,
         private formBuilder: FormBuilder,
         private router: Router,
         public translate: TranslateService,
-        public localStorage: LocalStorageService,
-        private lz: LZStringService
+        public localStorage: LocalStorageService
     ) {
         translate.setDefaultLang('pt-br');
         const browserLang = translate.getBrowserLang();
@@ -41,21 +40,11 @@ export class LoginComponent implements OnInit {
         this.submitted = false;
         this.hide      = true;
 
-        this.prepareAppVersion();
-
         this.loginForm = this.formBuilder.group(
             {
                 email: ['', [Validators.required, Validators.email]],
                 password: ['', Validators.required]
             });
-    }
-
-    get fields() {
-        return this.loginForm.controls;
-    }
-
-    prepareAppVersion(): void {
-        this.app_version = environment.app_version;
     }
 
     onSubmit() {
@@ -76,39 +65,58 @@ export class LoginComponent implements OnInit {
     }
 
     private login(email, password): void {
-        const authservice = this.authService;
-        this.submitted  = true;
-        authservice.login(
-            email,
-            password
-        )
+        this.loginService.prepareUserUrl();
+        this.loginService.getAll()
             .pipe(debounceTime(300))
             .subscribe(
                 (response) => {
+                    console.log(response);
+                    const protocol = _.filter(response, {
+                        'email': email,
+                        'senha': password
+                    });
 
-                    authservice.currentUser(
-                        response
-                    )
-                        .subscribe(
-                            (resp_auth) => {
-                                authservice.setCurrentUser(resp_auth.data);
-                                this.router.navigate(['/']);
-                            },
-                            error_auth => {
-                                this.submitted = false;
-                                console.warn(error_auth);
-                            }
-                        );
+                    if (_.isEmpty(protocol)) {
+                        Swal.fire('Ops!', 'E-mail ou senha incorretos!', 'error');
+                    }
+
+                    this.localStorage.setItem('user',
+                        JSON.stringify(response)
+                    );
+
+                    this.router.navigate(['/']);
                 },
                 error => {
-                    this.submitted = false;
-                    if (!navigator.onLine) {
-                        Swal.fire('Ops!', 'Você não está conectado à internet', 'error');
-                        return;
-                    }
-                    Swal.fire('Ops!', 'E-mail informado não existe ou a senha está incorreta!', 'error');
+                    console.warn(error.toString());
                 }
             );
+
+        // const authservice = this.authService;
+        // this.submitted  = true;
+        // authservice.login(
+        //     email,
+        //     password
+        // )
+        //     .pipe(debounceTime(300))
+        //     .subscribe(
+        //         (response) => {
+        //
+        //             authservice.currentUser(
+        //                 response
+        //             )
+        //                 .subscribe(
+        //                     (resp_auth) => {
+        //                         authservice.setCurrentUser(resp_auth.data);
+        //                         this.router.navigate(['/']);
+        //                     },
+        //                     error_auth => {
+        //                         this.submitted = false;
+        //                         console.warn(error_auth);
+        //                     }
+        //                 );
+        //         },
+        //         error => {}
+        //     );
     }
 
 }

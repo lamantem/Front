@@ -71,7 +71,7 @@ export class AuthenticationService {
   }
 
   getToken(): string {
-    return localStorage.getItem(this.keyTokenName());
+    return localStorage.getItem('user');
   }
 
   keyTokenName(): any {

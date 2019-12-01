@@ -6,15 +6,18 @@ import {DashboardCreateComponent} from './dashboard-create/dashboard-create.comp
 import {DashboardGenerateComponent} from './dashboard-generate/dashboard-generate.component';
 import {DashboardAdmComponent} from './dashboard-adm/dashboard-adm.component';
 import {DashboardRateComponent} from './dashboard-rate/dashboard-rate.component';
+import {AuthenticationGuard} from '../../core/authentication';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
+    canActivate: [AuthenticationGuard]
   },
   {
     path: 'criar',
     component: DashboardCreateComponent,
+    canActivate: [AuthenticationGuard],
     data: {
       title: 'Criar Questão'
     },
@@ -22,6 +25,7 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthenticationGuard],
     data: {
       title: 'Home'
     },
@@ -29,6 +33,7 @@ const routes: Routes = [
   {
     path: 'gerar',
     component: DashboardGenerateComponent,
+    canActivate: [AuthenticationGuard],
     data: {
       title: 'Gerar Provas'
     },
@@ -36,6 +41,7 @@ const routes: Routes = [
   {
     path: 'administrar',
     component: DashboardAdmComponent,
+    canActivate: [AuthenticationGuard],
     data: {
       title: 'Administrador'
     },
@@ -43,6 +49,7 @@ const routes: Routes = [
   {
     path: 'avaliar',
     component: DashboardRateComponent,
+    canActivate: [AuthenticationGuard],
     data: {
       title: 'Avaliar Questões'
     },
