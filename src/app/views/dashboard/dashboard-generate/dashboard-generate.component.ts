@@ -1,5 +1,7 @@
 import { AfterViewInit, OnInit, Component } from '@angular/core';
 import GenData = DashboardModel.GenData;
+import {debounceTime} from 'rxjs/operators';
+import {DashboardGenerateService} from './dashboard-generate.service';
 
 // @ts-ignore
 const Gen_DATA: GenData[] = [
@@ -17,15 +19,21 @@ const Gen_DATA: GenData[] = [
 export class DashboardGenerateComponent implements OnInit, AfterViewInit {
   gendataSource: DashboardModel.GenData[] = Gen_DATA;
   gencolumns: string[] = ['statement', 'uc', 'action'];
+  questiondataSource: DashboardModel.Question[] = [];
+  alternativedataSource: DashboardModel.Alternative[] = [];
   CurricularUnit: any;
   Course: any;
   Dificuldade: any;
   constructor(
+      private generateService: DashboardGenerateService
     ) {
     }
 
   ngOnInit() {
+    this.loadQuestion();
+    this.loadAlternatives();
   }
+
   ngAfterViewInit() {
   }
 
@@ -50,6 +58,7 @@ export class DashboardGenerateComponent implements OnInit, AfterViewInit {
   //
   //   this.dataSourceSearch = new MatTableDataSource(participants);
   // }
+
   add() {
     // guardar ou remover question_id de uma lista
     return;
@@ -63,4 +72,32 @@ export class DashboardGenerateComponent implements OnInit, AfterViewInit {
     onSubmit() {
         return;
     }
+
+  private loadQuestion(): void {
+    this.generateService.prepareQuestionUrl();
+    this.generateService.getAll()
+        .pipe(debounceTime(300))
+        .subscribe(
+            (response) => {
+              this.questiondataSource = response;
+            },
+            error => {
+              console.warn(error.toString());
+            }
+        );
+  }
+
+  private loadAlternatives(): void {
+    this.generateService.prepareAlternativesUrl();
+    this.generateService.getAll()
+        .pipe(debounceTime(300))
+        .subscribe(
+            (response) => {
+              this.alternativedataSource = response;
+            },
+            error => {
+              console.warn(error.toString());
+            }
+        );
+  }
 }

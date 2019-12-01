@@ -3,6 +3,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { MatDialog } from '@angular/material';
 import {DashboardReviewComponent} from '../dashboard-review/dashboard-review.component';
 import RateData = DashboardModel.RateData;
+import {debounceTime} from 'rxjs/operators';
+import {DashboardRateService} from './dashboard-rate.service';
 
 const Rate_DATA: RateData[] = [
     {uc: 'Curso de fazer cursos', user_id: '1', question_id: '2', situation: 'opapea', complaint: 'asdasdsad', review: 'dad'},
@@ -18,18 +20,25 @@ const Rate_DATA: RateData[] = [
   styleUrls: ['./dashboard-rate.component.scss'],
 })
 export class DashboardRateComponent implements OnInit, AfterViewInit {
-  ratedataSource: DashboardModel.RateData[] = Rate_DATA;
-  ratecolumns: string[] = ['uc', 'situation', 'complaint', 'review'];
-  private dialog: MatDialog;
+    private dialog: MatDialog;
+    ratedataSource: DashboardModel.RateData[] = Rate_DATA;
+    ratecolumns: string[] = ['uc', 'situation', 'complaint', 'review'];
+
+  questiondataSource: DashboardModel.Question[] = [];
+  alternativedataSource: DashboardModel.Alternative[] = [];
+  complaintdataSource: DashboardModel.Complaint[] = [];
 
   constructor(
-      private route: ActivatedRoute,
+      private rateService: DashboardRateService,
+    private route: ActivatedRoute,
       private router: Router,
     ) {
-    }
+  }
 
   ngOnInit() {
-
+    this.loadQuestion();
+    this.loadAlternatives();
+    this.loadComplaint();
   }
 
   ngAfterViewInit() {
@@ -61,5 +70,47 @@ export class DashboardRateComponent implements OnInit, AfterViewInit {
 
     openComplaint() {
         // método de abrir qual foi a reclamação feita se não quiser fazer no modal junto
+    }
+
+    private loadQuestion(): void {
+        this.rateService.prepareQuestionUrl();
+        this.rateService.getAll()
+            .pipe(debounceTime(300))
+            .subscribe(
+                (response) => {
+                    this.questiondataSource = response;
+                },
+                error => {
+                    console.warn(error.toString());
+                }
+            );
+    }
+
+    private loadAlternatives(): void {
+        this.rateService.prepareAlternativeUrl();
+        this.rateService.getAll()
+            .pipe(debounceTime(300))
+            .subscribe(
+                (response) => {
+                    this.alternativedataSource = response;
+                },
+                error => {
+                    console.warn(error.toString());
+                }
+            );
+    }
+
+    private loadComplaint(): void {
+        this.rateService.prepareComplaintUrl();
+        this.rateService.getAll()
+            .pipe(debounceTime(300))
+            .subscribe(
+                (response) => {
+                    this.complaintdataSource = response;
+                },
+                error => {
+                    console.warn(error.toString());
+                }
+            );
     }
 }

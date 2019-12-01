@@ -31,7 +31,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/app/views/dashboard/dashboard-rate" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -39,18 +39,31 @@
     <property name="ts.external.directory.path" value="C:\Users\Users\eclipse-workspace\Front\node_modules\typescript\lib" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\src\app\views\dashboard" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\assets\img\brand" />
       <recent name="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\src\app\views\dashboard" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\app\views\dashboard\dashboard-rate" />
+      <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\app\views\dashboard\dashboard-generate" />
+      <recent name="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\src\app\views\dashboard" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager" selected="npm.Angular CLI Server">
     <configuration name="Tests (ng)" type="JavaScriptTestRunnerKarma">
       <config-file value="$PROJECT_DIR$/karma.conf.js" />
-      <working-directory value="$PROJECT_DIR$" />
       <node-interpreter value="project" />
       <envs />
       <method v="2" />
@@ -76,18 +89,6 @@
       <envs />
       <method v="2" />
     </configuration>
-  </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand />
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />

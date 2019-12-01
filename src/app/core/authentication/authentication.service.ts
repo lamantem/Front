@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import { _throw } from "rxjs-compat/observable/throw";
-import { map } from "rxjs/operators";
+import { _throw } from 'rxjs-compat/observable/throw';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 @Injectable()
@@ -20,15 +20,15 @@ export class AuthenticationService {
   ) {}
 
   isAuthenticated(): boolean {
-    return (this.validateToken()) ? true : false;
+    return (this.validateToken());
   }
 
   validateToken(): boolean {
-    return (this.getToken()) ? true : false;
+    return !!(this.getToken());
   }
 
   login(username, password): Observable<any> {
-    let headers = new HttpHeaders();
+    const headers = new HttpHeaders();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
     return this._httpClient.post<any>(
@@ -61,7 +61,7 @@ export class AuthenticationService {
           errMsg = errorResponse.message ? errorResponse.message : errorResponse.toString();
         }
         return _throw(errMsg);
-      })
+      });
   }
 
   setToken(token): void {
@@ -84,7 +84,7 @@ export class AuthenticationService {
     }
   }
 
-  localStorageClear() : void {
+  localStorageClear(): void {
     localStorage.clear();
   }
 
@@ -96,28 +96,29 @@ export class AuthenticationService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': "Bearer "+ response.access_token
+        'Authorization': 'Bearer ' + response.access_token
       })
     };
 
-    let url_endpoint = environment.api_url + '/' + environment.api_version + '/auth-user';
+    const url_endpoint = environment.api_url + '/' + environment.api_version + '/auth-user';
 
     return this._httpClient.get(
       url_endpoint,
       httpOptions
     ).pipe(
+        // tslint:disable-next-line:no-shadowed-variable
       map((response: any) => {
         return response;
       })
-    )
+    );
   }
 
-  setCurrentUser(user) : void {
+  setCurrentUser(user): void {
     localStorage.setItem(this.keyCurrentUser(), JSON.stringify(user));
   }
 
   getCurrentUser(): string {
-    let user = localStorage.getItem(this.keyCurrentUser());
+    const user = localStorage.getItem(this.keyCurrentUser());
     return JSON.parse(user);
   }
 
@@ -136,6 +137,6 @@ export class AuthenticationService {
       grantType: environment.grantType,
       scope: environment.scope
     };
-  };
+  }
 
 }
