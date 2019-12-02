@@ -23,6 +23,7 @@ export class LayoutComponent implements OnDestroy {
   changes: MutationObserver;
   element: HTMLElement;
   user: any;
+  usertype: any;
   auth: any;
   synchronized: boolean;
   loading: boolean;
@@ -58,5 +59,12 @@ export class LayoutComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.changes.disconnect();
+  }
+
+  exit() {
+    this.router.navigate(['/sair'])
+        .catch(reason => {
+          console.warn(reason);
+        });
   }
 }

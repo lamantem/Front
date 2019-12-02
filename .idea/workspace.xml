@@ -34,15 +34,27 @@
     <property name="ts.external.directory.path" value="C:\Users\Users\eclipse-workspace\Front\node_modules\typescript\lib" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\assets\img\brand" />
-      <recent name="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\src\app\views\dashboard" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\app\views\dashboard\dashboard-rate" />
       <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\app\views\dashboard\dashboard-generate" />
       <recent name="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\src\app\views\dashboard" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\assets\img\brand" />
+      <recent name="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\src\app\views\dashboard" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager" selected="npm.Angular CLI Server">
     <configuration name="Tests (ng)" type="JavaScriptTestRunnerKarma">
@@ -72,18 +84,6 @@
       <envs />
       <method v="2" />
     </configuration>
-  </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand />
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
