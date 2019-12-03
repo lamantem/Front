@@ -1,16 +1,92 @@
+table {
+  width: 100%;
+}
 
-.select {
-  width: 33%;
+.mat-fab.mat-primary,
+.mat-flat-button.mat-primary,
+.mat-mini-fab.mat-primary,
+.mat-raised-button.mat-primary {
+  background-color: #009688;
 }
 
 .input {
+  width: 40%;
+}
+
+.inputC {
+  width: 40%;
   border-style: solid !important;
   border-radius: 1.2px;
   border-color: #009785 !important;
 }
 
-.mat-select {
-  border-style: solid !important;
-  border-radius: 1.2px;
-  border-color: #009785 !important;
+mat-form-field.mat-form-field {
+  padding-left: 2px;
+  padding-right: 2px;
+  width:100%;
+  background-color: white;
+}
+
+.table_empty {
+  text-align: center;
+  padding: 3%;
+  background-color: white;
+  font-weight: bold;
+  font-size: small;
+  color: #2196F3;
+}
+
+.iconButton {
+  color: #3b9687;
+}
+
+.actions_tab {
+  text-align: center;
+  padding-right: 1%;
+}
+
+th.mat-header-cell:nth-child(2), th.mat-header-cell:nth-child(3),
+td.mat-cell:nth-child(2), td.mat-cell:nth-child(3) {
+  text-align: center !important;
+}
+
+td.mat-cell[_ngcontent-kwr-c5]:nth-child(3) {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  width: auto !important;
+  height: auto !important;
+}
+
+@media screen and (max-width: 600px) {
+
+}
+
+@media (min-width: 600px) and (max-width: 1300px) {
+
+}
+
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  place-content: flex-start;
+  min-width: 250px;
+  width: 100%;
+  background: #ffffff;
+  margin: 4%;
+
+  @media screen and (min-width: 960px) {
+    width: 90%;
+  }
+
+  @media screen and (max-width: 450px) {
+    display: block;
+  }
+}
+
+.mat-horizontal-content-container  {
+  padding: 24px 0 0 0;
+  width: 100%;
+  margin: 24px 0 24px 0;
 }

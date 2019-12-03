@@ -71,12 +71,10 @@ export class LoginComponent implements OnInit {
             .pipe(debounceTime(300))
             .subscribe(
                 (response) => {
-                    console.log(response);
                     const protocol = _.filter(response, {
                         'email': email,
                         'senha': password
                     });
-                    console.log(protocol);
 
                     if (_.isEmpty(protocol)) {
                         Swal.fire('Ops!', 'E-mail ou senha incorretos!', 'error');
@@ -113,6 +111,7 @@ export class LoginComponent implements OnInit {
                     );
 
                     this.router.navigate(['/']);
+                    debounceTime(4000);
                 },
                 error => {
                     console.warn(error.toString());

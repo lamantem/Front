@@ -17,7 +17,7 @@ const Gen_DATA: GenData[] = [
 })
 export class DashboardGenerateComponent implements OnInit, AfterViewInit {
   gendataSource: DashboardModel.GenData[] = Gen_DATA;
-  gencolumns: string[] = ['statement', 'uc', 'action'];
+  gencolumns: string[] = ['statement', 'action'];
   questiondataSource: DashboardModel.Question[] = [];
   alternativedataSource: DashboardModel.Alternative[] = [];
   CurricularUnit: any;
@@ -40,33 +40,6 @@ export class DashboardGenerateComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-  }
-
-  // private getGenData(): void {
-  //   let groups = localStorage.getItem('groups');
-  //   let group_id = this.route.snapshot.paramMap.get('group_id');
-  //   this.groupsReaderDataSource = JSON.parse(groups);
-  //   this.groupsReaderDataSource = _.filter(this.groupsReaderDataSource, {'id': parseInt(group_id)});
-  //
-  //   let participants = [];
-  //   this.groupsReaderDataSource.forEach(function (group) {
-  //     group.participants.forEach(function (participant) {
-  //       let participant_local = {
-  //         name:               participant.name,
-  //         registration_code:  participant.registration_code,
-  //         allocation_code:    participant.allocation_code,
-  //         period:             participant.period
-  //       };
-  //       participants.push(participant_local);
-  //     })
-  //   });
-  //
-  //   this.dataSourceSearch = new MatTableDataSource(participants);
-  // }
-
-  add() {
-    // guardar ou remover question_id de uma lista
-    return;
   }
 
   applyFilterSearch(filterValue: string) {
@@ -147,4 +120,8 @@ export class DashboardGenerateComponent implements OnInit, AfterViewInit {
             }
         );
   }
+
+    add() {
+        return;
+    }
 }

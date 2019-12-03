@@ -1,44 +1,83 @@
 <div class="container-fluid scroller_content">
-  <div class="animated fadeIn">
-    <div class="mat-elevation-z8">
-      <div>
-        <mat-card class="mat-elevation-z8 mat-card-search">
+    <div class="animated fadeIn">
+        <div class="mat-elevation-z8">
+            <div>
+                <mat-card class="mat-elevation-z8 mat-card-search">
 
-          <div>Criar Usuário</div>
-          <div>
+                    <div>Criar Usuário</div>
+                    <div>
+                        <form [formGroup]="userFormGroup" class="form">
+                            <mat-form-field>
+                                <input matInput
+                                       class="input"
+                                       formControlName="email"
+                                       placeholder="E-mail"
+                                       required
+                                       type="text">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput
+                                       class="input"
+                                       formControlName="senha"
+                                       placeholder="Senha"
+                                       required
+                                       type="text">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput
+                                       class="input"
+                                       formControlName="nome"
+                                       placeholder="Nome"
+                                       required
+                                       type="text">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput
+                                       class="input"
+                                       formControlName="matricula"
+                                       placeholder="Matricula"
+                                       type="text">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput
+                                       class="input"
+                                       formControlName="afiliacao"
+                                       placeholder="Afilicao"
+                                       type="text">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput
+                                       class="input"
+                                       formControlName="cargo"
+                                       placeholder="Cargo"
+                                       required
+                                       type="text">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-select class="select"
+                                            placeholder="Tipo do Usuário"
+                                            (selectionChange)="createuser_type = $event.value" required>
+                                    <mat-option *ngFor="let type of typeDataSource" [value]="type.idTipo">
+                                        {{ type.tipo }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </form>
+                    </div>
+                    <br>
 
-            <input matInput
-                   class="input"
-                   [ngModel]="createuser_email"
-                   placeholder="E-mail"
-                   type="text">
+                    <div class="submit">
+                        <button type="submit"
+                                (click)="createuser()"
+                                [disabled]="userFormGroup.invalid"
+                                class="btn btn-primary px-4">
+                            Enviar
+                        </button>
 
-            <input matInput
-                   class="input"
-                   [ngModel]="createuser_password"
-                   placeholder="Senha"
-                   type="text">
+                    </div>
 
-            <mat-select class="select"
-                        placeholder="Tipo do Usuário"
-                        (selectionChange)="createuser_type = $event.value">
-                <mat-option *ngFor="let type of typeDataSource" [value]="type.idTipo">
-                  {{ type.tipo }}
-                </mat-option>
-            </mat-select>
-
-          </div>
-          <br>
-
-          <div class="submit">
-            <button type="submit" (click)="createuser()" class="btn btn-primary px-4">
-              Enviar
-            </button>
-
-          </div>
-
-        </mat-card>
-      </div>
+                </mat-card>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

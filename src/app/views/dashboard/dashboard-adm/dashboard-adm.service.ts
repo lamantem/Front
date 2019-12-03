@@ -21,4 +21,10 @@ export class DashboardAdmService extends BaseAPIClass {
     public prepareTypeUrl(): void {
         this.baseUrl = environment.api_url + '/banco/tipo/listar-todos/';
     }
+    public prepareProfilelUrl(): void {
+        this.baseUrl = environment.api_url + '/banco/perfil/salvar/';
+    }
+    public prepareUserUrl(): void {
+        this.baseUrl = environment.api_url + '/banco/usuario/salvar/';
+    }
 }

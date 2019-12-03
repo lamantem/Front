@@ -26,9 +26,6 @@
       </div>
       <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
         <div class="dropdown-header text-center">
-          <strong>Ações</strong>
-        </div>
-        <div class="dropdown-header text-center">
           <strong>Conta</strong>
         </div>
         <a class="dropdown-item"
@@ -41,7 +38,7 @@
   </ul>
 </app-header>
 <div class="app-body">
-  <app-sidebar [minimized]="true" [fixed]="true" [display]="'lg'">
+  <app-sidebar [minimized]="false" [fixed]="true" [display]="'lg'">
     <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
     <app-sidebar-minimizer></app-sidebar-minimizer>
   </app-sidebar>

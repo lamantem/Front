@@ -4,6 +4,73 @@
             <div>
                 <mat-card class="mat-elevation-z8 mat-card-search">
 
+                    <form [formGroup]="reviewFormGroup" class="form">
+
+                        <mat-form-field>
+                            <textarea matInput class="mat-form-field-outline" placeholder="Enunciado"
+                                      formControlName="enunciado"
+                                      type="text" required></textarea>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Comando"
+                                   formControlName="comando"
+                                   type="text" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Suporte"
+                                   formControlName="suporte"
+                                   type="text" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Alternativa Correta"
+                                   formControlName="alCorreta" type="text" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Alternativa Incorreta - 1"
+                                   formControlName="alIncorreta1" type="text" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Alternativa Incorreta - 2"
+                                   formControlName="alIncorreta2" type="text" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Alternativa Incorreta - 3"
+                                   formControlName="alIncorreta3" type="text" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Alternativa Incorreta - 4"
+                                   formControlName="alIncorreta4" type="text" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Curso"
+                                   formControlName="curso" type="text" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Unidade Curricular"
+                                   formControlName="uc" type="text" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput class="mat-form-field-outline" placeholder="Dificuldade"
+                                   formControlName="dificuldade" type="text" required>
+                        </mat-form-field>
+                        <br>
+                    </form>
+
+                    <mat-dialog-actions style="display: flex; justify-content: flex-end;">
+                        <button mat-raised-button color="warn" mat-dialog-close [mat-dialog-close]="false">{{this.data.close}}</button>
+                        <button mat-raised-button color="primary" cdkFocusInitial [mat-dialog-close]="true"> {{ this.data.save }}</button>
+                    </mat-dialog-actions>
+
                 </mat-card>
             </div>
         </div>

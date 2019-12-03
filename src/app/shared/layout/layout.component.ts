@@ -92,6 +92,5 @@ export class LayoutComponent implements  OnInit, OnDestroy {
       this.navItems[2].attributes = { hidden: true};
       this.navItems[3].attributes = { hidden: true};
     }
-    return;
   }
 }

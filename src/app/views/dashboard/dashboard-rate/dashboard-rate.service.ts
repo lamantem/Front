@@ -20,6 +20,10 @@ export class DashboardRateService extends BaseAPIClass {
     this.baseUrl = environment.api_url + '/banco/questao/listar-todos/';
   }
 
+  public saveQuestionUrl(): void {
+    this.baseUrl = environment.api_url + '/banco/questao/salvar/';
+  }
+
   public prepareAlternativeUrl(): void {
     this.baseUrl = environment.api_url + '/banco/alternativa/listar-todos/';
   }

@@ -14,6 +14,7 @@ declare namespace DashboardModel {
         action: string;
     }
     export interface  RateData {
+        id: number;
         uc: string;
         user_id: string;
         question_id: string;

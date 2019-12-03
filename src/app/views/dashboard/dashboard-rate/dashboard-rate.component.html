@@ -4,29 +4,18 @@
       <div>
         <mat-card class="mat-elevation-z8 mat-card-search">
 
-          <table mat-table [dataSource]="ratedataSource" class="mat-elevation-z8">
+          <table mat-table [dataSource]="questiondataSource" class="mat-elevation-z8">
             <!--- Note that these columns can be defined in any order.
                   The actual rendered columns are set as a property on the row definition" -->
 
-            <ng-container matColumnDef="uc">
-              <th mat-header-cell *matHeaderCellDef> Unidade Curricular </th>
-              <td mat-cell *matCellDef="let element"> {{element.uc}} </td>
+            <ng-container matColumnDef="enunciado">
+              <th mat-header-cell *matHeaderCellDef> Enunciado </th>
+              <td mat-cell *matCellDef="let element"> {{element.enunciado}} </td>
             </ng-container>
-            <!-- Position Column -->
-            <ng-container matColumnDef="situation">
-              <th mat-header-cell *matHeaderCellDef> Situação </th>
-              <td mat-cell *matCellDef="let element"> {{element.situation}} </td>
-            </ng-container>
-            <!-- Position Column -->
-            <ng-container matColumnDef="complaint">
-              <th mat-header-cell *matHeaderCellDef> Reclamação </th>
-              <td mat-cell *matCellDef="let element" class="actions_tab">
-                <button mat-icon-button
-                        color="primary"
-                        (click)="openComplaint()">
-                  <mat-icon aria-label="Edit" class="iconButton">feedback</mat-icon>
-                </button>
-              </td>
+
+            <ng-container matColumnDef="user">
+              <th mat-header-cell *matHeaderCellDef> Usuário </th>
+              <td mat-cell *matCellDef="let element"> {{element.usuario.perfil.nome}} </td>
             </ng-container>
 
             <ng-container matColumnDef="review">
@@ -34,7 +23,7 @@
               <td mat-cell *matCellDef="let element" class="actions_tab">
                 <button mat-icon-button
                         color="primary"
-                        (click)="openReview()">
+                        (click)="openReview(element)">
                   <mat-icon aria-label="Edit" class="iconButton">list</mat-icon>
                 </button>
               </td>

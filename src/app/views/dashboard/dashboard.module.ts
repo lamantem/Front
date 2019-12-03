@@ -29,6 +29,9 @@ import {DashboardReviewComponent} from './dashboard-review/dashboard-review.comp
     DashboardGenerateComponent,
     DashboardRateComponent,
     DashboardReviewComponent
-  ]
+  ],
+    entryComponents: [
+        DashboardReviewComponent
+    ]
 })
 export class DashboardModule { }

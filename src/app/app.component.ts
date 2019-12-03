@@ -16,7 +16,6 @@ export class AppComponent implements OnInit, OnDestroy {
               public checkForUpdateService: CheckForUpdateService,
               private router: Router) {
     this.updates.available.subscribe((event) => {
-      console.log('avaiable!');
       this.updateAvailable = true;
     });
   }
