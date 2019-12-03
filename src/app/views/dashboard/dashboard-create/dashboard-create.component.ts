@@ -3,6 +3,7 @@ import EditData = DashboardModel.EditData;
 import {debounceTime} from 'rxjs/operators';
 import {DashboardCreateService} from './dashboard-create.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import Swal from 'sweetalert2';
 
 const Edit_DATA: EditData[] = [
   {user_id: '1' , question_id: '2' , statement: 'qUESTÃO ddddddddddddddddddddddddddddddddddddddddddddddddddddddd sdsd asd asd asdasdadsdsa dada djdiaosjdoia jsdoia sjdoias jdoaisdj oasidj aosidj aosidj aodij odiajsd osi1 OPA', situation: 'Em aberto', action: 'Editar'},
@@ -23,13 +24,16 @@ export class DashboardCreateComponent implements OnInit, AfterViewInit {
   useruc: any;
   CurricularUnit: any;
   Course: any;
+  user = JSON.parse(localStorage['user']);
+  user_id = this.user[0].id;
   editdataSource: DashboardModel.EditData[] = Edit_DATA;
   editcolumns: string[] = ['statement', 'situation', 'action'];
   difficultyDataSource: DashboardModel.Difficulty[] = [];
   ucDataSource: DashboardModel.Uc[] = [];
   courseDataSource: DashboardModel.Course[] = [];
+  questionDataSource: DashboardModel.Question[] = [];
 
-  difficultyFormGroup: FormGroup;
+  questionFormGroup: FormGroup;
 
   constructor(
       private createService: DashboardCreateService,
@@ -41,7 +45,7 @@ export class DashboardCreateComponent implements OnInit, AfterViewInit {
     this.loadUc();
     this.loadCourse();
 
-    this.difficultyFormGroup = this.formBuilder.group({
+    this.questionFormGroup = this.formBuilder.group({
       enunciado: ['',
         Validators.required
       ],
@@ -49,6 +53,15 @@ export class DashboardCreateComponent implements OnInit, AfterViewInit {
         Validators.required
       ],
       suporte: ['',
+        Validators.required
+      ],
+      dificuldade: ['',
+        Validators.required
+      ],
+      uc: ['',
+        Validators.required
+      ],
+      curso: ['',
         Validators.required
       ],
       alCorreta: ['',
@@ -65,24 +78,40 @@ export class DashboardCreateComponent implements OnInit, AfterViewInit {
       ],
       alIncorreta4: ['',
         Validators.required
-      ],
-      dificuldade: ['',
-        Validators.required
-      ],
-      uc: ['',
-        Validators.required
-      ],
-      curso: ['',
-        Validators.required
-      ],
+      ]
     });
-
   }
 
   ngAfterViewInit() {
   }
 
   onSubmit() {
+
+    const question = {
+      'idUsuario': this.user_id,
+      'idUc': this.questionFormGroup.get('uc').value,
+      'idDificuldade': this.questionFormGroup.get('dificuldade').value,
+      'enunciado': this.questionFormGroup.get('enunciado').value,
+      'comando': this.questionFormGroup.get('comando').value,
+      'suporte': this.questionFormGroup.get('suporte').value,
+      'ativo': 0,
+    };
+    console.log(question);
+    this.createService.prepareQuestionUrl();
+    this.createService.create(question)
+        .pipe(debounceTime(300))
+        .subscribe(
+            (resp) => {
+              console.log('parece que deu certo');
+              this.questionDataSource = resp.data;
+           },
+            error => {
+            Swal.fire('Ops!', 'Ocorreu um erro!', 'error');
+            console.warn(error.toString())
+            }
+        );
+
+    console.log(FormData);
     return;
   }
 

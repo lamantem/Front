@@ -11,7 +11,7 @@ export class DashboardAdmComponent implements OnInit, AfterViewInit {
   createuser_email: any;
   createuser_password: any;
   createuser_type: any;
-  difficultyDataSource: DashboardModel.Difficulty[] = [];
+  typeDataSource: DashboardModel.Type[] = [];
   private user: any;
   private id: any;
   constructor(
@@ -35,7 +35,7 @@ export class DashboardAdmComponent implements OnInit, AfterViewInit {
         .pipe(debounceTime(300))
         .subscribe(
             (response) => {
-              this.difficultyDataSource = response;
+              this.typeDataSource = response;
             },
             error => {
               console.warn(error.toString());

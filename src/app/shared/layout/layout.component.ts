@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Inject } from '@angular/core';
+import {Component, OnDestroy, Inject, OnInit} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,15 +17,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./layout.component.scss'],
   preserveWhitespaces: false
 })
-export class LayoutComponent implements OnDestroy {
+export class LayoutComponent implements  OnInit, OnDestroy {
   navItems = navItems;
   sidebarMinimized: boolean;
   changes: MutationObserver;
   element: HTMLElement;
   user: any;
-  usertype: any;
   auth: any;
-  synchronized: boolean;
   loading: boolean;
 
   constructor(
@@ -50,12 +48,17 @@ export class LayoutComponent implements OnDestroy {
     });
   }
 
+  ngOnInit() {
+    this.verifyType();
+  }
+
   userName(): any {
     if (!this.user) {
       this.user = this.auth.getCurrentUser();
     }
     return (this.user) ? this.user.name : '';
   }
+
 
   ngOnDestroy(): void {
     this.changes.disconnect();
@@ -66,5 +69,29 @@ export class LayoutComponent implements OnDestroy {
         .catch(reason => {
           console.warn(reason);
         });
+  }
+
+  verifyType() {
+    const type = JSON.parse(localStorage['type']);
+    if (type.tipo === 'Docente') {
+      this.navItems[3].attributes = { hidden: true};
+      this.navItems[4].attributes = { hidden: true};
+    }
+    if (type.tipo === 'Avaliador') {
+      this.navItems[1].attributes = { hidden: true};
+      this.navItems[2].attributes = { hidden: true};
+      this.navItems[4].attributes = { hidden: true};
+    }
+    if (type.tipo === 'Administrador Root') {
+      this.navItems[1].attributes = { hidden: true};
+      this.navItems[2].attributes = { hidden: true};
+      this.navItems[3].attributes = { hidden: true};
+    }
+    if (type.tipo === 'Administrador') {
+      this.navItems[1].attributes = { hidden: true};
+      this.navItems[2].attributes = { hidden: true};
+      this.navItems[3].attributes = { hidden: true};
+    }
+    return;
   }
 }

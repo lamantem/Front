@@ -26,7 +26,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/app/views/dashboard/dashboard-rate" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/app/views/dashboard" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
@@ -35,6 +35,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\app\views\dashboard" />
       <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\app\views\dashboard\dashboard-rate" />
       <recent name="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\src\app\views\dashboard\dashboard-generate" />
       <recent name="C:\Users\1513 MX5-7\Desktop\OPA\front-pi\src\app\views\dashboard" />

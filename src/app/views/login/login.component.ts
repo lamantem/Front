@@ -10,6 +10,7 @@ import {LoginService} from './login.service';
 
 import Swal from 'sweetalert2';
 import * as _ from 'lodash';
+import {navItems} from '../../_nav';
 
 @Component({
     selector: 'app-dashboard',
@@ -75,13 +76,40 @@ export class LoginComponent implements OnInit {
                         'email': email,
                         'senha': password
                     });
+                    console.log(protocol);
 
                     if (_.isEmpty(protocol)) {
                         Swal.fire('Ops!', 'E-mail ou senha incorretos!', 'error');
                     }
 
                     this.localStorage.setItem('user',
-                        JSON.stringify(response)
+                        JSON.stringify(protocol)
+                    );
+
+                    this.getUserTypeUrl();
+                },
+                error => {
+                    console.warn(error.toString());
+                }
+            );
+    }
+
+    getUserTypeUrl() {
+        this.loginService.prepareUserTypeUrl();
+        this.loginService.getAll()
+            .pipe(debounceTime(300))
+            .subscribe(
+                (response) => {
+                    let potocolo = {};
+                    const user = JSON.parse(localStorage['user']);
+                    const user_id = user[0].id;
+                    response.forEach(function(resp) {
+                        if (resp.usuario.id === user_id) {
+                            potocolo = resp.tipo;
+                        }
+                    });
+                    this.localStorage.setItem('type',
+                        JSON.stringify(potocolo)
                     );
 
                     this.router.navigate(['/']);
@@ -90,33 +118,8 @@ export class LoginComponent implements OnInit {
                     console.warn(error.toString());
                 }
             );
-
-        // const authservice = this.authService;
-        // this.submitted  = true;
-        // authservice.login(
-        //     email,
-        //     password
-        // )
-        //     .pipe(debounceTime(300))
-        //     .subscribe(
-        //         (response) => {
-        //
-        //             authservice.currentUser(
-        //                 response
-        //             )
-        //                 .subscribe(
-        //                     (resp_auth) => {
-        //                         authservice.setCurrentUser(resp_auth.data);
-        //                         this.router.navigate(['/']);
-        //                     },
-        //                     error_auth => {
-        //                         this.submitted = false;
-        //                         console.warn(error_auth);
-        //                     }
-        //                 );
-        //         },
-        //         error => {}
-        //     );
     }
+
+
 
 }

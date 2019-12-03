@@ -27,4 +27,12 @@ export class DashboardCreateService extends BaseAPIClass {
   public prepareCourseUrl(): void {
     this.baseUrl = environment.api_url + '/banco/curso/listar-todos/';
   }
+
+  public prepareQuestionUrl(): void {
+    this.baseUrl = environment.api_url + '/banco/questao/salvar';
+  }
+
+  public prepareAlternativesUrl(): void {
+    this.baseUrl = environment.api_url + '/banco/alternativa/salvar';
+  }
 }

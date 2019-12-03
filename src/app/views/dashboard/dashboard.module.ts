@@ -15,6 +15,7 @@ import {DashboardReviewComponent} from './dashboard-review/dashboard-review.comp
 @NgModule({
     imports: [
         DashboardRoutingModule,
+        ReactiveFormsModule,
         AppMaterialModule,
         ReactiveFormsModule,
         CommonModule,

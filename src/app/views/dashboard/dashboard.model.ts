@@ -58,4 +58,8 @@ declare namespace DashboardModel {
         idCurso: number;
         nome: string;
     }
+    export interface Type {
+        idTipo: number;
+        tipo: any;
+    }
 }

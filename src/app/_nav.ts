@@ -42,7 +42,7 @@ export const navItems: NavData[] = [
   {
     name: 'Criar Questões',
     url: '/criar',
-    icon: 'icon-note',
+    icon: 'icon-pencil',
     attributes: { },
   },
   {
@@ -62,27 +62,6 @@ export const navItems: NavData[] = [
     url: '/administrar',
     icon: 'icon-wrench',
     attributes: { },
-  },
-  {
-    name: 'Disabled',
-    url: '/dashboard',
-    icon: 'icon-close',
-    attributes: { disabled: true },
-  },
-  {
-    name: 'Download CoreUI',
-    url: 'http://coreui.io/angular/',
-    icon: 'icon-cloud-download',
-    class: 'mt-auto',
-    variant: 'success',
-    attributes: { target: '_blank', rel: 'noopener' }
-  },
-  {
-    name: 'Try CoreUI PRO',
-    url: 'http://coreui.io/pro/angular/',
-    icon: 'icon-layers',
-    variant: 'danger',
-    attributes: { target: '_blank', rel: 'noopener' }
   }
 ];
 

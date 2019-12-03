@@ -19,4 +19,8 @@ export class LoginService extends BaseAPIClass{
   public prepareUserUrl(): void {
     this.baseUrl = environment.api_url + '/banco/usuario/listar-todos/';
   }
+
+  public prepareUserTypeUrl(): void {
+    this.baseUrl = environment.api_url + '/banco/usuario-tipo/listar-todos/';
+  }
 }

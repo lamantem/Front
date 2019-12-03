@@ -10,11 +10,11 @@
           </ng-template>
         <mat-card class="mat-elevation-z8 mat-card-search">
 
-            <form [formGroup]="difficultyFormGroup" class="form">
+            <form [formGroup]="questionFormGroup" class="form">
 
               <mat-form-field>
-                <input matInput class="mat-form-field-outline" placeholder="Enunciado" formControlName="enunciado"
-                       type="text" required>
+                <textarea matInput class="mat-form-field-outline" placeholder="Enunciado" formControlName="enunciado"
+                          type="text" required></textarea>
               </mat-form-field>
 
               <mat-form-field>
