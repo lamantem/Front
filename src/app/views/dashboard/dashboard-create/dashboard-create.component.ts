@@ -102,8 +102,53 @@ export class DashboardCreateComponent implements OnInit, AfterViewInit {
         .pipe(debounceTime(300))
         .subscribe(
             (resp) => {
-              console.log('parece que deu certo');
+              console.log(resp.idQuestao);
               this.questionDataSource = resp.data;
+
+
+              for (let i = 1 ; i <= 4 ; i++) {
+                const alternativasInc = {
+                  'correta': 0,
+                  'alternativa': this.questionFormGroup.get('alIncorreta' + i).value,
+                  'idQuestao': resp.idQuestao,
+                };
+                console.log(alternativasInc);
+                this.createService.prepareAlternativesUrl();
+                this.createService.create(alternativasInc)
+                    .pipe(debounceTime(300))
+                    .subscribe(
+                        (resps) => {
+                          console.log('parece que deu certo');
+                          this.questionDataSource = resps.data;
+                        },
+                        error => {
+                          Swal.fire('Ops!', 'Ocorreu um erro!', 'error');
+                          console.warn(error.toString())
+                        }
+                    );
+              }
+                const alternativasCorr = {
+                  'correta': 1,
+                  'alternativa': this.questionFormGroup.get('alCorreta').value,
+                  'idQuestao': resp.idQuestao,
+                };
+                console.log(alternativasCorr);
+                this.createService.prepareAlternativesUrl();
+                this.createService.create(alternativasCorr)
+                    .pipe(debounceTime(300))
+                    .subscribe(
+                        (resps) => {
+                          console.log('parece que deu certo');
+                          this.questionDataSource = resps.data;
+                        },
+                        error => {
+                          Swal.fire('Ops!', 'Ocorreu um erro!', 'error');
+                          console.warn(error.toString())
+                        }
+                    );
+
+              console.log(FormData);
+              return;
            },
             error => {
             Swal.fire('Ops!', 'Ocorreu um erro!', 'error');
