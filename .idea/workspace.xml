@@ -9,6 +9,7 @@
       <change beforePath="$PROJECT_DIR$/src/app/views/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/views/login/login.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/views/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/views/login/login.component.ts" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,7 +32,7 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="ts.external.directory.path" value="C:\Users\Users\eclipse-workspace\Front\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="C:\Users\1513 MX5-7\Desktop\Nova pasta (4)\front-pi\node_modules\typescript\lib" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -105,6 +106,7 @@
       <workItem from="1575099058155" duration="4664000" />
       <workItem from="1575130591316" duration="10019000" />
       <workItem from="1575224599502" duration="2334000" />
+      <workItem from="1575549755743" duration="600000" />
     </task>
     <servers />
   </component>

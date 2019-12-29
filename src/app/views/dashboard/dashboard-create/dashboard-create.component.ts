@@ -22,7 +22,7 @@ export class DashboardCreateComponent implements OnInit, AfterViewInit {
     Course: any;
     user = JSON.parse(localStorage['user']);
     user_id = this.user[0].id;
-    editcolumns: string[] = ['statement', 'situation' 'action'];
+    editcolumns: string[] = ['statement', 'action'];
     difficultyDataSource: DashboardModel.Difficulty[] = [];
     ucDataSource: DashboardModel.Uc[] = [];
     courseDataSource: DashboardModel.Course[] = [];
@@ -248,7 +248,6 @@ export class DashboardCreateComponent implements OnInit, AfterViewInit {
                     const user_id = user[0].id;
                     response.forEach(function (resp) {
                         if (resp.usuario.idUsuario === user_id) {
-                            if (resp.)
                             potocolo.push(resp);
                         }
                     });

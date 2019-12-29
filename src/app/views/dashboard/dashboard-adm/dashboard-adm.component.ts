@@ -61,16 +61,19 @@ export class DashboardAdmComponent implements OnInit, AfterViewInit {
           .pipe(debounceTime(300))
           .subscribe(
               (resp) => {
+                  console.log(resp);
                   const usuario = {
                       'email': this.userFormGroup.get('email').value,
                       'senha': this.userFormGroup.get('senha').value,
-                      'idPerfil': resp.perfil.id,
+                      'idPerfil': resp.perfil.idPerfil,
                   };
+                  console.log(usuario);
                   this.admService.prepareUserUrl();
                   this.admService.create(usuario)
                       .pipe(debounceTime(300))
                       .subscribe(
-                          () => {
+                          (resps) => {
+                              console.log(resps);
                           },
                           error => {
                               Swal.fire('Ops!', 'Ocorreu um erro!', 'error');
